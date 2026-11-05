@@ -1,0 +1,205 @@
+/* HEXAGON About Premium V1 — isolated under .ha-page to avoid altering other pages. */
+:root { color-scheme: light; }
+.ha-page {
+  --ha-navy:#081630; --ha-ink:#10264c; --ha-muted:#60728f; --ha-blue:#2376ed;
+  --ha-border:#dce7f5; --ha-wrap:1200px;
+  margin:0; background:#f7faff; color:var(--ha-ink); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased;
+}
+.ha-page *, .ha-page *::before, .ha-page *::after { box-sizing:border-box; }
+.ha-page a { text-decoration:none; }
+.ha-page .ha-wrap { width:min(var(--ha-wrap),calc(100% - 48px)); margin-inline:auto; }
+.ha-page .ha-skip { position:absolute; top:-60px; left:18px; z-index:90; padding:12px 16px; background:#fff; color:#0b3f87; border-radius:10px; }
+.ha-page .ha-skip:focus { top:10px; }
+.ha-page a:focus-visible,.ha-page button:focus-visible,.ha-page summary:focus-visible { outline:3px solid #46bdfd; outline-offset:4px; }
+.ha-page .ha-header { position:relative; z-index:15; background:#07152f; border-bottom:1px solid rgba(146,191,251,.17); color:#eff7ff; }
+.ha-page .ha-header-inner { display:flex; align-items:center; justify-content:space-between; gap:20px; min-height:80px; }
+.ha-page .ha-brand { display:inline-flex; gap:10px; align-items:center; flex-shrink:0; font-size:24px; line-height:1.2; font-weight:850; letter-spacing:-.9px; color:#fff; }
+.ha-page .ha-brand svg { flex-shrink:0; }
+.ha-page .ha-dot { color:#57a0ff; }
+.ha-page .ha-navigation { display:flex; align-items:center; gap:clamp(14px,1.7vw,28px); }
+.ha-page .ha-navigation a { color:#bacbe4; font-size:14px; font-weight:630; padding:9px 0; white-space:nowrap; transition:color .18s ease; }
+.ha-page .ha-navigation .ha-mobile-login {display:none;}
+.ha-page .ha-navigation a:hover,.ha-page .ha-navigation .ha-current { color:#fff; }
+.ha-page .ha-navigation .ha-current { position:relative; }
+.ha-page .ha-navigation .ha-current::after { content:""; height:2px; width:100%; border-radius:2px; position:absolute; bottom:4px;left:0;background:#5fa8ff; }
+.ha-page .ha-header-actions { display:flex;align-items:center;gap:15px;flex-shrink:0; }
+.ha-page .ha-cart { display:inline-flex; align-items:center; gap:7px; color:#dceaff; font-size:13px; font-weight:650; }
+.ha-page .ha-cart svg { width:21px;height:21px; }
+.ha-page .ha-cart:hover { color:#fff; }
+.ha-page .ha-cart-count { padding:0 5px;min-width:18px;line-height:18px;border-radius:20px;color:#fff;background:#2376ed;text-align:center; }
+.ha-page .ha-language { width:41px;height:41px;border:1px solid rgba(146,191,251,.24);border-radius:50%;background:rgba(255,255,255,.055);display:grid;place-items:center;cursor:pointer; }
+.ha-page .ha-language:hover { background:rgba(255,255,255,.12); }
+.ha-page .ha-language img { width:26px;height:26px; border-radius:50%; }
+.ha-page .ha-login { color:#fff; background:rgba(80,153,255,.13); border:1px solid rgba(120,179,255,.25); border-radius:11px;padding:9px 14px;font-weight:700;font-size:14px; }
+.ha-page .ha-login:hover { background:rgba(80,153,255,.3); }
+.ha-page .ha-account { position:relative; }
+.ha-page .ha-avatar { list-style:none;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;font-weight:850;color:#fff;border-radius:50%;background:#286dd3;border:2px solid #75aefa; }
+.ha-page .ha-avatar::-webkit-details-marker { display:none; }
+.ha-page .ha-popover { display:flex; flex-direction:column; position:absolute;top:calc(100% + 15px);right:0;z-index:20;width:min(285px,calc(100vw - 28px));padding:13px;background:#fff;border-radius:15px;box-shadow:0 16px 60px rgba(1,16,40,.23);border:1px solid #dce7f5;color:#20365b; }
+.ha-page .ha-popover strong,.ha-page .ha-popover small { overflow-wrap:anywhere;padding:2px 8px; }
+.ha-page .ha-popover small { font-size:12px!important;color:#687b94; }
+.ha-page .ha-popover a,.ha-page .ha-popover button { display:block; width:100%;background:transparent;border:0;border-radius:8px;text-align:left;padding:9px 8px;color:#153361;cursor:pointer;font:inherit;font-size:14px; }
+.ha-page .ha-popover a:hover,.ha-page .ha-popover button:hover { background:#eaf2ff; }
+.ha-page .ha-popover form { border-top:1px solid #e1e9f3;padding-top:5px;margin-top:4px; }
+.ha-page .ha-menu-button { display:none; width:42px;height:42px; padding:9px; flex-direction:column;justify-content:center;gap:5px;border:1px solid rgba(146,191,251,.2);border-radius:10px;background:transparent;cursor:pointer; }
+.ha-page .ha-menu-button span {display:block;height:2px;background:#dbeaff;border-radius:2px;}
+.ha-page .ha-hero { position:relative; isolation:isolate; color:#fff; overflow:hidden; background:linear-gradient(120deg,#091938 0%,#0a214b 52%,#092b59 100%); }
+.ha-page .ha-hero::before { content:"";pointer-events:none;position:absolute;z-index:-1;width:820px;height:820px;right:-140px;top:-210px;background:radial-gradient(circle,rgba(48,115,241,.37),transparent 66%); }
+.ha-page .ha-hero::after {content:"";position:absolute;z-index:-1;left:-150px;bottom:-300px;width:650px;height:650px;border-radius:50%;border:1px solid rgba(136,185,254,.13);box-shadow:0 0 0 85px rgba(88,144,242,.035),0 0 0 180px rgba(88,144,242,.026);}
+.ha-page .ha-hero-mesh { position:absolute;inset:0;z-index:-1;opacity:.24;background-image:linear-gradient(rgba(101,154,255,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(101,154,255,.14) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(90deg,transparent 6%,#000 100%); }
+.ha-page .ha-hero-grid { min-height:565px; display:grid;grid-template-columns:minmax(0,1.1fr) minmax(340px,.9fr); align-items:center;gap:54px; padding-block:74px 66px; }
+.ha-page .ha-hero-copy { position:relative; z-index:2; }
+.ha-page .ha-eyebrow,.ha-page .ha-section-tag { display:inline-flex;align-items:center;gap:11px;font-size:12px;line-height:1.4;font-weight:850;letter-spacing:1.9px;color:#6faffb; }
+.ha-page .ha-eyebrow {color:#b3d8ff;}
+.ha-page .ha-pulse { width:9px;height:9px;background:#77e6ce;border-radius:50%;box-shadow:0 0 0 5px rgba(119,230,206,.14); }
+.ha-page .ha-hero h1 { max-width:760px; font-size:clamp(40px,4.45vw,67px); line-height:1.11;letter-spacing:-2.9px; margin:21px 0 22px;font-weight:850; }
+.ha-page .ha-hero h1 span {display:block;}
+.ha-page .ha-hero-em {color:#87caff;background:linear-gradient(90deg,#a4e4ff,#7eacff);background-clip:text;-webkit-text-fill-color:transparent;}
+.ha-page .ha-hero-lead {max-width:650px;font-size:17px!important;line-height:1.86;color:#bed3ee;margin:0 0 29px;}
+.ha-page .ha-hero-actions {display:flex;gap:12px;flex-wrap:wrap;}
+.ha-page .ha-btn {display:inline-flex;align-items:center;justify-content:center;gap:14px;min-height:48px;padding:11px 19px;border-radius:12px;font-weight:780;font-size:14px;transition:transform .2s ease,background .2s ease,border .2s ease;}
+.ha-page .ha-btn:hover { transform:translateY(-2px); }
+.ha-page .ha-btn-primary {background:#eff7ff;color:#0b2f62;box-shadow:0 12px 29px rgba(3,18,41,.14);}
+.ha-page .ha-btn-primary:hover {background:#fff;}
+.ha-page .ha-btn-ghost {color:#e2f1ff;border:1px solid rgba(198,221,255,.36);background:rgba(255,255,255,.045);}
+.ha-page .ha-btn-ghost:hover {border-color:#b0d9ff;background:rgba(255,255,255,.08);}
+.ha-page .ha-hero-points {display:flex;flex-wrap:wrap;gap:12px 23px;margin-top:34px;color:#adc7e9;font-size:12px;}
+.ha-page .ha-hero-points>span {display:inline-flex;align-items:center;gap:6px;}
+.ha-page .ha-hero-points svg {height:17px;width:17px;color:#83e5cf;}
+.ha-page .ha-hero-art { height:450px;position:relative;display:grid;place-items:center; filter:drop-shadow(0 26px 50px rgba(0,12,32,.23)); }
+.ha-page .ha-art-mark {position:relative;z-index:2;width:min(100%,365px);height:auto;animation:ha-float 7s ease-in-out infinite;}
+.ha-page .ha-art-orbit {position:absolute;border:1px solid rgba(131,190,255,.22);border-radius:50%;}
+.ha-page .ha-orbit-1 {width:430px;height:430px;}
+.ha-page .ha-orbit-2 {width:325px;height:325px;border-style:dashed;}
+.ha-page .ha-art-sheen {width:260px;height:260px;position:absolute;background:#3999f0;border-radius:50%;filter:blur(105px);opacity:.22;}
+.ha-page .ha-orbit-tag {position:absolute;z-index:3;border:1px solid #477cb5;background:rgba(14,37,79,.9);color:#b5d9ff;padding:7px 12px;border-radius:9px;font-size:10px;font-weight:830;letter-spacing:1.1px;box-shadow:0 10px 30px rgba(2,12,35,.25);}
+.ha-page .ha-orbit-tag-a {top:40px;left:12px;}
+.ha-page .ha-orbit-tag-b {right:0;top:125px;}
+.ha-page .ha-orbit-tag-c {bottom:34px;left:47px;}
+.ha-page .ha-section {padding-block:78px;}
+.ha-page .ha-section-tag {color:#357bea;}
+.ha-page .ha-section-heading h2,.ha-page .ha-section-head-centered h2,.ha-page .ha-values-head h2,.ha-page .ha-ecosystem-head h2 {font-size:clamp(29px,3.25vw,43px);letter-spacing:-1.45px;line-height:1.25;margin:16px 0 0;font-weight:850;}
+.ha-page .ha-story {background:#fff;}
+.ha-page .ha-story-grid {display:grid;grid-template-columns:.95fr 1.05fr;gap:clamp(38px,7vw,115px);align-items:start;}
+.ha-page .ha-section-heading h2 {max-width:510px;}
+.ha-page .ha-heading-line {width:85px;height:4px;margin-top:27px;border-radius:4px;background:linear-gradient(90deg,#2673ed,#80d7ef);}
+.ha-page .ha-story-text p {font-size:16px!important;line-height:1.9;color:#526782;margin:0 0 16px;}
+.ha-page .ha-story-stamp {display:inline-flex;align-items:center;gap:12px;margin-top:11px;padding:11px 14px;background:#f1f6ff;border:1px solid #dbe8fa;border-radius:14px;color:#153665;font-weight:850;letter-spacing:.3px;font-size:12px;}
+.ha-page .ha-stamp-icon {display:grid;place-items:center;width:37px;height:37px;color:#fff;background:#286fe4;clip-path:polygon(50% 0,93% 24%,93% 75%,50% 100%,7% 75%,7% 24%);font-size:17px;}
+.ha-page .ha-story-stamp small {color:#7392bd;}
+.ha-page .ha-direction {background:#f2f7ff;}
+.ha-page .ha-section-head-centered {text-align:center;margin-bottom:33px;}
+.ha-page .ha-section-tag-dark {color:#3675d0;}
+.ha-page .ha-direction-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;}
+.ha-page .ha-direction-card {position:relative;overflow:hidden;padding:35px 35px 38px;border-radius:21px;min-height:250px;background:#fff;border:1px solid #dce8f9;box-shadow:0 12px 35px rgba(15,56,107,.035);}
+.ha-page .ha-direction-card::after {content:"";position:absolute;right:-65px;top:-65px;width:190px;height:190px;border:1px solid rgba(78,141,233,.16);transform:rotate(30deg);border-radius:32px;}
+.ha-page .ha-card-num {position:absolute;top:24px;right:29px;color:#dce9fc;font-size:48px;font-weight:850;line-height:1;}
+.ha-page .ha-card-label {font-weight:850;font-size:12px;letter-spacing:1px;color:#3278e5;}
+.ha-page .ha-direction-card h3 {font-size:24px;line-height:1.28;letter-spacing:-.5px;margin:17px 0 13px;max-width:390px;}
+.ha-page .ha-direction-card p {font-size:15px!important;color:#647590;line-height:1.83;max-width:410px;margin:0;}
+.ha-page .ha-direction-vision {background:linear-gradient(120deg,#143465,#102b56);border-color:#214c8f;color:#fff;}
+.ha-page .ha-direction-vision .ha-card-label {color:#9ed5ff;}
+.ha-page .ha-direction-vision p {color:#bed0ed;}
+.ha-page .ha-direction-vision .ha-card-num {color:rgba(139,189,255,.14);}
+.ha-page .ha-values {background:#fff;}
+.ha-page .ha-values-head {max-width:760px;margin-bottom:33px;}
+.ha-page .ha-values-grid {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:17px;}
+.ha-page .ha-value-card {padding:25px 23px 27px;border:1px solid #e3ebf6;border-radius:17px;background:#fbfdff;transition:transform .18s ease,border-color .18s ease;}
+.ha-page .ha-value-card:hover {transform:translateY(-3px);border-color:#bcd6fa;}
+.ha-page .ha-value-index {color:#3579e7;font-weight:900;font-size:13px;letter-spacing:1.3px;}
+.ha-page .ha-value-decoration {display:flex;align-items:center;gap:4px;height:44px;margin-top:15px;}
+.ha-page .ha-value-decoration span {width:17px;height:17px;border:2px solid #5aa6ef;transform:rotate(30deg);border-radius:4px;}
+.ha-page .ha-value-decoration span:nth-child(2) {border-color:#7adac8;margin-left:-5px;}
+.ha-page .ha-value-decoration span:nth-child(3) {border-color:#b0c8fa;margin-left:-5px;}
+.ha-page .ha-value-card h3 {font-size:20px;letter-spacing:-.5px;margin:0 0 10px;}
+.ha-page .ha-value-card p {font-size:14px!important;color:#667a95;line-height:1.8;margin:0;}
+.ha-page .ha-ecosystem {background:#f2f7ff;}
+.ha-page .ha-ecosystem-head {display:flex;align-items:end;justify-content:space-between;gap:45px;margin-bottom:32px;}
+.ha-page .ha-ecosystem-head>div {max-width:690px;}
+.ha-page .ha-ecosystem-head p {max-width:315px;color:#657894;font-size:14px!important;line-height:1.8;margin:0 0 4px;}
+.ha-page .ha-ecosystem-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;}
+.ha-page .ha-product {background:#fff;border:1px solid #dbe6f6;border-radius:22px;padding:31px;position:relative;min-height:335px;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;}
+.ha-page .ha-product::after {content:"";position:absolute;right:-52px;top:-82px;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(45,135,238,.16),transparent 67%);pointer-events:none;}
+.ha-page .ha-product-icon {width:60px;height:60px;border-radius:17px;background:#e9f3ff;color:#2778eb;display:grid;place-items:center;margin-bottom:15px;}
+.ha-page .ha-product-icon svg {width:35px;height:35px;}
+.ha-page .ha-product-tag {display:inline-block;font-size:11px;font-weight:850;color:#3f7fd8;letter-spacing:.9px;}
+.ha-page .ha-product h3 {font-size:27px;letter-spacing:-.7px;margin:10px 0 9px;}
+.ha-page .ha-product p {color:#627593;line-height:1.75;max-width:460px;font-size:15px!important;margin:0 0 19px;}
+.ha-page .ha-product a {margin-top:auto;color:#1766cf;font-weight:840;font-size:14px;display:inline-flex;gap:14px;align-items:center;}
+.ha-page .ha-product a:hover {color:#084388;}
+.ha-page .ha-product-saas .ha-product-icon {background:#e8f9f5;color:#138e89;}
+.ha-page .ha-product-saas .ha-product-tag {color:#148e8b;}
+.ha-page .ha-close-section {background:#f2f7ff;padding:0 0 75px;}
+.ha-page .ha-close-panel {padding:35px 40px;display:flex;justify-content:space-between;align-items:center;gap:25px;border-radius:23px;background:linear-gradient(105deg,#102a57,#103d7e);color:#fff;border:1px solid #305e9d;}
+.ha-page .ha-close-panel .ha-section-tag {color:#91d1fc;}
+.ha-page .ha-close-panel h2 {font-size:clamp(23px,3vw,35px);letter-spacing:-1px;line-height:1.23;margin:12px 0 8px;}
+.ha-page .ha-close-panel p {color:#bed3ef;font-size:15px!important;margin:0;}
+.ha-page .ha-close-panel .ha-btn {flex-shrink:0;}
+@keyframes ha-float {0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@media(max-width:1100px) {
+ .ha-page .ha-header-inner {gap:12px;}
+ .ha-page .ha-navigation {gap:14px;}
+ .ha-page .ha-navigation a {font-size:13px;}
+ .ha-page .ha-hero-grid {grid-template-columns:1fr 350px;gap:20px;min-height:520px;}
+ .ha-page .ha-hero-art {height:365px;}
+ .ha-page .ha-art-orbit {transform:scale(.83);}
+ .ha-page .ha-values-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media(max-width:800px) {
+ .ha-page .ha-wrap {width:calc(100% - 32px);}
+ .ha-page .ha-header-inner {min-height:70px;}
+ .ha-page .ha-brand {font-size:22px;}
+ .ha-page .ha-menu-button {display:flex;}
+ .ha-page .ha-navigation {display:none;position:absolute;top:calc(100% - 1px);left:0;right:0;padding:15px 22px 22px;background:#0a1b38;border-bottom:1px solid rgba(146,191,251,.24);box-shadow:0 18px 27px rgba(4,16,40,.3);flex-direction:column;align-items:stretch;gap:1px;}
+ .ha-page .ha-navigation.ha-navigation-open {display:flex;}
+ .ha-page .ha-navigation a {font-size:15px;padding:12px 9px;}
+ .ha-page .ha-navigation .ha-mobile-login {display:block;}
+ .ha-page .ha-navigation .ha-current::after {width:3px;height:22px;bottom:10px;left:0;}
+ .ha-page .ha-hero-grid {grid-template-columns:1fr;gap:0;min-height:0;padding-block:56px 43px;}
+ .ha-page .ha-hero h1 {font-size:clamp(37px,7vw,54px);letter-spacing:-1.8px;}
+ .ha-page .ha-hero-art {height:335px;max-width:480px;width:100%;margin:18px auto 0;}
+ .ha-page .ha-art-mark {width:280px;}
+ .ha-page .ha-art-orbit {transform:scale(.74);}
+ .ha-page .ha-section {padding-block:57px;}
+ .ha-page .ha-story-grid {grid-template-columns:1fr;gap:25px;}
+ .ha-page .ha-section-heading h2,.ha-page .ha-section-head-centered h2,.ha-page .ha-values-head h2,.ha-page .ha-ecosystem-head h2 {font-size:clamp(29px,5vw,38px);}
+ .ha-page .ha-heading-line {margin-top:20px;}
+ .ha-page .ha-ecosystem-head {display:block;}
+ .ha-page .ha-ecosystem-head p {max-width:630px;margin-top:17px;}
+ .ha-page .ha-close-section {padding-bottom:50px;}
+}
+@media(max-width:600px) {
+ .ha-page .ha-brand svg {width:33px;height:33px;}
+ .ha-page .ha-header-actions {gap:10px;}
+ .ha-page .ha-cart span:not(.ha-cart-count) {display:none;}
+ .ha-page .ha-login {display:none;}
+ .ha-page .ha-hero-grid {padding-top:46px;padding-bottom:25px;}
+ .ha-page .ha-hero h1 {font-size:clamp(34px,8vw,47px);}
+ .ha-page .ha-hero-lead {font-size:15.5px!important;}
+ .ha-page .ha-hero-points {gap:11px;}
+ .ha-page .ha-hero-art {height:280px;max-width:330px;}
+ .ha-page .ha-art-mark {width:245px;}
+ .ha-page .ha-orbit-tag {font-size:9px;}
+ .ha-page .ha-orbit-tag-a {top:20px;left:8px;}
+ .ha-page .ha-orbit-tag-b {top:82px;}
+ .ha-page .ha-orbit-tag-c {bottom:10px;left:15px;}
+ .ha-page .ha-direction-grid,.ha-page .ha-ecosystem-grid {grid-template-columns:1fr;}
+ .ha-page .ha-direction-card {min-height:0;padding:27px;}
+ .ha-page .ha-values-grid {grid-template-columns:1fr 1fr;gap:12px;}
+ .ha-page .ha-value-card {padding:20px 17px;}
+ .ha-page .ha-value-card h3 {font-size:18px;}
+ .ha-page .ha-value-card p {font-size:13px!important;}
+ .ha-page .ha-product {min-height:0;padding:24px;}
+ .ha-page .ha-product p {margin-bottom:25px;}
+ .ha-page .ha-close-panel {padding:29px 24px;display:block;}
+ .ha-page .ha-close-panel .ha-btn {margin-top:22px;}
+}
+@media(max-width:390px) {
+ .ha-page .ha-brand {font-size:19px;}
+ .ha-page .ha-header-actions {gap:6px;}
+ .ha-page .ha-menu-button {width:38px;height:38px;}
+ .ha-page .ha-hero-points>span {font-size:11px;}
+ .ha-page .ha-values-grid {grid-template-columns:1fr;}
+}
+@media(prefers-reduced-motion:reduce) { .ha-page * {animation:none!important;transition:none!important;} }

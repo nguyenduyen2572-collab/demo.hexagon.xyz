@@ -247,5 +247,5 @@ Route::middleware(['auth', EnsureAdmin::class])
     });
     require __DIR__.'/hexagon_saas.php';
 
-
-
+// HEXAGON public About page
+require __DIR__.'/hexagon_about.php';

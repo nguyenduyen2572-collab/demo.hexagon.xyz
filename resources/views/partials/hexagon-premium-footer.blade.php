@@ -1,4 +1,4 @@
-{{-- HEXAGON Footer Premium V5: compact informational footer, no top CTA or fake newsletter. --}}
+{{-- HEXAGON Footer Premium V5.2: dedicated About page, accurate support labels and contextual cart links. --}}
 <footer class="hx-footer hx-footer-premium hx-footer-v5" id="siteFooter">
     <div class="hx-f5-container">
         <div class="hx-f5-grid">
@@ -32,10 +32,10 @@
 
             <nav class="hx-f5-links" aria-label="Giới thiệu HEXAGON">
                 <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5ZM3 12l9 5 9-5M3 16l9 5 9-5"/></svg><span data-hx-vi="Giới thiệu" data-hx-en="About">Giới thiệu</span></h3>
-                <a href="{{ url('/') }}" data-hx-vi="Về HEXAGON" data-hx-en="About HEXAGON">Về HEXAGON</a>
+                <a href="{{ route('hexagon.about') }}" data-hx-vi="Về HEXAGON" data-hx-en="About HEXAGON">Về HEXAGON</a>
                 <a href="{{ url('/') }}#solutions" data-hx-vi="Giải pháp số" data-hx-en="Digital solutions">Giải pháp số</a>
                 <a href="{{ url('/') }}#how-it-works" data-hx-vi="Quy trình sử dụng" data-hx-en="How it works">Quy trình sử dụng</a>
-                <a href="{{ url('/') }}#support" data-hx-vi="Liên hệ & hỗ trợ" data-hx-en="Contact & support">Liên hệ & hỗ trợ</a>
+                <a href="{{ url('/') }}#support" data-hx-vi="Hỏi đáp và thông tin" data-hx-en="FAQs and information">Hỏi đáp và thông tin</a>
             </nav>
 
             <nav class="hx-f5-links" aria-label="Sản phẩm HEXAGON">
@@ -47,7 +47,9 @@
                 @else
                     <a href="{{ url('/') }}#solutions" data-hx-vi="Giải pháp SaaS" data-hx-en="SaaS solutions">Giải pháp SaaS</a>
                 @endif
-                <a href="{{ route('cart.index') }}" data-hx-vi="Giỏ hàng" data-hx-en="Shopping cart">Giỏ hàng</a>
+                @unless(request()->routeIs('cart.index'))
+                    <a href="{{ route('cart.index') }}" data-hx-vi="Giỏ hàng" data-hx-en="Shopping cart">Giỏ hàng</a>
+                @endunless
             </nav>
 
             <nav class="hx-f5-links" aria-label="Tài nguyên và hướng dẫn">
@@ -60,7 +62,7 @@
 
             <nav class="hx-f5-links" aria-label="Hỗ trợ tài khoản">
                 <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14v-3a8 8 0 0 1 16 0v3M4 14H2v5h5v-5H4Zm16 0h2v5h-5v-5h3ZM20 19c0 3-3 3-6 3h-2"/></svg><span data-hx-vi="Hỗ trợ" data-hx-en="Support">Hỗ trợ</span></h3>
-                <a href="{{ url('/') }}#support" data-hx-vi="Trung tâm trợ giúp" data-hx-en="Help centre">Trung tâm trợ giúp</a>
+                <a href="{{ url('/') }}#support" data-hx-vi="Câu hỏi thường gặp" data-hx-en="Frequently asked questions">Câu hỏi thường gặp</a>
                 @auth
                     @if(auth()->user()->is_admin)
                         <a href="{{ route('admin.dashboard') }}" data-hx-vi="Trang quản trị" data-hx-en="Admin dashboard">Trang quản trị</a>
@@ -87,12 +89,18 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>
                         </a>
                     @endif
-                    <a href="{{ route('cart.index') }}" aria-label="Giỏ hàng" title="Giỏ hàng">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 2h3l3 14h13l2-10H5"/></svg>
-                    </a>
+                    @unless(request()->routeIs('cart.index'))
+                        <a href="{{ route('cart.index') }}" aria-label="Giỏ hàng" title="Giỏ hàng">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 2h3l3 14h13l2-10H5"/></svg>
+                        </a>
+                    @endunless
                     <a href="{{ url('/') }}#support" aria-label="Trợ giúp" title="Trợ giúp">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.5 9.5a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4M12 17h.01"/></svg>
                     </a>
+                </div>
+                <div class="hx-f5-status">
+                    <span class="hx-f5-status-head"><span class="hx-f5-status-dot" aria-hidden="true"></span><span data-hx-vi="Phiên bản thử nghiệm" data-hx-en="Demo environment">Phiên bản thử nghiệm</span></span>
+                    <span data-hx-vi="Dữ liệu mẫu. Chưa hỗ trợ thanh toán hoặc đăng ký tên miền thật." data-hx-en="Sample data only. Real payments and domain registrations are not enabled.">Dữ liệu mẫu. Chưa hỗ trợ thanh toán hoặc đăng ký tên miền thật.</span>
                 </div>
             </aside>
         </div>
