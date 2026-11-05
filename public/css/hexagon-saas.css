@@ -1,0 +1,54 @@
+/* HEXAGON SaaS: mọi class được đặt tiền tố saas- để không ảnh hưởng trang cũ. */
+.saas-hero {padding:42px 0 32px;max-width:790px}
+.saas-eyebrow {display:inline-block;font-size:12px;font-weight:800;letter-spacing:1.2px;color:#1465d9;margin-bottom:15px}
+.saas-hero h1,.saas-detail h1 {font-size:clamp(29px,4.6vw,45px);line-height:1.17;letter-spacing:-1.4px;margin:0 0 16px;color:#102e5b}
+.saas-hero p,.saas-detail-lead {font-size:16px;color:#64748b;line-height:1.8;margin:0}
+.saas-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.saas-card {display:flex;flex-direction:column;background:white;border:1px solid #dce7f3;border-radius:18px;padding:26px;box-shadow:0 10px 30px #0c234708;min-height:305px}
+.saas-card:hover {border-color:#b6cffa;box-shadow:0 15px 38px #0c234712}
+.saas-card-top {display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin-bottom:22px}
+.saas-chip {display:inline-flex;align-items:center;padding:5px 10px;font-weight:800;font-size:11px;border-radius:20px;background:#eaf2ff;color:#1d5ab1}
+.saas-chip-hot {background:#ecfdf3;color:#15803d}
+.saas-card h2 {font-size:20px;margin:0 0 10px;line-height:1.35;overflow-wrap:anywhere}
+.saas-card h2 a {color:#102e5b;text-decoration:none}
+.saas-card h2 a:hover {color:#1465d9}
+.saas-summary {font-size:14px;color:#64748b;line-height:1.7;margin:0 0 25px;overflow-wrap:anywhere}
+.saas-card-bottom {display:flex;gap:14px;align-items:end;justify-content:space-between;margin-top:auto;flex-wrap:wrap}
+.saas-price {color:#102e5b;display:flex;flex-wrap:wrap;gap:3px;align-items:baseline}
+.saas-price strong,.saas-price>span {font-size:18px;font-weight:800}
+.saas-price small,.saas-detail-price small {color:#64748b}
+.saas-button {background:#1465d9;border:1px solid #1465d9;border-radius:10px;color:white!important;padding:12px 16px;font-size:13px;font-weight:750;white-space:nowrap;text-decoration:none;display:inline-block;cursor:pointer}
+.saas-button:hover {background:#0f50ac}
+.saas-button-outline {background:white;color:#1465d9!important}
+.saas-button-outline:hover {background:#eef5ff}
+.saas-empty {background:white;border:1px solid #dce7f3;padding:42px;border-radius:16px;text-align:center}
+.saas-empty h2 {font-size:21px;margin:0 0 10px}
+.saas-empty p {margin:0;color:#64748b}
+.saas-pages {display:flex;align-items:center;justify-content:space-between;gap:12px;margin:25px 0}
+.saas-pages a {color:#1465d9;font-weight:700;text-decoration:none}
+.saas-detail {display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:32px;align-items:start;padding:20px 0 45px}
+.saas-detail-description {white-space:pre-wrap;color:#334155;line-height:1.9;margin-top:30px;overflow-wrap:anywhere}
+.saas-detail-side {border:1px solid #dce7f3;background:white;border-radius:18px;padding:25px;box-shadow:0 10px 30px #0c234708}
+.saas-detail-side>p {font-size:14px;color:#64748b}
+.saas-detail-price {font-size:21px;color:#102e5b;display:flex;gap:4px;align-items:baseline;flex-wrap:wrap}
+.saas-detail-note {font-size:12px!important;line-height:1.8;border-top:1px solid #e2e8f0;padding-top:16px;margin-top:22px}
+.saas-admin-head {display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.saas-admin-table {min-width:790px}
+.saas-admin-status {display:inline-block;padding:6px 10px;border-radius:25px;font-size:12px;font-weight:750;white-space:nowrap}
+.saas-admin-status.is-on {background:#dcfce7;color:#166534}
+.saas-admin-status.is-off {background:#f1f5f9;color:#64748b}
+.saas-admin-tag {display:inline-block;background:#eaf2ff;color:#1465d9;font-size:10px;padding:5px;border-radius:6px;margin-left:6px}
+.saas-admin-actions {display:flex;align-items:center;gap:15px}
+.saas-admin-toggle {border:0;background:none;color:#1465d9;font-weight:700;cursor:pointer;font-size:14px;padding:0}
+.saas-admin-form {padding:30px}
+.saas-fields {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.saas-fields>label {display:flex;flex-direction:column;gap:9px;font-size:14px;font-weight:700;color:#334155}
+.saas-fields input:not([type=checkbox]),.saas-fields textarea {width:100%;padding:12px 14px;border-radius:9px;border:1px solid #cbd5e1;font:inherit;font-weight:400;background:white;color:#0f172a}
+.saas-fields textarea {resize:vertical}
+.saas-fields small {font-size:11px;color:#64748b;font-weight:400}
+.saas-fields .saas-wide {grid-column:1/-1}
+.saas-checks {display:flex;flex-direction:column;gap:12px;justify-content:center}
+.saas-checks label {display:flex;align-items:center;gap:10px;cursor:pointer;font-size:14px}
+.saas-form-actions {display:flex;gap:12px;margin-top:26px}
+@media(max-width:950px) {.saas-grid {grid-template-columns:repeat(2,minmax(0,1fr))}.saas-detail {grid-template-columns:1fr}}
+@media(max-width:650px) {.saas-grid {grid-template-columns:1fr}.saas-card {min-height:260px}.saas-fields {grid-template-columns:1fr}.saas-admin-form {padding:18px}.saas-hero {padding-top:15px}}

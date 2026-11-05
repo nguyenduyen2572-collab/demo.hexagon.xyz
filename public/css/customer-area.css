@@ -1,0 +1,45 @@
+/* HEXAGON - customer account and order pages */
+* { box-sizing: border-box; }
+body { margin: 0; background: #f4f7fb; color: #172c49; font-family: Arial, sans-serif; }
+a { color: #1465d9; }
+.ca-header { background: #fff; border-bottom: 1px solid #e2e8f0; padding: 18px max(20px, calc((100% - 1120px)/2)); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.ca-logo { color: #1465d9; font-size: 24px; font-weight: 800; letter-spacing: .5px; text-decoration: none; }
+.ca-home { font-size: 14px; font-weight: 600; text-decoration: none; }
+.ca-main { max-width: 1120px; margin: 42px auto; padding: 0 20px; }
+.ca-title { font-size: clamp(25px, 3vw, 32px); margin: 0 0 9px; }
+.ca-subtitle { color: #64748b; font-size: 14px; line-height: 1.6; margin: 0 0 27px; }
+.ca-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 15px; padding: 26px; min-width: 0; box-shadow: 0 7px 20px rgba(15,23,42,.025); }
+.ca-profile-layout { display: grid; grid-template-columns: minmax(270px, .95fr) minmax(340px, 1.2fr); align-items: start; gap: 22px; }
+.ca-avatar { width: 60px; height: 60px; border-radius: 50%; background: #1465d9; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 25px; margin-bottom: 16px; }
+.ca-name { font-size: 21px; font-weight: 700; overflow-wrap: anywhere; }
+.ca-email { font-size: 14px; color: #64748b; margin: 8px 0 20px; overflow-wrap: anywhere; }
+.ca-divider { height: 1px; background: #e2e8f0; margin: 22px 0; }
+.ca-field { display: grid; gap: 6px; margin-top: 18px; }
+.ca-field-label { font-size: 13px; color: #64748b; }
+.ca-field-value { font-size: 15px; font-weight: 600; overflow-wrap: anywhere; }
+.ca-card-title { font-size: 19px; margin: 0 0 12px; }
+.ca-note { font-size: 13px; line-height: 1.65; color: #64748b; }
+.ca-action { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; border: 1px solid #1465d9; background: #1465d9; color: white; padding: 12px 17px; font-size: 14px; border-radius: 9px; font-weight: 700; margin-top: 14px; }
+.ca-action:hover { background: #0e4fa9; }
+.ca-action-secondary { background: #eff6ff; border-color: #bfdbfe; color: #1465d9; }
+.ca-action-secondary:hover { background: #dbeafe; }
+.ca-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+.ca-muted { font-size: 13px; color: #64748b; }
+.ca-table-scroll { overflow-x: auto; }
+.ca-table { width: 100%; border-collapse: collapse; min-width: 700px; }
+.ca-table th, .ca-table td { text-align: left; padding: 16px 14px; border-bottom: 1px solid #edf2f7; font-size: 14px; }
+.ca-table th { background: #f8fafc; color: #64748b; font-size: 13px; font-weight: 600; }
+.ca-table tbody tr:last-child td { border-bottom: 0; }
+.ca-code { max-width: 240px; overflow-wrap: anywhere; }
+.ca-code a { text-decoration: none; font-weight: 700; }
+.ca-code a:hover { text-decoration: underline; }
+.ca-status { display: inline-block; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 7px 11px; white-space: nowrap; }
+.ca-pending { background: #fef3c7; color: #92400e; }
+.ca-processing { background: #dbeafe; color: #1d4ed8; }
+.ca-completed { background: #dcfce7; color: #166534; }
+.ca-cancelled { background: #fee2e2; color: #b91c1c; }
+.ca-unknown { background: #f1f5f9; color: #475569; }
+.ca-empty { text-align: center !important; padding: 42px 20px !important; color: #64748b; }
+.ca-pages { display: flex; justify-content: space-between; gap: 16px; margin-top: 20px; font-size: 13px; }
+.ca-pages a { text-decoration: none; font-weight: 700; }
+@media(max-width: 760px) { .ca-main { margin: 25px auto; } .ca-profile-layout { grid-template-columns: 1fr; } .ca-header { padding: 15px 20px; } .ca-card { padding: 19px; } }

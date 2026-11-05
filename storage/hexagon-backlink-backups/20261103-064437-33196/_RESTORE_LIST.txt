@@ -1,0 +1,3 @@
+resources/views\customer\layouts\settings.blade.php
+resources/views\customer\order-detail.blade.php
+resources/views\customer\orders.blade.php

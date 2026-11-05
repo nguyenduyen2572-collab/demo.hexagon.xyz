@@ -1,0 +1,29 @@
+/* HEXAGON customer profile and password pages */
+.cs-heading {display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.cs-back {font-size:14px;font-weight:700;text-decoration:none;border:1px solid #bfdbfe;background:#e8f1ff;padding:11px 16px;border-radius:9px;}
+.cs-back:hover {background:#dbeafe;}
+.cs-tabs {display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 22px;}
+.cs-tabs a {display:inline-block;text-decoration:none;border-radius:10px;padding:11px 15px;background:#fff;border:1px solid #e2e8f0;font-size:14px;color:#475569;font-weight:600;}
+.cs-tabs a.current,.cs-tabs a:hover {background:#1465d9;color:#fff;border-color:#1465d9;}
+.cs-card {max-width:660px;margin-bottom:30px;}
+.cs-card-heading {display:flex;gap:14px;align-items:center;margin-bottom:23px;}
+.cs-profile-avatar {height:48px;width:48px;display:grid;place-items:center;color:#fff;background:#1465d9;border-radius:50%;font-size:21px;font-weight:800;flex-shrink:0;}
+.cs-card-heading .ca-note {margin:4px 0 0;}
+.cs-label {display:block;font-size:14px;font-weight:700;margin:21px 0 8px;}
+.cs-input {display:block;width:100%;padding:13px 15px;border:1px solid #cbd5e1;border-radius:9px;font-size:15px;color:#172c49;background:#fff;outline:none;}
+.cs-input:focus {border-color:#1465d9;box-shadow:0 0 0 3px rgba(20,101,217,.13);}
+.cs-input[readonly] {background:#f1f5f9;color:#64748b;}
+.cs-help {font-size:12px;line-height:1.5;color:#64748b;margin:8px 0 0;}
+.cs-actions {display:flex;align-items:center;gap:12px;margin-top:26px;flex-wrap:wrap;}
+.cs-primary,.cs-secondary {display:inline-flex;align-items:center;justify-content:center;padding:13px 20px;border-radius:9px;font-size:14px;font-weight:700;text-decoration:none;cursor:pointer;}
+.cs-primary {border:1px solid #1465d9;background:#1465d9;color:#fff;}
+.cs-primary:hover {background:#0d4da8;}
+.cs-secondary {border:1px solid #cbd5e1;background:#fff;color:#475569;}
+.cs-secondary:hover {background:#f8fafc;}
+.cs-alert {padding:14px 18px;border-radius:10px;margin-bottom:18px;font-size:14px;line-height:1.6;max-width:660px;}
+.cs-alert ul {margin:6px 0 0;padding-left:18px;}
+.cs-success {border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;}
+.cs-error {border:1px solid #fecaca;background:#fff1f2;color:#991b1b;}
+.cs-field-error {color:#b91c1c;font-size:13px;margin:7px 0 0;}
+.cs-security-tip {margin-top:24px;padding:13px 15px;border-radius:9px;background:#eff6ff;color:#1e40af;font-size:13px;line-height:1.5;}
+@media(max-width:560px) {.cs-card {padding:20px;}.cs-tabs a {flex:1;text-align:center;}.cs-actions a,.cs-actions button {flex:1;}.cs-back {width:100%;text-align:center;}}

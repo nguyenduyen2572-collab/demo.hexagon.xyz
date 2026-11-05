@@ -1,0 +1,23 @@
+/* HEXAGON · Email verification & customer password recovery */
+* {box-sizing:border-box}
+body {margin:0;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:#f4f7fb;color:#172c49;line-height:1.5}
+.sec-header {background:#fff;border-bottom:1px solid #e2e8f0;padding:20px max(20px,calc((100vw - 1100px)/2));display:flex;justify-content:space-between;align-items:center;gap:15px}
+.sec-brand {color:#1465d9;font-size:25px;font-weight:800;letter-spacing:0.02em;text-decoration:none}
+.sec-link {color:#1465d9;text-decoration:none;font-size:14px;font-weight:600}
+.sec-link:hover {text-decoration:underline}
+.sec-main {max-width:500px;padding:0 18px;margin:65px auto}
+.sec-card {background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:34px;box-shadow:0 12px 30px rgba(15,23,42,.04)}
+.sec-card h1 {margin:0 0 10px;font-size:26px}
+.sec-muted {color:#64748b;font-size:14px;line-height:1.7}
+.sec-card label {display:block;margin:20px 0 8px;font-size:14px;font-weight:600}
+.sec-card input {width:100%;min-width:0;padding:13px 14px;border:1px solid #cbd5e1;border-radius:9px;font:inherit;color:#172c49}
+.sec-card input:focus {outline:3px solid #bfdbfe;border-color:#1465d9}
+.sec-btn {width:100%;margin-top:24px;border:0;border-radius:9px;padding:14px 18px;background:#1465d9;color:white;font:inherit;font-weight:700;cursor:pointer}
+.sec-btn:hover {background:#0d4da8}
+.sec-btn:focus-visible {outline:3px solid #93c5fd;outline-offset:2px}
+.sec-alert {padding:13px 16px;margin:14px 0 18px;border-radius:10px;font-size:14px;overflow-wrap:anywhere}
+.sec-success {background:#dcfce7;color:#166534}
+.sec-error {background:#fff1f2;color:#9f1239}
+.sec-bottom {margin-top:22px;text-align:center;font-size:14px}
+.sec-safety {margin-top:20px;padding:12px;border:1px dashed #cbd5e1;border-radius:9px;color:#64748b;font-size:12px}
+@media(max-width:520px){.sec-main{margin:30px auto}.sec-card{padding:24px}.sec-header{padding:16px 20px}}

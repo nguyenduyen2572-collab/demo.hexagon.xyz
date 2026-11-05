@@ -1,0 +1,3 @@
+resources\views\cart.blade.php
+resources\views\customer\account.blade.php
+resources\views\order-success.blade.php
