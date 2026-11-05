@@ -7,6 +7,8 @@
     <title>Giỏ hàng - HEXAGON</title>
     <link rel="stylesheet" href="{{ asset('css/hexagon-shop.css') }}?v=1">
     <script src="{{ asset('js/hexagon-shop-i18n.js') }}?v=1" defer></script>
+    <link rel="stylesheet" href="{{ asset('css/hexagon-web-polish.css') }}?v=4">
+    <script src="{{ asset('js/hexagon-web-polish.js') }}?v=4" defer></script>
 </head>
 <body data-page-title="pageCart">
     @include('partials.hexagon-shop-header')
@@ -51,6 +53,6 @@
         </section>
         <p class="hx-subtle" style="margin:18px 0" data-i18n="cartDemo">Giỏ hàng demo. Không thanh toán hay đăng ký tên miền thật.</p>
     </main>
-    <footer class="hx-footer"><span data-i18n="demoNote">HEXAGON · Môi trường thử nghiệm Local — Chưa thanh toán hoặc đăng ký tên miền thật.</span></footer>
+    @include('partials.hexagon-premium-footer')
 </body>
 </html>

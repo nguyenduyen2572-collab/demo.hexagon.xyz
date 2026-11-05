@@ -234,6 +234,8 @@
     <script src="{{ asset('js/hexagon-password-toggle.js') }}?v=1" defer></script>
     <link rel="stylesheet" href="{{ asset('css/hexagon-auth-cursor-state.css') }}?v=1">
     <script src="{{ asset('js/hexagon-auth-login-state.js') }}?v=1" defer></script>
+    <link rel="stylesheet" href="{{ asset('css/hexagon-web-polish.css') }}?v=4">
+    <script src="{{ asset('js/hexagon-web-polish.js') }}?v=4" defer></script>
 </head>
 <body>
 <div class="scene" aria-hidden="true"><div class="orb"></div></div>

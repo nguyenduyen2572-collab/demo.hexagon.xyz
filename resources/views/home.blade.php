@@ -9,6 +9,8 @@
     <title>HEXAGON — Tên miền &amp; giải pháp số cho tương lai</title>
     <link rel="stylesheet" href="{{ asset('css/hexagon-home-premium.css') }}?v=2">
     <script src="{{ asset('js/hexagon-home-premium.js') }}?v=2" defer></script>
+    <link rel="stylesheet" href="{{ asset('css/hexagon-web-polish.css') }}?v=4">
+    <script src="{{ asset('js/hexagon-web-polish.js') }}?v=4" defer></script>
 </head>
 <body data-check-url="{{ url('/api/v1/domains/check') }}"
       data-add-cart-url="{{ url('/cart/items') }}">
@@ -48,8 +50,7 @@
                 <a href="#support" data-i18n="navSupport">Hỗ trợ</a>
                 @guest
                     <a class="hx-mobile-auth" href="{{ route('customer.login') }}" data-i18n="login">Đăng nhập</a>
-                    <a class="hx-mobile-auth" href="{{ route('customer.register') }}" data-i18n="register">Bắt đầu</a>
-                @endguest
+@endguest
             </nav>
 
             <div class="hx-header-actions">
@@ -63,10 +64,7 @@
                 </button>
                 @guest
                     <a class="hx-header-login" href="{{ route('customer.login') }}" data-i18n="login">Đăng nhập</a>
-                    <a class="hx-header-cta" href="{{ route('customer.register') }}">
-                        <span data-i18n="register">Bắt đầu</span><span aria-hidden="true">↗</span>
-                    </a>
-                @endguest
+@endguest
                 @auth
                     <details class="hx-account" id="accountDropdown">
                         <summary class="hx-account-avatar" title="{{ auth()->user()->name }}" data-i18n-aria="accountMenu" aria-label="Mở menu tài khoản">
@@ -254,9 +252,8 @@
             </div>
         </section>
 
-        <section class="hx-last-cta"><div class="hx-container hx-cta-panel"><div><span class="hx-cta-kicker">HEXAGON / THE NEXT STEP</span><h2 data-i18n="ctaTitle">Tên miền tốt, khởi đầu tốt.</h2><p data-i18n="ctaDesc">Bắt đầu tìm tên miền phù hợp với thương hiệu của bạn ngay hôm nay.</p></div><a href="#domain-search" class="hx-cta-button"><span data-i18n="ctaButton">Bắt đầu tìm kiếm</span><span aria-hidden="true">↗</span></a></div></section>
-    </main>
+</main>
 
-    <footer class="hx-footer"><div class="hx-container hx-footer-main"><div class="hx-footer-about"><a href="{{ url('/') }}" class="hx-footer-brand">HEXAGON<span>.</span></a><p data-i18n="footerAbout">Nền tảng tên miền và giải pháp dịch vụ số đang phát triển bởi Công ty Cổ phần Lục Giác.</p></div><div class="hx-footer-right"><strong data-i18n="footerExplore">Khám phá</strong><a href="#domain-search" data-i18n="navDomain">Tên miền</a><a href="#pricing" data-i18n="navPricing">Bảng giá</a><a href="#solutions" data-i18n="navSaas">Giải pháp SaaS</a><a href="#support" data-i18n="navSupport">Hỗ trợ</a></div></div><div class="hx-container hx-footer-bottom"><span>© {{ date('Y') }} HEXAGON · <span data-i18n="company">Công ty Cổ phần Lục Giác</span></span><span data-i18n="footerDemo">Môi trường thử nghiệm · Không thanh toán hoặc đăng ký tên miền thật.</span></div></footer>
+    @include('partials.hexagon-premium-footer')
 </body>
 </html>

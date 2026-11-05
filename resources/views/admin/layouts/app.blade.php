@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'HEXAGON Admin')</title>
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v=3">
+    <link rel="stylesheet" href="{{ asset('css/hexagon-web-polish.css') }}?v=4">
+    <script src="{{ asset('js/hexagon-web-polish.js') }}?v=4" defer></script>
 </head>
 <body>
 <div class="admin-layout">

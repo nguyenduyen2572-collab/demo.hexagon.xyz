@@ -46,6 +46,8 @@
             font-size: 19px;
         }
     </style>
+    <link rel="stylesheet" href="{{ asset('css/hexagon-web-polish.css') }}?v=4">
+    <script src="{{ asset('js/hexagon-web-polish.js') }}?v=4" defer></script>
 </head>
 <body>
 <main>
