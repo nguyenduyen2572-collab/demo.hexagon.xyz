@@ -18,31 +18,59 @@ class CustomerPasswordResetController extends Controller
         return view('customer.forgot-password');
     }
 
+    // HEXAGON_FORGOT_EMAILCHECK_V1: only registered non-admin customers may request a reset link.
     public function sendLink(Request $request)
     {
         $request->merge([
             'email' => Str::lower(trim((string) $request->input('email', ''))),
         ]);
 
+        $language = $request->input('hx_locale') === 'en' ? 'en' : 'vi';
+        $english = $language === 'en';
+
         $validated = $request->validate([
             'email' => ['required', 'email', 'max:190'],
+        ], [
+            'email.required' => $english ? 'Please enter your email address.' : 'Vui lòng nhập địa chỉ email.',
+            'email.email' => $english ? 'Please enter a valid email address.' : 'Địa chỉ email không đúng định dạng.',
+            'email.max' => $english ? 'Email must not exceed 190 characters.' : 'Email không được vượt quá 190 ký tự.',
         ]);
 
-        // Chỉ gửi link cho khách hàng. Không phục vụ tài khoản Admin.
+        // Do not allow the customer flow to send password links to Admin accounts.
         $customer = User::query()
             ->where('email', $validated['email'])
             ->where('is_admin', false)
             ->first();
 
-        if ($customer) {
-            Password::sendResetLink(['email' => $customer->email]);
+        if ($customer === null) {
+            return back()->withErrors([
+                'email' => $english
+                    ? 'This email address is not registered in HEXAGON.'
+                    : 'Email này chưa được đăng ký trong hệ thống HEXAGON.',
+            ])->onlyInput('email');
         }
 
-        // Cùng một thông báo dù email có tồn tại hay không.
-        return back()->with(
-            'status',
-            'Nếu email thuộc tài khoản khách hàng HEXAGON, liên kết đặt lại mật khẩu đã được tạo.'
-        );
+        $status = Password::sendResetLink(['email' => $customer->email]);
+
+        if ($status === Password::ResetLinkSent) {
+            return back()->with('status', $english
+                ? 'A password reset link has been sent. Please check your email.'
+                : 'Đã tạo liên kết đặt lại mật khẩu. Vui lòng kiểm tra email của bạn.');
+        }
+
+        if ($status === Password::ResetThrottled) {
+            return back()->withErrors([
+                'email' => $english
+                    ? 'Too many requests. Please try again in a moment.'
+                    : 'Bạn đã yêu cầu quá nhiều lần. Vui lòng thử lại sau.',
+            ])->onlyInput('email');
+        }
+
+        return back()->withErrors([
+            'email' => $english
+                ? 'Unable to send the reset link right now. Please try again.'
+                : 'Chưa thể gửi liên kết lúc này. Vui lòng thử lại sau.',
+        ])->onlyInput('email');
     }
 
     public function showReset(Request $request, string $token)

@@ -13,6 +13,7 @@
     <script src="{{ asset('js/hexagon-auth-login-state.js') }}?v=1" defer></script>
     <link rel="stylesheet" href="{{ asset('css/hexagon-web-polish.css') }}?v=4">
     <script src="{{ asset('js/hexagon-web-polish.js') }}?v=4" defer></script>
+    @stack('hxForgotStyles')
 </head>
 <body data-auth-page="@yield('auth_page', 'register')"
       data-flag-gb="{{ asset('images/flags/gb.svg') }}"
@@ -37,5 +38,6 @@
         </section>
         <p class="hx-copyright">HEXAGON · <span data-i18n="footer">Môi trường thử nghiệm Local</span></p>
     </main>
+    @stack('hxForgotScripts')
 </body>
 </html>
