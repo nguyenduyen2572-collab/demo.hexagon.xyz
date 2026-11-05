@@ -1,0 +1,37 @@
+/* HEXAGON auth usability patch — only loaded on authentication/account pages.
+   Native text cursor and visible caret, with no replacement of existing form design. */
+body input:not(:disabled):is(
+    [type="text"], [type="email"], [type="password"], [type="tel"],
+    [type="url"], [type="search"], [type="number"]
+),
+body input:not(:disabled):not([type]),
+body textarea:not(:disabled) {
+    cursor: text !important;
+    caret-color: currentColor !important;
+}
+
+/* Enabled login buttons retain the website's original blue styles and effects.
+   Disabled buttons are grey and have absolutely no hover/active animation. */
+body [data-hx-login-submit]:disabled,
+body [data-hx-login-submit]:disabled:hover,
+body [data-hx-login-submit]:disabled:active,
+body [data-hx-login-submit]:disabled:focus {
+    background: #aab5c3 !important;
+    background-image: none !important;
+    border-color: #aab5c3 !important;
+    color: #f7f9fc !important;
+    opacity: 1 !important;
+    cursor: default !important;
+    transform: none !important;
+    filter: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    transition: none !important;
+    animation: none !important;
+}
+
+body [data-hx-login-submit]:disabled::before,
+body [data-hx-login-submit]:disabled::after {
+    animation: none !important;
+    transition: none !important;
+}

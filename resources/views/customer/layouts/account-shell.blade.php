@@ -6,6 +6,8 @@
     <title>@yield('title', 'Tài khoản HEXAGON')</title>
     <link rel="stylesheet" href="{{ asset('css/hexagon-account-unified.css') }}?v=1">
     <script src="{{ asset('js/hexagon-account-unified.js') }}?v=1" defer></script>
+    <link rel="stylesheet" href="{{ asset('css/hexagon-auth-cursor-state.css') }}?v=1">
+    <script src="{{ asset('js/hexagon-auth-login-state.js') }}?v=1" defer></script>
 </head>
 <body class="hx-account-body">
     <header class="hx-header">
