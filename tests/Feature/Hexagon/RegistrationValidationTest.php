@@ -12,7 +12,7 @@ class RegistrationValidationTest extends HexagonIsolatedTestCase
         return array_replace([
             'name' => 'Nguyễn Văn An',
             'email' => 'anhexagon@gmail.com',
-            'password' => 'Ab1!cdef', // exactly 8; upper, lower, number, special
+            'password' => 'Ab1!cdef', // 8 characters (minimum); upper, lower, number, special
             'password_confirmation' => 'Ab1!cdef',
             'ui_language' => 'vi',
         ], $extra);
@@ -35,13 +35,27 @@ class RegistrationValidationTest extends HexagonIsolatedTestCase
             ->assertSessionHasErrors('email');
     }
 
-    public function test_password_requires_eight_characters_and_complexity(): void
+    public function test_password_requires_at_least_eight_characters_and_complexity(): void
     {
         $this->post(route('customer.register.store'), $this->data(['password' => 'abcdefgh', 'password_confirmation' => 'abcdefgh']))
             ->assertSessionHasErrors('password');
 
-        $this->post(route('customer.register.store'), $this->data(['password' => 'Ab1!cdefgh', 'password_confirmation' => 'Ab1!cdefgh']))
+        $this->post(route('customer.register.store'), $this->data(['password' => 'Ab1!cde', 'password_confirmation' => 'Ab1!cde']))
             ->assertSessionHasErrors('password');
+    }
+
+    public function test_password_longer_than_eight_characters_is_accepted(): void
+    {
+        $this->post(route('customer.register.store'), $this->data([
+            'password' => 'Ab1!cdefghijk',
+            'password_confirmation' => 'Ab1!cdefghijk',
+        ]))
+            ->assertRedirect(route('customer.register'))
+            ->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'anhexagon@gmail.com',
+        ]);
     }
 
     public function test_confirmation_error_appears_on_confirmation_field(): void

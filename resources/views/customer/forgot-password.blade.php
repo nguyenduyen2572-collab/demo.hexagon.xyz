@@ -26,9 +26,4 @@
             <span class="hx-submit-arrow" aria-hidden="true">→</span>
         </button>
     </form>
-
-
-    <div class="hx-local-note" data-i18n="localEmailNote">
-        Chế độ Local: liên kết thử nghiệm nằm trong storage/logs/laravel.log.
-    </div>
 @endsection

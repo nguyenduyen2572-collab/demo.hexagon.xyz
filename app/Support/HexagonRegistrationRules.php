@@ -32,7 +32,7 @@ final class HexagonRegistrationRules
             'email.max' => 'The email address is too long.',
             'email.unique' => 'This email address is already registered.',
             'password.required' => 'Please enter a password.',
-            'password.size' => 'The password must contain exactly 8 characters.',
+            'password.min' => 'The password must contain at least 8 characters.',
             'password.regex' => 'Use uppercase, lowercase, a number and a special character.',
             'password_confirmation.required' => 'Please confirm your password.',
             'password_confirmation.same' => 'Passwords do not match.',
@@ -47,7 +47,7 @@ final class HexagonRegistrationRules
             'email.max' => 'Email quá dài.',
             'email.unique' => 'Email này đã được đăng ký.',
             'password.required' => 'Vui lòng nhập mật khẩu.',
-            'password.size' => 'Mật khẩu phải có đúng 8 ký tự.',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
             'password.regex' => 'Mật khẩu phải có chữ hoa, chữ thường, số và ký tự đặc biệt.',
             'password_confirmation.required' => 'Vui lòng nhập lại mật khẩu.',
             'password_confirmation.same' => 'Không trùng với mật khẩu.',
@@ -64,8 +64,8 @@ final class HexagonRegistrationRules
                 'ends_with:@gmail.com', Rule::unique('users', 'email'),
             ],
             'password' => [
-                'bail', 'required', 'string', 'size:8',
-                'regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8}$/s',
+                'bail', 'required', 'string', 'min:8',
+                'regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$/s',
             ],
             'password_confirmation' => ['bail', 'required', 'same:password'],
         ], $messages);

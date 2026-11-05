@@ -14,7 +14,7 @@
       emailFormat: 'Email không đúng định dạng.',
       gmail: 'Chỉ chấp nhận email có đuôi @gmail.com.',
       requiredPassword: 'Vui lòng nhập mật khẩu.',
-      passwordLength: 'Mật khẩu phải có đúng 8 ký tự.',
+      passwordLength: 'Mật khẩu phải có ít nhất 8 ký tự.',
       passwordComplex: 'Mật khẩu phải có chữ hoa, chữ thường, số và ký tự đặc biệt.',
       requiredConfirmation: 'Vui lòng nhập lại mật khẩu.',
       mismatch: 'Không trùng với mật khẩu.'
@@ -27,7 +27,7 @@
       emailFormat: 'Please enter a valid email address.',
       gmail: 'Only @gmail.com addresses are accepted.',
       requiredPassword: 'Please enter a password.',
-      passwordLength: 'The password must contain exactly 8 characters.',
+      passwordLength: 'The password must contain at least 8 characters.',
       passwordComplex: 'Use uppercase, lowercase, a number and a special character.',
       requiredConfirmation: 'Please confirm your password.',
       mismatch: 'Passwords do not match.'
@@ -61,7 +61,7 @@
     }
     if (key === 'password') {
       if (!value) return text('requiredPassword');
-      if (Array.from(value).length !== 8) return text('passwordLength');
+      if (Array.from(value).length < 8) return text('passwordLength');
       if (!/[A-Z]/.test(value) || !/[a-z]/.test(value) || !/[0-9]/.test(value) || !/[^a-zA-Z0-9]/.test(value)) return text('passwordComplex');
     }
     if (key === 'password_confirmation') {
