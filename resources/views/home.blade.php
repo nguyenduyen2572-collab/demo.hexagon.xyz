@@ -11,6 +11,7 @@
     <script src="{{ asset('js/hexagon-home-premium.js') }}?v=2" defer></script>
     <link rel="stylesheet" href="{{ asset('css/hexagon-web-polish.css') }}?v=4">
     <script src="{{ asset('js/hexagon-web-polish.js') }}?v=4" defer></script>
+    <link rel="stylesheet" href="{{ asset('css/hexagon-home-content-v6.css') }}?v=6">
 </head>
 <body data-check-url="{{ url('/api/v1/domains/check') }}"
       data-add-cart-url="{{ url('/cart/items') }}">
@@ -20,14 +21,6 @@
     @endphp
 
     <a class="hx-skip-link" href="#mainContent" data-i18n="skip">Bỏ qua điều hướng</a>
-
-    <div class="hx-announcement">
-        <div class="hx-container hx-announcement-inner">
-            <span class="hx-live-dot" aria-hidden="true"></span>
-            <span data-i18n="announcement">HEXAGON đang trong giai đoạn trải nghiệm và hoàn thiện hệ thống</span>
-            <a href="#how-it-works" data-i18n="announcementCta">Khám phá nền tảng <span aria-hidden="true">→</span></a>
-        </div>
-    </div>
 
     <header class="hx-header" id="top">
         <div class="hx-container hx-header-inner">
@@ -229,28 +222,9 @@
             </div>
         </section>
 
-        <section class="hx-how" id="how-it-works" aria-labelledby="howTitle">
-            <div class="hx-container">
-                <div class="hx-section-top hx-how-heading"><div><span class="hx-section-kicker" data-i18n="howEyebrow">TRẢI NGHIỆM ĐƠN GIẢN</span><h2 id="howTitle" data-i18n="howTitle">Từ ý tưởng đến giỏ hàng, chỉ 3 bước.</h2></div></div>
-                <div class="hx-steps">
-                    <article class="hx-step"><span class="hx-step-no">01</span><span class="hx-step-symbol" aria-hidden="true">⌕</span><h3 data-i18n="step1Title">Tìm kiếm tên miền</h3><p data-i18n="step1Desc">Nhập tên miền bạn quan tâm để kiểm tra trong hệ thống thử nghiệm.</p></article>
-                    <article class="hx-step"><span class="hx-step-no">02</span><span class="hx-step-symbol" aria-hidden="true">◈</span><h3 data-i18n="step2Title">Xem giá và lựa chọn</h3><p data-i18n="step2Desc">Xem trạng thái, giá đăng ký và giá gia hạn trước khi quyết định.</p></article>
-                    <article class="hx-step"><span class="hx-step-no">03</span><span class="hx-step-symbol" aria-hidden="true">↗</span><h3 data-i18n="step3Title">Thêm vào giỏ hàng</h3><p data-i18n="step3Desc">Tiếp tục quy trình đặt hàng demo và quản lý đơn trong tài khoản.</p></article>
-                </div>
-            </div>
-        </section>
+        @include('partials.hexagon-home-steps-v6')
 
-        <section class="hx-support" id="support" aria-labelledby="supportTitle">
-            <div class="hx-container hx-support-layout">
-                <div class="hx-support-left"><span class="hx-section-kicker" data-i18n="supportEyebrow">BẠN CẦN BIẾT</span><h2 id="supportTitle" data-i18n="supportTitle">Mọi thứ rõ ràng ngay từ đầu.</h2><p data-i18n="supportDescription">Một vài thông tin quan trọng về phiên bản HEXAGON đang trong quá trình thử nghiệm.</p></div>
-                <div class="hx-faq">
-                    <details><summary><span data-i18n="faq1Title">Tên miền tra cứu có phải dữ liệu thật?</span><span aria-hidden="true">+</span></summary><p data-i18n="faq1Desc">Chưa. Kết quả hiện tại sử dụng dữ liệu mẫu. Khi tích hợp API nhà cung cấp, HEXAGON mới có thể cung cấp dữ liệu tra cứu thực tế.</p></details>
-                    <details><summary><span data-i18n="faq2Title">Đặt hàng có phát sinh thanh toán không?</span><span aria-hidden="true">+</span></summary><p data-i18n="faq2Desc">Không. Quy trình đặt hàng hiện chỉ dùng để thử nghiệm, chưa thu tiền hoặc đăng ký tên miền thật.</p></details>
-                    <details><summary><span data-i18n="faq3Title">Tôi có thể xem lại đơn hàng ở đâu?</span><span aria-hidden="true">+</span></summary><p data-i18n="faq3Desc">Sau khi đăng nhập và xác minh email, bạn có thể xem các đơn hàng gắn với tài khoản trong mục Đơn hàng của tôi.</p></details>
-                    <details><summary><span data-i18n="faq4Title">Dịch vụ SaaS đã sẵn sàng sử dụng chưa?</span><span aria-hidden="true">+</span></summary><p data-i18n="faq4Desc">Danh mục SaaS đang được phát triển. Các dịch vụ và chức năng sẽ được cập nhật theo tiến độ của HEXAGON.</p></details>
-                </div>
-            </div>
-        </section>
+        @include('partials.hexagon-home-faq-v6')
 
 </main>
 

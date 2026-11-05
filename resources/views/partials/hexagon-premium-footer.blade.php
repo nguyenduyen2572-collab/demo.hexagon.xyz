@@ -98,10 +98,6 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.5 9.5a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4M12 17h.01"/></svg>
                     </a>
                 </div>
-                <div class="hx-f5-status">
-                    <span class="hx-f5-status-head"><span class="hx-f5-status-dot" aria-hidden="true"></span><span data-hx-vi="Phiên bản thử nghiệm" data-hx-en="Demo environment">Phiên bản thử nghiệm</span></span>
-                    <span data-hx-vi="Dữ liệu mẫu. Chưa hỗ trợ thanh toán hoặc đăng ký tên miền thật." data-hx-en="Sample data only. Real payments and domain registrations are not enabled.">Dữ liệu mẫu. Chưa hỗ trợ thanh toán hoặc đăng ký tên miền thật.</span>
-                </div>
             </aside>
         </div>
 
