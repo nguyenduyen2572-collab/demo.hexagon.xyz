@@ -47,26 +47,7 @@ class CustomerRegisterController extends Controller
         ]);
 
         // Kiểm tra thông tin
-        $validated = $request->validate([
-            'name' => [
-                'required',
-                'string',
-                'max:150',
-            ],
-
-            'email' => [
-                'required',
-                'email',
-                'max:190',
-                Rule::unique('users', 'email'),
-            ],
-
-            'password' => [
-                'required',
-                'confirmed',
-                Password::min(12),
-            ],
-        ]);
+        $validated = \App\Support\HexagonRegistrationRules::validate($request);
 
         // Tạo tài khoản khách hàng
         $user = new User();

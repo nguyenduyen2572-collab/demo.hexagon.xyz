@@ -1,0 +1,16 @@
+/* Scoped to HEXAGON registration only; leaves all other auth pages untouched. */
+.hx-reg .hx-reg-field { margin-bottom: 16px; }
+.hx-reg .hx-reg-field .hx-input { cursor: text; caret-color: #1269ed; }
+.hx-reg .hx-reg-field .hx-input[aria-invalid="true"] { border-color: #df4e59 !important; background: #fff9f9; }
+.hx-reg .hx-reg-field .hx-input[aria-invalid="true"]:focus { box-shadow: 0 0 0 3px rgba(220,53,69,.13) !important; }
+.hx-reg-error { display: none; margin: 6px 0 0; color: #bd273b; font-size: 13px; font-weight: 650; line-height: 1.5; }
+.hx-reg-error:not(:empty) { display: block; }
+.hx-reg-hint { margin: 6px 0 0; color: #667c95; font-size: 12.5px; line-height: 1.55; }
+.hx-reg-success { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 15px; padding: 15px 0 8px; }
+.hx-reg-success-icon { display: grid; place-items: center; width: 80px; height: 80px; background: #e0f8e9; border: 3px solid #a9e6c1; border-radius: 50%; color: #16864f; font-size: 44px; font-weight: 850; }
+.hx-reg-success h2 { margin: 2px 0 0; color: #104d36; font-size: clamp(25px,5vw,32px); font-weight: 850; line-height: 1.25; }
+.hx-reg-success p { margin: 0; color: #526c83; line-height: 1.7; font-size: 15px; }
+.hx-reg-success-action { display:flex; align-items:center; justify-content:center; gap:12px; width:100%; min-height:54px; padding:12px 20px; margin-top:8px; background:linear-gradient(115deg,#1263db,#168df7); color:white !important; text-decoration:none; border-radius:11px; font-weight:800; font-size:16px; box-shadow:0 12px 22px rgba(20,108,223,.2); transition:transform .15s ease,box-shadow .15s ease; }
+.hx-reg-success-action:hover { transform:translateY(-1px); box-shadow:0 15px 26px rgba(20,108,223,.3); }
+.hx-reg-success-action:focus-visible { outline:3px solid #8abfff; outline-offset:3px; }
+@media (prefers-reduced-motion: reduce) { .hx-reg-success-action { transition:none; } }
