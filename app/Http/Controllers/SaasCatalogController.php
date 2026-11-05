@@ -21,11 +21,13 @@ class SaasCatalogController extends Controller
 
     public function show(string $slug): View
     {
-        $service = DB::table('saas_services')
-            ->where('slug', $slug)
-            ->where('is_active', true)
-            ->firstOrFail();
+         $service = DB::table('saas_services')
+        ->where('slug', $slug)
+        ->where('is_active', true)
+        ->first();
 
-        return view('saas.show', compact('service'));
+    abort_if($service === null, 404);
+
+    return view('saas.show', compact('service'));
     }
 }

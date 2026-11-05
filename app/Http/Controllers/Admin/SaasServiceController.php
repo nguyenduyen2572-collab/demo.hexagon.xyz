@@ -42,13 +42,17 @@ class SaasServiceController extends Controller
 
     public function edit(int $id): View
     {
-        $service = DB::table('saas_services')->findOrFail($id);
+        $service = DB::table('saas_services')->find($id);
+        abort_if($service === null, 404);
+
         return view('admin.saas.form', compact('service'));
     }
 
     public function update(Request $request, int $id): RedirectResponse
     {
-        DB::table('saas_services')->findOrFail($id);
+        $service = DB::table('saas_services')->find($id);
+        abort_if($service === null, 404);
+
         $payload = $this->validatedPayload($request, $id);
         $payload['updated_at'] = now();
 
@@ -60,7 +64,8 @@ class SaasServiceController extends Controller
 
     public function toggle(int $id): RedirectResponse
     {
-        $service = DB::table('saas_services')->findOrFail($id);
+        $service = DB::table('saas_services')->find($id);
+        abort_if($service === null, 404);
 
         DB::table('saas_services')->where('id', $id)->update([
             'is_active' => ! (bool) $service->is_active,
