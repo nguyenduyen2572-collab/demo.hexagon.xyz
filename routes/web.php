@@ -196,7 +196,7 @@ Route::middleware(['auth', EnsureAdmin::class])
         Route::patch('/orders/{id}/status', [
             AdminOrderController::class,
             'updateStatus'
-        ])->whereNumber('id')->name('orders.update-status');
+        ])->whereNumber('id')->name('orders.update-status')->middleware(\App\Http\Middleware\AuditOrderStatusTransition::class);
         
         // Danh sách giá tên miền
         Route::get('/domain-prices', [

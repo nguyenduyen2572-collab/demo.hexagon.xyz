@@ -59,6 +59,8 @@
                             <option value="{{ $next }}" @selected(old('status') === $next)>{{ $statusLabels[$next] }}</option>
                         @endforeach
                     </select>
+                    <label for="status_note">Ghi chú xử lý (không bắt buộc)</label>
+                    <textarea id="status_note" name="status_note" rows="3" maxlength="500" placeholder="Ví dụ: Đã kiểm tra thông tin và liên hệ khách hàng">{{ old('status_note') }}</textarea>
                     <button class="primary-button" type="submit">Lưu trạng thái</button>
                 </form>
             @else
@@ -67,4 +69,5 @@
             <p class="muted">Chỉ quản lý trạng thái đơn demo, không thu tiền hoặc đăng ký tên miền thật.</p>
         </section>
     </div>
+<x-admin.order-status-timeline :order-id="$order->id" />
 @endsection
