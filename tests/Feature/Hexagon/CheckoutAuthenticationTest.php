@@ -93,10 +93,10 @@ class CheckoutAuthenticationTest extends HexagonIsolatedTestCase
         $this->actingAs($admin)
             ->withSession(['hexagon_cart' => $this->cart()])
             ->get(route('checkout.create'))
-            ->assertForbidden();
+            ->assertRedirect(route('cart.index'));
 
         $this->post(route('checkout.store'), $this->customerInfo())
-            ->assertForbidden();
+            ->assertRedirect(route('cart.index'));
 
         $this->assertDatabaseCount('orders', 0);
     }

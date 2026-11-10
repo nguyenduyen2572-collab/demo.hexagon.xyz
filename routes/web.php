@@ -140,13 +140,13 @@ Route::delete('/cart/items', [CartController::class, 'destroy'])
 // Trang nhập thông tin đặt hàng
 Route::get('/checkout', [
     OrderController::class, 'create'
-])->name('checkout.create')->middleware('auth');
+])->name('checkout.create')->middleware(\App\Http\Middleware\EnsureCheckoutCustomer::class);
 
 // Xác nhận và lưu đơn hàng
 
 Route::post('/checkout', [OrderController::class, 'store'])
     ->name('checkout.store')
-    ->block(20, 10)->middleware('auth');
+    ->block(20, 10)->middleware(\App\Http\Middleware\EnsureCheckoutCustomer::class);
 
 
 // Trang xác nhận đơn hàng
