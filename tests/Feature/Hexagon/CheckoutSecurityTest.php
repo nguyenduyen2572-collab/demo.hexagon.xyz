@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Hexagon;
 
+use App\Models\User;
+
 use Illuminate\Support\Facades\DB;
 use Tests\Support\HexagonIsolatedTestCase;
 
@@ -48,6 +50,8 @@ class CheckoutSecurityTest extends HexagonIsolatedTestCase
 
     public function test_inactive_extension_cannot_be_ordered(): void
     {
+        $this->actingAs(User::factory()->create(['is_admin' => false]));
+
         $this->insertMockDomain(active: false);
 
         $this->withSession(['hexagon_cart' => $this->demoCart()])
@@ -59,6 +63,8 @@ class CheckoutSecurityTest extends HexagonIsolatedTestCase
 
     public function test_checkout_uses_database_price_not_session_price(): void
     {
+        $this->actingAs(User::factory()->create(['is_admin' => false]));
+
         $this->insertMockDomain(active: true, price: 260000);
 
         $this->withSession(['hexagon_cart' => $this->demoCart(1)])

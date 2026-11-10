@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Hexagon;
 
+use App\Models\User;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Tests\Support\HexagonIsolatedTestCase;
@@ -53,6 +55,8 @@ class CheckoutDuplicateSubmissionTest extends HexagonIsolatedTestCase
 
     public function test_repeating_checkout_after_success_does_not_create_a_second_order(): void
     {
+        $this->actingAs(User::factory()->create(['is_admin' => false]));
+
         $this->seedSellableDomain();
 
         $this->withSession(['hexagon_cart' => $this->sampleCart()])
@@ -72,6 +76,8 @@ class CheckoutDuplicateSubmissionTest extends HexagonIsolatedTestCase
 
     public function test_empty_cart_checkout_does_not_create_an_order(): void
     {
+        $this->actingAs(User::factory()->create(['is_admin' => false]));
+
         $this->withSession(['hexagon_cart' => []])
             ->post(route('checkout.store'), $this->buyer())
             ->assertRedirect(route('cart.index'));

@@ -11,6 +11,9 @@ class OrderController extends Controller
     // Hiển thị trang đặt hàng
     public function create(Request $request)
     {
+        // HEXAGON: checkout customer only (guest blocked by auth middleware).
+        abort_if((bool) $request->user()?->is_admin, 403);
+
         $cart = $request->session()->get('hexagon_cart', []);
 
         if (empty($cart)) {
@@ -29,6 +32,9 @@ class OrderController extends Controller
     // Xử lý và lưu đơn hàng vào MySQL
     public function store(Request $request)
     {
+        // HEXAGON: checkout customer only (guest blocked by auth middleware).
+        abort_if((bool) $request->user()?->is_admin, 403);
+
         $validated = $request->validate([
             'customer_name' => 'required|string|max:150',
             'customer_email' => 'required|email|max:190',
