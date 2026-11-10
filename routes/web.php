@@ -226,13 +226,13 @@ Route::middleware(['auth', EnsureAdmin::class])
         
         // Danh sách khách đã đặt hàng
         Route::get('/customers', [
-            AdminCustomerController::class,
+            \App\Http\Controllers\Admin\AdminCustomerInsightsController::class,
             'index'
         ])->name('customers.index');
 
         // Chi tiết và lịch sử khách hàng
         Route::get('/customers/{id}', [
-            AdminCustomerController::class,
+            \App\Http\Controllers\Admin\AdminCustomerInsightsController::class,
             'show'
         ])->whereNumber('id')->name('customers.show');
 
