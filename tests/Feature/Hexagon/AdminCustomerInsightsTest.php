@@ -55,7 +55,7 @@ final class AdminCustomerInsightsTest extends HexagonIsolatedTestCase
         $this->customer('Nguyen Phuoc An', 'an.kh@example.com');
         $this->customer('Tran Ngoc Binh', 'binh.kh@example.com');
 
-        $this->actingAs($this->admin())
+        $this->actingAs($this->admin(), 'admin')
             ->get(route('admin.customers.index', ['q' => 'Phuoc']))
             ->assertOk()->assertSee('Nguyen Phuoc An')->assertDontSee('Tran Ngoc Binh');
 
@@ -68,7 +68,7 @@ final class AdminCustomerInsightsTest extends HexagonIsolatedTestCase
         $this->customer('Duong Verified', 'verified@example.com', true);
         $this->customer('Duong Pending', 'pending@example.com', false);
 
-        $this->actingAs($this->admin())
+        $this->actingAs($this->admin(), 'admin')
             ->get(route('admin.customers.index', ['verified' => 'no']))
             ->assertOk()->assertSee('Duong Pending')->assertDontSee('Duong Verified');
     }
@@ -80,7 +80,7 @@ final class AdminCustomerInsightsTest extends HexagonIsolatedTestCase
         $this->order($active->id, $active->email, 'pending_demo', 260000);
         $this->order($active->id, $active->email, 'cancelled_demo', 500000);
 
-        $this->actingAs($this->admin())
+        $this->actingAs($this->admin(), 'admin')
             ->get(route('admin.customers.index', ['orders' => 'yes']))
             ->assertOk()->assertSee('Minh Has Orders')->assertDontSee('Mai No Orders')
             ->assertSee('260.000');
@@ -91,7 +91,7 @@ final class AdminCustomerInsightsTest extends HexagonIsolatedTestCase
         $customer = $this->customer('Khach Guest Mail', 'same@example.com');
         $this->order(null, $customer->email);
 
-        $this->actingAs($this->admin())
+        $this->actingAs($this->admin(), 'admin')
             ->get(route('admin.customers.show', ['id' => $customer->id]))
             ->assertOk()->assertSee('Khach Guest Mail')
             ->assertSee('chưa có đơn hàng nào được liên kết');
@@ -107,7 +107,7 @@ final class AdminCustomerInsightsTest extends HexagonIsolatedTestCase
         $ownCode = DB::table('orders')->where('user_id', $first->id)->value('order_code');
         $otherCode = DB::table('orders')->where('user_id', $other->id)->value('order_code');
 
-        $this->actingAs($this->admin())
+        $this->actingAs($this->admin(), 'admin')
             ->get(route('admin.customers.show', ['id' => $first->id]))
             ->assertOk()->assertSee($ownCode)->assertDontSee($otherCode);
     }
@@ -115,14 +115,14 @@ final class AdminCustomerInsightsTest extends HexagonIsolatedTestCase
     public function test_admin_accounts_are_not_listed_as_customers(): void
     {
         $admin = $this->admin();
-        $this->actingAs($admin)
+        $this->actingAs($admin, 'admin')
             ->get(route('admin.customers.show', ['id' => $admin->id]))
             ->assertNotFound();
     }
 
     public function test_invalid_filter_does_not_trigger_sql_error(): void
     {
-        $this->actingAs($this->admin())
+        $this->actingAs($this->admin(), 'admin')
             ->get(route('admin.customers.index', ['sort' => 'not-a-valid-column']))
             ->assertSessionHasErrors('sort');
     }

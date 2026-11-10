@@ -10,8 +10,8 @@ class CustomerLoginController extends Controller
 {
     public function showLogin()
     {
-        if (Auth::check()) {
-            return redirect()->to(Auth::user()->is_admin ? route('admin.dashboard') : '/');
+        if (Auth::guard('web')->check()) {
+            return redirect()->to(Auth::guard('web')->user()->is_admin ? route('admin.dashboard') : '/');
         }
 
         return view('customer.login');
@@ -25,7 +25,7 @@ class CustomerLoginController extends Controller
         ]);
 
         // Customer accounts only; never authenticate Admin via the customer form.
-        if (Auth::attempt([
+        if (Auth::guard('web')->attempt([
             'email' => strtolower(trim($credentials['email'])),
             'password' => $credentials['password'],
             'is_admin' => false,
@@ -42,9 +42,9 @@ class CustomerLoginController extends Controller
     public function logout(Request $request)
     {
         // The customer logout endpoint must not log out an Admin account.
-        abort_unless(Auth::check() && !Auth::user()->is_admin, 403);
-        Auth::logout();
-        $request->session()->invalidate();
+        abort_unless(Auth::guard('web')->check() && !Auth::guard('web')->user()->is_admin, 403);
+        Auth::guard('web')->logout();
+        $request->session()->regenerate();
         $request->session()->regenerateToken();
         return redirect('/');
     }

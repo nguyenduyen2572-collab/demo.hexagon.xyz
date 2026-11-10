@@ -51,7 +51,7 @@ class SaasCatalogTest extends HexagonIsolatedTestCase
     {
         $admin = User::factory()->create(['is_admin' => true]);
 
-        $this->actingAs($admin)->post(route('admin.saas.store'), [
+        $this->actingAs($admin, 'admin')->post(route('admin.saas.store'), [
             'slug' => 'demo-saas',
             'name_vi' => 'Phần mềm Demo',
             'summary_vi' => 'Mô tả mẫu',
@@ -73,7 +73,7 @@ class SaasCatalogTest extends HexagonIsolatedTestCase
         $id = DB::table('saas_services')->where('slug', 'demo-saas')->value('id');
         $admin = User::factory()->create(['is_admin' => true]);
 
-        $this->actingAs($admin)
+        $this->actingAs($admin, 'admin')
             ->patch(route('admin.saas.toggle', $id))
             ->assertRedirect(route('admin.saas.index'));
 

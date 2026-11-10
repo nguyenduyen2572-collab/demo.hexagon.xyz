@@ -1,5 +1,7 @@
 <?php
 
+
+use App\Http\Controllers\Admin\SeparatedAdminAuthController;
 use App\Http\Controllers\Customer\CustomerSettingsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
@@ -159,17 +161,17 @@ Route::get('/admin', function () {
         })->name('admin.index');
 // Trang đăng nhập Admin
 Route::get('/admin/login', [
-    AdminAuthController::class, 'showLogin'
+    SeparatedAdminAuthController::class, 'showLogin'
 ])->name('login');
 
 Route::post('/admin/login', [
-    AdminAuthController::class, 'login'
+    SeparatedAdminAuthController::class, 'login'
 ])->middleware('throttle:5,1')
   ->name('admin.login.submit');
 
 // Chỉ tài khoản đã đăng nhập và có quyền Admin
 
-Route::middleware(['auth', EnsureAdmin::class])
+Route::middleware([\App\Http\Middleware\EnsureAdminSession::class, EnsureAdmin::class])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -240,7 +242,7 @@ Route::middleware(['auth', EnsureAdmin::class])
 
         // Đăng xuất Admin
         Route::post('/logout', [
-            AdminAuthController::class,
+            SeparatedAdminAuthController::class,
             'logout'
         ])->name('logout');
 

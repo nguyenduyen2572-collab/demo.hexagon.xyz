@@ -39,7 +39,7 @@ final class AdminOrderFiltersTest extends HexagonIsolatedTestCase
         $included = $this->makeOrder('Nguyen Van An', 'an@example.com', 'pending_demo', '2026-11-10 09:30:00');
         $excluded = $this->makeOrder('Tran Thi Binh', 'binh@example.com', 'pending_demo', '2026-11-10 09:30:00');
 
-        $this->actingAs($this->admin())
+        $this->actingAs($this->admin(), 'admin')
             ->get(route('admin.orders.index', ['q' => 'Nguyen Van An']))
             ->assertOk()->assertSee($included)->assertDontSee($excluded);
     }
@@ -49,7 +49,7 @@ final class AdminOrderFiltersTest extends HexagonIsolatedTestCase
         $included = $this->makeOrder('Khach A', 'a@example.com', 'processing_demo', '2026-11-10 09:30:00');
         $excluded = $this->makeOrder('Khach B', 'b@example.com', 'cancelled_demo', '2026-11-10 09:30:00');
 
-        $this->actingAs($this->admin())
+        $this->actingAs($this->admin(), 'admin')
             ->get(route('admin.orders.index', ['status' => 'processing_demo']))
             ->assertOk()->assertSee($included)->assertDontSee($excluded);
     }
@@ -59,7 +59,7 @@ final class AdminOrderFiltersTest extends HexagonIsolatedTestCase
         $included = $this->makeOrder('Khach A', 'a@example.com', 'pending_demo', '2026-11-09 23:59:59');
         $excluded = $this->makeOrder('Khach B', 'b@example.com', 'pending_demo', '2026-11-10 00:00:00');
 
-        $this->actingAs($this->admin())
+        $this->actingAs($this->admin(), 'admin')
             ->get(route('admin.orders.index', ['from' => '2026-11-09', 'to' => '2026-11-09']))
             ->assertOk()->assertSee($included)->assertDontSee($excluded);
     }
@@ -69,7 +69,7 @@ final class AdminOrderFiltersTest extends HexagonIsolatedTestCase
         $included = $this->makeOrder('Duong', 'duong@example.com', 'pending_demo', '2026-11-09 10:00:00');
         $excluded = $this->makeOrder('Duong B', 'duong2@example.com', 'completed_demo', '2026-11-09 10:00:00');
 
-        $this->actingAs($this->admin())
+        $this->actingAs($this->admin(), 'admin')
             ->get(route('admin.orders.index', ['q' => 'Duong', 'status' => 'pending_demo']))
             ->assertOk()->assertSee($included)->assertDontSee($excluded);
         $this->assertDatabaseCount('orders', 2);
@@ -88,7 +88,7 @@ final class AdminOrderFiltersTest extends HexagonIsolatedTestCase
             $this->makeOrder('Khach Loc ' . $n, 'filter'.$n.'@example.com', 'pending_demo', '2026-11-09 10:00:00');
         }
 
-        $this->actingAs($this->admin())
+        $this->actingAs($this->admin(), 'admin')
             ->get(route('admin.orders.index', ['status' => 'pending_demo', 'q' => 'Khach Loc']))
             ->assertOk()->assertSee('status=pending_demo', false)->assertSee('q=Khach', false);
     }

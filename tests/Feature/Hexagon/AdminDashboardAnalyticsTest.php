@@ -52,7 +52,7 @@ final class AdminDashboardAnalyticsTest extends HexagonIsolatedTestCase
     {
         $this->makeOrder('pending_demo', '2026-11-10 10:30:00');
 
-        $this->actingAs(User::factory()->create(['is_admin' => true]))
+        $this->actingAs(User::factory()->create(['is_admin' => true]), 'admin')
             ->get(route('admin.dashboard', ['days' => 7]))
             ->assertOk()
             ->assertSee('Phân tích hoạt động')

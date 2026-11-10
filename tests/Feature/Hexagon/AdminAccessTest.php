@@ -30,7 +30,7 @@ class AdminAccessTest extends HexagonIsolatedTestCase
         $admin->is_admin = true;
         $admin->save();
 
-        $this->actingAs($admin)
+        $this->actingAs($admin, 'admin')
             ->get(route('admin.orders.index'))
             ->assertOk();
     }

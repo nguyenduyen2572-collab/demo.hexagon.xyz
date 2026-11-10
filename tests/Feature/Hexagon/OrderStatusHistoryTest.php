@@ -37,7 +37,7 @@ class OrderStatusHistoryTest extends HexagonIsolatedTestCase
         $orderId = $this->createOrder();
         $admin = $this->admin();
 
-        $this->actingAs($admin)
+        $this->actingAs($admin, 'admin')
             ->patch(route('admin.orders.update-status', ['id' => $orderId]), [
                 'status' => 'processing_demo',
                 'status_note' => 'Da lien he khach hang',
@@ -57,7 +57,7 @@ class OrderStatusHistoryTest extends HexagonIsolatedTestCase
     {
         $orderId = $this->createOrder();
 
-        $this->actingAs($this->admin())
+        $this->actingAs($this->admin(), 'admin')
             ->patch(route('admin.orders.update-status', ['id' => $orderId]), [
                 'status' => 'cancelled_demo',
             ])->assertRedirect();
@@ -70,7 +70,7 @@ class OrderStatusHistoryTest extends HexagonIsolatedTestCase
     {
         $orderId = $this->createOrder();
 
-        $this->actingAs($this->admin())
+        $this->actingAs($this->admin(), 'admin')
             ->from(route('admin.orders.show', ['id' => $orderId]))
             ->patch(route('admin.orders.update-status', ['id' => $orderId]), [
                 'status' => 'completed_demo',
@@ -84,7 +84,7 @@ class OrderStatusHistoryTest extends HexagonIsolatedTestCase
     {
         $orderId = $this->createOrder('completed_demo');
 
-        $this->actingAs($this->admin())
+        $this->actingAs($this->admin(), 'admin')
             ->patch(route('admin.orders.update-status', ['id' => $orderId]), [
                 'status' => 'cancelled_demo',
             ])->assertSessionHasErrors('status');
@@ -118,7 +118,7 @@ class OrderStatusHistoryTest extends HexagonIsolatedTestCase
             'created_at' => now(),
         ]);
 
-        $this->actingAs($this->admin())
+        $this->actingAs($this->admin(), 'admin')
             ->get(route('admin.orders.show', ['id' => $orderId]))
             ->assertOk()
             ->assertSee('Lịch sử xử lý đơn hàng')
@@ -129,7 +129,7 @@ class OrderStatusHistoryTest extends HexagonIsolatedTestCase
     {
         $orderId = $this->createOrder();
 
-        $this->actingAs($this->admin())
+        $this->actingAs($this->admin(), 'admin')
             ->patch(route('admin.orders.update-status', ['id' => $orderId]), [
                 'status' => 'processing_demo',
                 'status_note' => str_repeat('x', 501),
