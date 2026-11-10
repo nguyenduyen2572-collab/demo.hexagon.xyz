@@ -45,7 +45,14 @@ final class SeparatedAdminAuthController extends Controller
             ])->onlyInput('email');
         }
 
-        // Regenerate the ID, retaining cart and any web/customer session data.
+        // Clear only a legacy web-guard Admin session after a successful
+        // dedicated Admin login. Never remove a genuine Customer web session.
+        $webUser = Auth::guard('web')->user();
+        if ($webUser !== null && (bool) $webUser->is_admin) {
+            Auth::guard('web')->logout();
+        }
+
+        // Keep cart and any genuine Customer authentication intact.
         $request->session()->regenerate();
 
         return redirect()->route('admin.dashboard');

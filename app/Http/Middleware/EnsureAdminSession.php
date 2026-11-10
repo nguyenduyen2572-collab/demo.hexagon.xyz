@@ -31,8 +31,36 @@ final class EnsureAdminSession
             return $next($request);
         }
 
-        // Preserve previous behavior: customers receive 403, guests go to login.
-        if (Auth::guard('web')->check()) {
+        // A session created BEFORE Admin and Customer guards were separated
+        // may still contain an Admin account under the old "web" guard.
+        // This is a migration case, not a Customer attempting to gain access.
+        $webUser = Auth::guard('web')->user();
+
+        if ($webUser !== null && (bool) $webUser->is_admin) {
+            if ($request->routeIs('admin.logout')) {
+                // The legacy Admin logout button must work without changing
+                // a separate Customer session or invalidating the whole session.
+                Auth::guard('web')->logout();
+                $request->session()->regenerate();
+
+                return redirect()->route('login')
+                    ->with('status', 'Đã đăng xuất phiên quản trị cũ.');
+            }
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Phiên Admin cũ đã thay đổi. Vui lòng đăng nhập lại.',
+                ], 401);
+            }
+
+            return redirect()->route('login')->with(
+                'status',
+                'Phiên Admin cũ cần đăng nhập lại để chuyển sang cơ chế xác thực mới.'
+            );
+        }
+
+        // A real Customer must never gain access to Admin routes.
+        if ($webUser !== null) {
             abort(403, 'Tài khoản khách hàng không có quyền quản trị.');
         }
 
