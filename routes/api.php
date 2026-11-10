@@ -14,5 +14,5 @@ Route::get('/user', function (Request $request) {
 Route::get(
     '/v1/domains/check',
     [DomainController::class, 'check']
-)->middleware('throttle:hexagon-domain-search');
+)->middleware('throttle:hexagon-domain-search')->middleware(\App\Http\Middleware\HexagonDomainSearchCooldown::class);
 

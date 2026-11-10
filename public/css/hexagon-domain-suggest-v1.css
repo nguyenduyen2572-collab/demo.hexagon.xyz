@@ -1,0 +1,29 @@
+/* HEXAGON domain suggestions, scoped to existing Premium search controls. */
+.hx-domain-form-enhanced { position: relative; }
+.hx-domain-suggestions[hidden],.hx-domain-cooldown[hidden]{display:none!important}
+.hx-domain-suggestions {
+  position:absolute; left:0; right:0; z-index:55; background:#fff;
+  color:#122748; border:1px solid #dce6f4; border-radius:15px;
+  padding:7px; max-height:350px; overflow-y:auto;
+  box-shadow:0 20px 45px rgba(5,20,56,.27);
+}
+.hx-domain-suggest-head{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:10px 12px 9px;border-bottom:1px solid #ebeff6;flex-wrap:wrap}
+.hx-domain-suggest-head strong{font-size:12px;color:#132d56;font-weight:800}
+.hx-domain-suggest-head span{font-size:11px;color:#7d899e}
+.hx-domain-suggest-option{width:100%;display:flex;align-items:center;justify-content:space-between;
+  gap:10px;background:transparent;border:0;border-radius:10px;padding:10px 12px;
+  text-align:left;color:#0e2b57;cursor:pointer;font:inherit}
+.hx-domain-suggest-option:hover,.hx-domain-suggest-option.is-highlighted,
+.hx-domain-suggest-option:focus-visible{background:#edf5ff;outline:none}
+.hx-domain-suggest-main{display:flex;flex-direction:column;gap:3px;min-width:0}
+.hx-domain-suggest-main strong{font-size:14px;font-weight:750;overflow-wrap:anywhere}
+.hx-domain-suggest-main small{font-size:11px;color:#6d7e9a}
+.hx-domain-suggest-arrow{color:#347cf2;font-size:18px;font-weight:700}
+.hx-domain-cooldown{margin:9px 8px 2px;font-size:12px;color:#b9caff;line-height:1.4}
+@media(max-width:590px){
+ .hx-domain-suggestions{max-height:295px;border-radius:12px}
+ .hx-domain-suggest-head span{display:none}
+ .hx-domain-suggest-option{padding:9px 11px}
+ .hx-domain-suggest-main strong{font-size:13px}
+}
