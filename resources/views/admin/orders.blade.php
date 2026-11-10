@@ -9,6 +9,7 @@
         <p>Quản lý các đơn hàng thử nghiệm của hệ thống HEXAGON.</p>
     </div>
 
+    @include('admin.partials.order-filters-v1')
     <section class="panel">
         <div class="table-wrap">
             <table class="admin-table">

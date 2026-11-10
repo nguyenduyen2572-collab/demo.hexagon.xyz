@@ -1,0 +1,19 @@
+/* HEXAGON - Giao diện lọc đơn hàng Admin; không thay đổi CSS global. */
+.hx-order-filter{margin:0 0 22px;background:#fff;border:1px solid #dbe5f2;border-radius:17px;padding:20px 22px;box-shadow:0 8px 28px rgba(12,35,72,.045)}
+.hx-order-filter__form{display:grid;grid-template-columns:minmax(220px,1.7fr) minmax(165px,1fr) minmax(145px,.8fr) minmax(145px,.8fr);gap:14px;align-items:end}
+.hx-order-filter__field{display:flex;flex-direction:column;min-width:0;gap:7px}
+.hx-order-filter__field label{font-size:13px;font-weight:750;color:#192c4b}
+.hx-order-filter__field input,.hx-order-filter__field select{box-sizing:border-box;width:100%;min-height:43px;padding:10px 12px;border-radius:10px;border:1px solid #cbd8e8;background:#fff;color:#172a49;font:inherit;font-size:14px;outline:none}
+.hx-order-filter__field input:focus,.hx-order-filter__field select:focus{border-color:#2476dc;box-shadow:0 0 0 3px rgba(36,118,220,.13)}
+.hx-order-filter__field input::placeholder{color:#8390a5}
+.hx-order-filter__actions{grid-column:1/-1;display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:3px}
+.hx-order-filter__submit,.hx-order-filter__reset{display:inline-flex;align-items:center;justify-content:center;border-radius:10px;padding:11px 18px;min-height:43px;text-decoration:none;font:inherit;font-size:14px;font-weight:750;cursor:pointer;box-sizing:border-box}
+.hx-order-filter__submit{background:#1452a5;color:#fff;border:1px solid #1452a5}
+.hx-order-filter__submit:hover{background:#0d428d}
+.hx-order-filter__reset{border:1px solid #cbd8e8;background:#f8fafc;color:#233c61}
+.hx-order-filter__reset:hover{background:#eef4fc}
+.hx-order-filter__meta{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:13px;padding-top:13px;border-top:1px solid #e8eef6;font-size:13px;color:#62738d}
+.hx-order-filter__meta strong{color:#1553ab;font-size:16px}
+.hx-order-filter__warning{color:#bd2525;font-weight:650;margin-left:8px}
+@media(max-width:1150px){.hx-order-filter__form{grid-template-columns:repeat(2,minmax(0,1fr))}.hx-order-filter__field--search{grid-column:1/-1}}
+@media(max-width:620px){.hx-order-filter{padding:16px}.hx-order-filter__form{grid-template-columns:1fr}.hx-order-filter__field--search{grid-column:auto}.hx-order-filter__actions>*{flex:1}}

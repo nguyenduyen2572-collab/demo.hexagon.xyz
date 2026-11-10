@@ -34,9 +34,9 @@ class AdminOrderController extends Controller
     // Danh sách đơn hàng
     public function index()
     {
-        $orders = DB::table('orders')
+        $orders = \App\Support\HexagonAdminOrderFilters::apply(DB::table('orders'), request())
             ->orderByDesc('id')
-            ->paginate(10);
+            ->paginate(10)->withQueryString();
 
         return view('admin.orders', [
             'orders' => $orders,
