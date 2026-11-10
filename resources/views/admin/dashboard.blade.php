@@ -61,5 +61,9 @@
             </table>
         </div>
     </section>
+
+{{-- HEXAGON ANALYTICS V2.1: BEGIN --}}
+<x-admin.dashboard-analytics />
+{{-- HEXAGON ANALYTICS V2.1: END --}}
 @endsection
     
