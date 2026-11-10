@@ -12,7 +12,16 @@ class OrderController extends Controller
     public function create(Request $request)
     {
         // HEXAGON: checkout customer only (guest blocked by auth middleware).
-        abort_if((bool) $request->user()?->is_admin, 403);
+        if ((bool) $request->user()?->is_admin) {
+    return redirect()
+        ->route('cart.index')
+        ->with(
+            'error',
+            'Bạn đang đăng nhập bằng tài khoản Admin. '
+            . 'Vui lòng đăng xuất Admin và đăng nhập '
+            . 'bằng tài khoản khách hàng để tiếp tục đặt hàng.'
+        );
+}
 
         $cart = $request->session()->get('hexagon_cart', []);
 
