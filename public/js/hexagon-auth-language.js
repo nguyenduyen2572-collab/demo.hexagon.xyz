@@ -1,3 +1,4 @@
+/* HEXAGON_PASSWORD_SECURITY_V2 */
 /* HEXAGON VI/EN: shares localStorage('hexagon-language') with the homepage. */
 (() => {
     'use strict';
@@ -6,12 +7,12 @@
             home: 'Trang chủ', footer: 'Môi trường thử nghiệm Local',
             registerTitle: 'Tạo tài khoản', registerLead: 'Bắt đầu hành trình tên miền của bạn với HEXAGON.',
             fullName: 'Họ và tên', email: 'Email', password: 'Mật khẩu',
-            passwordHint: 'Ít nhất 12 ký tự.', confirmPassword: 'Nhập lại mật khẩu',
+            passwordHint: 'Tối thiểu 8 ký tự: chữ hoa, chữ thường, số và ký tự đặc biệt.', confirmPassword: 'Nhập lại mật khẩu',
             registerButton: 'Đăng ký tài khoản', haveAccount: 'Đã có tài khoản?', login: 'Đăng nhập',
             forgotTitle: 'Quên mật khẩu?', forgotLead: 'Nhập email để nhận liên kết đặt lại mật khẩu.',
             forgotButton: 'Gửi liên kết đặt lại mật khẩu', backLogin: '← Quay lại đăng nhập',
             localEmailNote: 'Chế độ Local: liên kết thử nghiệm nằm trong storage/logs/laravel.log.',
-            resetTitle: 'Đặt lại mật khẩu', resetLead: 'Tạo mật khẩu mới tối thiểu 12 ký tự.',
+            resetTitle: 'Đặt lại mật khẩu', resetLead: 'Tạo mật khẩu mới tối thiểu 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt.',
             newPassword: 'Mật khẩu mới', confirmNewPassword: 'Nhập lại mật khẩu mới', resetButton: 'Lưu mật khẩu mới',
             verifyTitle: 'Xác minh địa chỉ email', verifyLead: 'Vui lòng xác minh email trước khi sử dụng khu vực tài khoản.',
             verifyButton: 'Gửi lại liên kết xác minh', backHome: '← Về trang chủ',
@@ -21,12 +22,12 @@
             home: 'Home', footer: 'Local testing environment',
             registerTitle: 'Create an account', registerLead: 'Start your domain journey with HEXAGON.',
             fullName: 'Full name', email: 'Email', password: 'Password',
-            passwordHint: 'Use at least 12 characters.', confirmPassword: 'Confirm password',
+            passwordHint: 'At least 8 characters, including uppercase, lowercase, number and symbol.', confirmPassword: 'Confirm password',
             registerButton: 'Create account', haveAccount: 'Already have an account?', login: 'Log in',
             forgotTitle: 'Forgot password?', forgotLead: 'Enter your email address to receive a password reset link.',
             forgotButton: 'Send reset link', backLogin: '← Back to login',
             localEmailNote: 'Local mode: the test link is written to storage/logs/laravel.log.',
-            resetTitle: 'Reset password', resetLead: 'Set a new password with at least 12 characters.',
+            resetTitle: 'Reset password', resetLead: 'Use at least 8 characters, including uppercase, lowercase, number and symbol.',
             newPassword: 'New password', confirmNewPassword: 'Confirm new password', resetButton: 'Save new password',
             verifyTitle: 'Verify your email', verifyLead: 'Please verify your email before accessing your account.',
             verifyButton: 'Resend verification link', backHome: '← Back to homepage',

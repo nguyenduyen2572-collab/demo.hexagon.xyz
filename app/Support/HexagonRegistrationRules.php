@@ -63,10 +63,7 @@ final class HexagonRegistrationRules
                 'bail', 'required', 'string', 'email:rfc', 'max:190',
                 'ends_with:@gmail.com', Rule::unique('users', 'email'),
             ],
-            'password' => [
-                'bail', 'required', 'string', 'min:8',
-                'regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$/s',
-            ],
+            'password' => ['bail', 'required', 'string', ...\App\Support\HexagonPasswordPolicy::requirements()],
             'password_confirmation' => ['bail', 'required', 'same:password'],
         ], $messages);
 

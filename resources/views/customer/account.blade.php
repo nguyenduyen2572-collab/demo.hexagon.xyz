@@ -3,6 +3,8 @@
 @section('title', 'Tài khoản của tôi - HEXAGON')
 
 @section('content')
+{{-- hx-security-account-v2 --}}
+<link rel="stylesheet" href="{{ asset('css/hexagon-password-security-v2.css') }}?v=1">
 @php
     $passwordHasErrors = $errors->has('current_password') || $errors->has('new_password') || $errors->has('new_password_confirmation');
     $initialTab = $passwordHasErrors ? 'security' : (session('account_tab') === 'security' || request('tab') === 'security' || request('tab') === 'password' ? 'security' : 'profile');
@@ -65,9 +67,10 @@
             <h2 data-vi="Đổi mật khẩu" data-en="Change password">Đổi mật khẩu</h2>
             <p data-vi="Nhập mật khẩu hiện tại để bảo vệ tài khoản của bạn." data-en="Enter your current password to protect your account.">Nhập mật khẩu hiện tại để bảo vệ tài khoản của bạn.</p>
         </div>
-        <form method="POST" action="{{ route('customer.account.password.update') }}" class="hx-form" autocomplete="on">
+        <form method="POST" action="{{ route('customer.account.password.update') }}" class="hx-form" autocomplete="on" novalidate>
             @csrf
             @method('PATCH')
+            <input type="hidden" name="ui_language" data-hx-password-locale value="vi">
             <label for="hx-current-password" data-vi="Mật khẩu hiện tại" data-en="Current password">Mật khẩu hiện tại</label>
             <div class="hx-password-field">
                 <input id="hx-current-password" name="current_password" type="password" autocomplete="current-password" required>
@@ -79,21 +82,22 @@
 
             <label for="hx-new-password" data-vi="Mật khẩu mới" data-en="New password">Mật khẩu mới</label>
             <div class="hx-password-field">
-                <input id="hx-new-password" name="new_password" type="password" autocomplete="new-password" minlength="12" required>
+                <input id="hx-new-password" name="new_password" type="password" autocomplete="new-password" minlength="8" required>
                 <button type="button" data-hx-eye="hx-new-password" aria-label="Hiển thị mật khẩu" aria-pressed="false" title="Hiển thị mật khẩu">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.7-6 10-6 10 6 10 6-3.7 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/><path class="hx-eye-slash" d="M3 3 21 21"/></svg>
                 </button>
             </div>
-            <p class="hx-hint" data-vi="Ít nhất 12 ký tự và khác mật khẩu hiện tại." data-en="At least 12 characters and different from your current password.">Ít nhất 12 ký tự và khác mật khẩu hiện tại.</p>
+            <p class="hx-hint" data-vi="Tối thiểu 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt; khác mật khẩu cũ." data-en="At least 8 characters, including upper/lowercase, a number and a symbol; different from your old password.">Tối thiểu 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt; khác mật khẩu cũ.</p>
             @error('new_password')<div class="hx-field-error" role="alert">{{ $message }}</div>@enderror
 
             <label for="hx-confirm-password" data-vi="Xác nhận mật khẩu mới" data-en="Confirm new password">Xác nhận mật khẩu mới</label>
             <div class="hx-password-field">
-                <input id="hx-confirm-password" name="new_password_confirmation" type="password" autocomplete="new-password" minlength="12" required>
+                <input id="hx-confirm-password" name="new_password_confirmation" type="password" autocomplete="new-password" minlength="8" required>
                 <button type="button" data-hx-eye="hx-confirm-password" aria-label="Hiển thị mật khẩu" aria-pressed="false" title="Hiển thị mật khẩu">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.7-6 10-6 10 6 10 6-3.7 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/><path class="hx-eye-slash" d="M3 3 21 21"/></svg>
                 </button>
             </div>
+            @error('new_password_confirmation')<p class="hx-security-inline-error" role="alert">{{ $message }}</p>@enderror
             <div class="hx-form-actions">
                 <button type="submit" class="hx-primary-button" data-vi="Cập nhật mật khẩu" data-en="Update password">Cập nhật mật khẩu</button>
             </div>
@@ -101,4 +105,5 @@
         <p class="hx-safety-note" data-vi="Website hiện chạy trên Local HTTP. Chỉ sử dụng mật khẩu thử nghiệm, không dùng lại mật khẩu thật." data-en="This website currently runs on local HTTP. Use test passwords only, not real ones.">Website hiện chạy trên Local HTTP. Chỉ sử dụng mật khẩu thử nghiệm, không dùng lại mật khẩu thật.</p>
     </section>
 </section>
+<script src="{{ asset('js/hexagon-password-security-v2.js') }}?v=1" defer></script>
 @endsection

@@ -87,11 +87,20 @@ class CustomerPasswordResetController extends Controller
             'email' => Str::lower(trim((string) $request->input('email', ''))),
         ]);
 
+        // HEXAGON_RESET_PASSWORD_SECURITY_V2: chỉ cập nhật chính sách, giữ nguyên xác thực token.
+        $english = \App\Support\HexagonPasswordPolicy::isEnglish($request);
         $validated = $request->validate([
             'token' => ['required', 'string'],
             'email' => ['required', 'email', 'max:190'],
-            'password' => ['required', 'confirmed', PasswordRule::min(12)],
-        ]);
+            'password' => ['required', 'string', ...\App\Support\HexagonPasswordPolicy::requirements()],
+            'password_confirmation' => ['required', 'same:password'],
+        ], array_merge([
+            'token.required' => $english ? 'Invalid or missing reset link.' : 'Liên kết đặt lại mật khẩu không hợp lệ.',
+            'email.required' => $english ? 'Please enter your email address.' : 'Vui lòng nhập địa chỉ email.',
+            'email.email' => $english ? 'Please enter a valid email address.' : 'Email không đúng định dạng.',
+            'password_confirmation.required' => $english ? 'Please confirm your new password.' : 'Vui lòng nhập lại mật khẩu mới.',
+            'password_confirmation.same' => $english ? 'Passwords do not match.' : 'Không trùng với mật khẩu.',
+        ], \App\Support\HexagonPasswordPolicy::messages('password', $english)));
 
         // Quan trọng: không dùng luồng khách hàng để đặt lại mật khẩu Admin.
         $customer = User::query()
@@ -101,7 +110,7 @@ class CustomerPasswordResetController extends Controller
 
         if (!$customer) {
             return back()->withErrors([
-                'email' => 'Thông tin hoặc liên kết đặt lại mật khẩu không hợp lệ.',
+                'email' => $english ? 'Invalid account or password reset link.' : 'Thông tin hoặc liên kết đặt lại mật khẩu không hợp lệ.',
             ])->onlyInput('email');
         }
 
@@ -124,11 +133,11 @@ class CustomerPasswordResetController extends Controller
 
         if ($status === Password::PasswordReset) {
             return redirect()->route('customer.login')
-                ->with('status', 'Đặt lại mật khẩu thành công. Hãy đăng nhập bằng mật khẩu mới.');
+                ->with('status', $english ? 'Password reset successfully. Please sign in.' : 'Đặt lại mật khẩu thành công. Hãy đăng nhập bằng mật khẩu mới.');
         }
 
         return back()->withErrors([
-            'email' => 'Liên kết đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.',
+            'email' => $english ? 'The password reset link is invalid or expired.' : 'Liên kết đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.',
         ])->onlyInput('email');
     }
 }

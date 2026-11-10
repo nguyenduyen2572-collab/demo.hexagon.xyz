@@ -52,16 +52,19 @@ class CustomerSettingsController extends Controller
     public function updatePassword(Request $request)
     {
         $this->ensureCustomer($request);
+        // HEXAGON_ACCOUNT_SECURITY_V2: dùng một quy tắc mật khẩu cho toàn bộ luồng khách hàng.
+        $english = \App\Support\HexagonPasswordPolicy::isEnglish($request);
         $validated = $request->validate([
             'current_password' => ['required', 'current_password'],
-            'new_password' => ['required', 'confirmed', 'different:current_password', Password::min(12)],
-        ], [
-            'current_password.required' => 'Vui lòng nhập mật khẩu hiện tại.',
-            'current_password.current_password' => 'Mật khẩu hiện tại không đúng.',
-            'new_password.required' => 'Vui lòng nhập mật khẩu mới.',
-            'new_password.confirmed' => 'Hai lần nhập mật khẩu mới không khớp.',
-            'new_password.different' => 'Mật khẩu mới phải khác mật khẩu cũ.',
-        ]);
+            'new_password' => ['required', 'string', 'different:current_password', ...\App\Support\HexagonPasswordPolicy::requirements()],
+            'new_password_confirmation' => ['required', 'same:new_password'],
+        ], array_merge([
+            'current_password.required' => $english ? 'Please enter your current password.' : 'Vui lòng nhập mật khẩu hiện tại.',
+            'current_password.current_password' => $english ? 'Your current password is incorrect.' : 'Mật khẩu hiện tại không đúng.',
+            'new_password.different' => $english ? 'New password must be different from the current password.' : 'Mật khẩu mới phải khác mật khẩu cũ.',
+            'new_password_confirmation.required' => $english ? 'Please confirm your new password.' : 'Vui lòng nhập lại mật khẩu mới.',
+            'new_password_confirmation.same' => $english ? 'Passwords do not match.' : 'Không trùng với mật khẩu.',
+        ], \App\Support\HexagonPasswordPolicy::messages('new_password', $english)));
 
         $user = $request->user();
         $user->password = Hash::make($validated['new_password']);
@@ -71,6 +74,6 @@ class CustomerSettingsController extends Controller
 
         return redirect()->route('customer.account.index')
             ->with('account_tab', 'security')
-            ->with('success', 'Đã cập nhật mật khẩu thành công!');
+            ->with('success', $english ? 'Password updated successfully!' : 'Đã cập nhật mật khẩu thành công!');
     }
 }
