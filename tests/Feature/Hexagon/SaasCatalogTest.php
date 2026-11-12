@@ -3,6 +3,7 @@
 namespace Tests\Feature\Hexagon;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
 use Tests\Support\HexagonIsolatedTestCase;
 
@@ -49,6 +50,10 @@ class SaasCatalogTest extends HexagonIsolatedTestCase
 
     public function test_admin_can_create_a_new_service(): void
     {
+        config()->set('services.hexagon_saas_translation.provider', 'mymemory');
+        Http::fake(['api.mymemory.translated.net/*' => Http::response([
+            'responseStatus' => 200, 'responseData' => ['translatedText' => 'Demo Software'],
+        ])]);
         $admin = User::factory()->create(['is_admin' => true]);
 
         $this->actingAs($admin, 'admin')->post(route('admin.saas.store'), [

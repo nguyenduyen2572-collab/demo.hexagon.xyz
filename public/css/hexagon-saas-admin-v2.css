@@ -1,0 +1,52 @@
+/* Giới hạn trong màn hình Admin SaaS, không ảnh hưởng website công khai. */
+.hx-admin-pro .saas-v2-heading{max-width:980px;display:flex;justify-content:space-between;gap:18px;align-items:flex-end;flex-wrap:wrap;margin-bottom:24px}
+.hx-admin-pro .saas-v2-heading h1{font-size:26px;letter-spacing:-.55px;line-height:1.25;margin:7px 0 8px;color:#152945}
+.hx-admin-pro .saas-v2-heading p{font-size:13px;line-height:1.6;max-width:620px}
+.hx-admin-pro .saas-v2-kicker{font-size:10px;letter-spacing:1.1px;color:#3970b5;font-weight:800}
+.hx-admin-pro .saas-v2-back{border:1px solid #d8e4f4;background:white;border-radius:9px;padding:9px 13px;color:#355b8f;text-decoration:none;font-size:12px;font-weight:700}
+.hx-admin-pro .saas-v2-back:hover{background:#eff5ff;color:#2154a9}
+.hx-admin-pro .saas-v2-panel{max-width:980px;padding:28px 31px 29px;border:1px solid #e2e9f3;box-shadow:0 8px 28px rgba(20,45,85,.04)}
+.hx-admin-pro .saas-v2-section-heading{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.hx-admin-pro .saas-v2-section-icon{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border-radius:10px;color:#215ac2;background:#e8f0ff;font-size:12px;font-weight:850}
+.hx-admin-pro .saas-v2-section-heading h2{margin:0;font-size:16px;color:#203552;letter-spacing:-.2px}
+.hx-admin-pro .saas-v2-section-heading p{margin:5px 0 0;color:#8190a5;font-size:11px;line-height:1.4}
+.hx-admin-pro .saas-v2-divider-top{padding-top:27px;margin-top:27px;border-top:1px solid #e9eef6}
+.hx-admin-pro .saas-v2-fields{gap:19px 21px}
+.hx-admin-pro .saas-v2-fields>label{font-size:12px;color:#304561;gap:8px;font-weight:750;min-width:0}
+.hx-admin-pro .saas-v2-fields :is(input,textarea){border:1px solid #d4dfed;min-height:43px;box-shadow:0 1px 2px rgba(15,33,60,.025);line-height:1.5;outline:none}
+.hx-admin-pro .saas-v2-fields :is(input,textarea):focus{border-color:#7da9f3;box-shadow:0 0 0 3px rgba(56,126,244,.11)}
+.hx-admin-pro .saas-v2-fields textarea{min-height:85px;line-height:1.7}
+.hx-admin-pro .saas-v2-fields small{color:#7b8da9;font-size:11px;line-height:1.5}
+.hx-admin-pro .saas-v2-required{color:#ed5263}
+.hx-admin-pro .saas-v2-currency-wrap{position:relative;display:flex;align-items:center;width:100%}
+.hx-admin-pro .saas-v2-currency-wrap input{padding-right:105px!important;font-weight:750!important;font-size:15px!important}
+.hx-admin-pro .saas-v2-currency-unit{position:absolute;right:14px;font-size:12px;color:#617c9b;font-weight:750;pointer-events:none}
+.hx-admin-pro .saas-v2-fields .saas-v2-input-error{color:#b91c1c!important}
+.hx-admin-pro .saas-v2-error{max-width:980px;line-height:1.7}
+.hx-admin-pro .saas-v2-translation{margin-top:23px;border:1px solid #dce9fb;border-radius:13px;overflow:hidden;background:#f7faff}
+.hx-admin-pro .saas-v2-translation summary{cursor:pointer;padding:16px 18px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:14px;color:#1d467f}
+.hx-admin-pro .saas-v2-translation summary::-webkit-details-marker{display:none}
+.hx-admin-pro .saas-v2-translation summary span:first-child{display:grid;gap:5px}
+.hx-admin-pro .saas-v2-translation summary strong{font-size:12px}
+.hx-admin-pro .saas-v2-translation summary small{font-size:11px;color:#6c86aa}
+.hx-admin-pro .saas-v2-summary-chevron{font-size:20px;transition:transform .18s}
+.hx-admin-pro .saas-v2-translation[open] .saas-v2-summary-chevron{transform:rotate(180deg)}
+.hx-admin-pro .saas-v2-translation-body{padding:0 18px 17px;display:grid;gap:13px}
+.hx-admin-pro .saas-v2-translation-row{background:#fff;border:1px solid #e5edf8;border-radius:10px;padding:12px 14px}
+.hx-admin-pro .saas-v2-translation-row strong{font-size:11px;color:#48678c}
+.hx-admin-pro .saas-v2-translation-row p{font-size:12px;color:#293d56;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;margin:7px 0 0}
+.hx-admin-pro .saas-v2-translation-note{margin:0;color:#7388a5;font-size:11px}
+.hx-admin-pro .saas-v2-switches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.hx-admin-pro .saas-v2-switch-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border:1px solid #e1e9f3;border-radius:11px;cursor:pointer;background:#fff}
+.hx-admin-pro .saas-v2-switch-row span{display:grid;gap:5px}
+.hx-admin-pro .saas-v2-switch-row strong{color:#304461;font-size:12px}
+.hx-admin-pro .saas-v2-switch-row small{color:#8a99af;font-size:11px;line-height:1.5}
+.hx-admin-pro .saas-v2-switch-row input[type=checkbox]{width:19px;height:19px;accent-color:#2563d7;cursor:pointer;flex-shrink:0}
+.hx-admin-pro .saas-v2-actions{display:flex;align-items:center;flex-wrap:wrap;gap:11px;padding-top:21px;margin-top:28px;border-top:1px solid #e9eef5}
+.hx-admin-pro .saas-v2-actions .saas-v2-primary{background:#2062d2!important;color:#fff!important;border:1px solid #2062d2!important;padding:12px 20px;border-radius:10px;min-height:43px;font-size:13px;font-weight:760;cursor:pointer;opacity:1!important}
+.hx-admin-pro .saas-v2-actions .saas-v2-primary:hover{background:#194fb1!important}
+.hx-admin-pro .saas-v2-actions .saas-v2-cancel,.hx-admin-pro .saas-v2-actions .saas-v2-cancel:visited{display:inline-flex!important;align-items:center;justify-content:center;min-height:43px;padding:11px 21px;border-radius:10px;border:1px solid #cdd9e8!important;background:#f0f4fa!important;color:#344967!important;text-decoration:none!important;font-size:13px;font-weight:760;opacity:1!important;visibility:visible!important}
+.hx-admin-pro .saas-v2-actions .saas-v2-cancel:hover,.hx-admin-pro .saas-v2-actions .saas-v2-cancel:focus{background:#e4ecf8!important;color:#183b72!important;border-color:#a9bedb!important}
+.hx-admin-pro .saas-v2-actions :is(a,button):focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
+@media(max-width:760px){.hx-admin-pro .saas-v2-panel{padding:22px 18px}.hx-admin-pro .saas-v2-switches{grid-template-columns:1fr}.hx-admin-pro .saas-v2-heading{align-items:flex-start}.hx-admin-pro .saas-v2-heading h1{font-size:23px}}
+@media(max-width:550px){.hx-admin-pro .saas-v2-fields{grid-template-columns:1fr}.hx-admin-pro .saas-v2-panel{padding:18px 15px}.hx-admin-pro .saas-v2-actions .saas-v2-primary,.hx-admin-pro .saas-v2-actions .saas-v2-cancel{flex:1}}

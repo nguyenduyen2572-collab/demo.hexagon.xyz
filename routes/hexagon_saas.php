@@ -15,6 +15,8 @@ Route::prefix('admin/saas')
     ->middleware([\App\Http\Middleware\EnsureAdminSession::class, EnsureAdmin::class])
     ->group(function () {
         Route::get('/', [SaasServiceController::class, 'index'])->name('index');
+        Route::post('/translate-preview', [SaasServiceController::class, 'translatePreview'])
+            ->middleware('throttle:20,1')->name('translate-preview');
         Route::get('/create', [SaasServiceController::class, 'create'])->name('create');
         Route::post('/', [SaasServiceController::class, 'store'])->name('store');
         Route::get('/{id}/edit', [SaasServiceController::class, 'edit'])

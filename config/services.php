@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    // Cau hinh dich tu dong danh muc SaaS (khong luu API key trong source).
+    'hexagon_saas_translation' => [
+        'provider' => env('SAAS_TRANSLATION_PROVIDER', 'mymemory'),
+        'google_api_key' => env('GOOGLE_TRANSLATE_API_KEY', ''),
+    ],
+
 ];
