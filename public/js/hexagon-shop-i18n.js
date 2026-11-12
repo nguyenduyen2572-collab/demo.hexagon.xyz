@@ -4,7 +4,7 @@
 
     const messages = {
         vi: {
-            home: 'Trang chủ', cart: 'Giỏ hàng', login: 'Đăng nhập', admin: 'Trang quản trị',
+            home: 'Trang chủ', cart: 'Giỏ hàng', login: 'Đăng nhập', register: 'Đăng ký', accountShort: 'Tài khoản', admin: 'Trang quản trị',
             myAccount: 'Tài khoản của tôi', myOrders: 'Đơn hàng của tôi', logout: 'Đăng xuất',
             accountMenu: 'Mở menu tài khoản', backHome: '← Về trang chủ', backCart: '← Quay lại giỏ hàng',
             cartTitle: 'Giỏ hàng của bạn', cartSubtitle: 'Kiểm tra tên miền trước khi đặt hàng thử nghiệm.',
@@ -25,7 +25,7 @@
             pageCart: 'Giỏ hàng - HEXAGON', pageCheckout: 'Đặt hàng - HEXAGON', pageSuccess: 'Xác nhận đơn hàng - HEXAGON'
         },
         en: {
-            home: 'Home', cart: 'Cart', login: 'Log in', admin: 'Admin dashboard',
+            home: 'Home', cart: 'Cart', login: 'Log in', register: 'Sign up', accountShort: 'Account', admin: 'Admin dashboard',
             myAccount: 'My account', myOrders: 'My orders', logout: 'Log out',
             accountMenu: 'Open account menu', backHome: '← Back to home', backCart: '← Back to cart',
             cartTitle: 'Your cart', cartSubtitle: 'Review your domain names before placing a demo order.',
@@ -95,6 +95,19 @@
         try { localStorage.setItem(storageKey, language); } catch (_) { /* no persistence */ }
         update();
     });
+
+    const guestMenu = document.getElementById('hexagonGuestMenu');
+    if (guestMenu) {
+        document.addEventListener('click', (event) => {
+            if (!guestMenu.contains(event.target)) guestMenu.open = false;
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && guestMenu.open) {
+                guestMenu.open = false;
+                guestMenu.querySelector('summary')?.focus();
+            }
+        });
+    }
 
     if (accountMenu) {
         document.addEventListener('click', (event) => {

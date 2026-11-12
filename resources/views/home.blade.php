@@ -8,13 +8,16 @@
     <meta name="description" content="HEXAGON — Tìm kiếm tên miền và khám phá giải pháp dịch vụ số cho doanh nghiệp.">
     <title>HEXAGON — Tên miền &amp; giải pháp số cho tương lai</title>
     <link rel="stylesheet" href="{{ asset('css/hexagon-home-premium.css') }}?v=2">
-    <script src="{{ asset('js/hexagon-home-premium.js') }}?v=2" defer></script>
+    <script src="{{ asset('js/hexagon-home-premium.js') }}?v=3" defer></script>
     <link rel="stylesheet" href="{{ asset('css/hexagon-web-polish.css') }}?v=4">
     <script src="{{ asset('js/hexagon-web-polish.js') }}?v=4" defer></script>
     <link rel="stylesheet" href="{{ asset('css/hexagon-home-content-v6.css') }}?v=6">
     {{-- HEXAGON: gợi ý tên miền và giới hạn tìm kiếm 3 giây --}}
     <link rel="stylesheet" href="{{ asset('css/hexagon-domain-suggest-v1.css') }}?v=1">
     <script src="{{ asset('js/hexagon-domain-suggest-v1.js') }}?v=1" defer></script>
+    <link rel="stylesheet" href="{{ asset('css/hexagon-unified-ui-v1.css') }}?v=1">
+    <link rel="stylesheet" href="{{ asset('css/hexagon-header-cta-v2.css') }}?v=2">
+    <script src="{{ asset('js/hexagon-unified-ui-v1.js') }}?v=2" defer></script>
 </head>
 <body data-check-url="{{ url('/api/v1/domains/check') }}"
       data-add-cart-url="{{ url('/cart/items') }}">
@@ -46,7 +49,8 @@
                 <a href="#support" data-i18n="navSupport">Hỗ trợ</a>
                 @guest
                     <a class="hx-mobile-auth" href="{{ route('customer.login') }}" data-i18n="login">Đăng nhập</a>
-@endguest
+                    <a class="hx-mobile-auth hx-mobile-register" href="{{ route('customer.register') }}" data-i18n="register">Đăng ký</a>
+                @endguest
             </nav>
 
             <div class="hx-header-actions">
@@ -59,8 +63,15 @@
                     <img id="langFlag" src="{{ asset('images/flags/gb.svg') }}" data-gb="{{ asset('images/flags/gb.svg') }}" data-vn="{{ asset('images/flags/vn.svg') }}" alt="" width="27" height="27" aria-hidden="true">
                 </button>
                 @guest
-                    <a class="hx-header-login" href="{{ route('customer.login') }}" data-i18n="login">Đăng nhập</a>
-@endguest
+                    <a class="hx-header-login" href="{{ route('customer.login') }}">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3"/><path d="M12 3h6a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3h-6"/></svg>
+                        <span data-i18n="login">Đăng nhập</span>
+                    </a>
+                    <a class="hx-header-register" href="{{ route('customer.register') }}">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M20 8v6m-3-3h6"/></svg>
+                        <span data-i18n="register">Đăng ký</span>
+                    </a>
+                @endguest
                 @auth
                     <details class="hx-account" id="accountDropdown">
                         <summary class="hx-account-avatar" title="{{ auth()->user()->name }}" data-i18n-aria="accountMenu" aria-label="Mở menu tài khoản">

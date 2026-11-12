@@ -7,10 +7,13 @@
     <title>Dịch vụ SaaS - HEXAGON</title>
     <link rel="stylesheet" href="{{ asset('css/hexagon-shop.css') }}?v=1">
     <link rel="stylesheet" href="{{ asset('css/hexagon-saas.css') }}?v=1">
-    <script src="{{ asset('js/hexagon-shop-i18n.js') }}?v=1" defer></script>
+    <script src="{{ asset('js/hexagon-shop-i18n.js') }}?v=2" defer></script>
     <script src="{{ asset('js/hexagon-saas-i18n.js') }}?v=1" defer></script>
     <link rel="stylesheet" href="{{ asset('css/hexagon-web-polish.css') }}?v=4">
     <script src="{{ asset('js/hexagon-web-polish.js') }}?v=4" defer></script>
+    <link rel="stylesheet" href="{{ asset('css/hexagon-unified-ui-v1.css') }}?v=1">
+    <link rel="stylesheet" href="{{ asset('css/hexagon-header-cta-v2.css') }}?v=2">
+    <script src="{{ asset('js/hexagon-unified-ui-v1.js') }}?v=1" defer></script>
 </head>
 <body data-saas-title-vi="Dịch vụ SaaS - HEXAGON" data-saas-title-en="SaaS Services - HEXAGON">
     @include('partials.hexagon-shop-header')

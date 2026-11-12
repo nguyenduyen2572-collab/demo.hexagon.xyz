@@ -20,6 +20,8 @@
         @endif
         <link rel="stylesheet" href="{{ asset('css/hexagon-web-polish.css') }}?v=4">
     <script src="{{ asset('js/hexagon-web-polish.js') }}?v=4" defer></script>
+    <link rel="stylesheet" href="{{ asset('css/hexagon-unified-ui-v1.css') }}?v=1">
+    <script src="{{ asset('js/hexagon-unified-ui-v1.js') }}?v=1" defer></script>
 </head>
     <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col">
         <header class="w-full lg:max-w-4xl max-w-[335px] text-sm mb-6 not-has-[nav]:hidden">

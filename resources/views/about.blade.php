@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="{{ asset('css/hexagon-web-polish.css') }}?v=5">
     <link rel="stylesheet" href="{{ asset('css/hexagon-about-premium.css') }}?v=1">
     <script src="{{ asset('js/hexagon-about-premium.js') }}?v=1" defer></script>
+    <link rel="stylesheet" href="{{ asset('css/hexagon-unified-ui-v1.css') }}?v=1">
+    <link rel="stylesheet" href="{{ asset('css/hexagon-header-cta-v2.css') }}?v=2">
+    <script src="{{ asset('js/hexagon-unified-ui-v1.js') }}?v=1" defer></script>
 </head>
 @php
     $about = config('hexagon_about');
@@ -34,7 +37,8 @@
                 <a href="{{ url('/') }}#solutions" data-hx-vi="Giải pháp SaaS" data-hx-en="SaaS solutions">Giải pháp SaaS</a>
             @endif
             @guest
-                <a class="ha-mobile-login" href="{{ route('customer.login') }}" data-hx-vi="Đăng nhập" data-hx-en="Sign in">Đăng nhập</a>
+                <a class="ha-mobile-login" href="{{ route('customer.login') }}" data-hx-vi="Đăng nhập" data-hx-en="Log in">Đăng nhập</a>
+                <a class="ha-mobile-register" href="{{ route('customer.register') }}" data-hx-vi="Đăng ký" data-hx-en="Sign up">Đăng ký</a>
             @endguest
         </nav>
         <div class="ha-header-actions">
@@ -43,11 +47,9 @@
                 <span data-hx-vi="Giỏ hàng" data-hx-en="Cart">Giỏ hàng</span>
                 @if($cartCount > 0)<small class="ha-cart-count">{{ $cartCount }}</small>@endif
             </a>
-            <button class="ha-language" id="haLangToggle" type="button" aria-label="Switch to English" title="Switch to English">
-                <img id="haLangFlag" src="{{ asset('images/flags/gb.svg') }}" data-gb="{{ asset('images/flags/gb.svg') }}" data-vn="{{ asset('images/flags/vn.svg') }}" alt="" aria-hidden="true" width="26" height="26">
-            </button>
             @guest
-                <a class="ha-login" href="{{ route('customer.login') }}" data-hx-vi="Đăng nhập" data-hx-en="Sign in">Đăng nhập</a>
+                <a class="ha-login" href="{{ route('customer.login') }}" data-hx-vi="Đăng nhập" data-hx-en="Log in">Đăng nhập</a>
+                <a class="ha-register" href="{{ route('customer.register') }}" data-hx-vi="Đăng ký" data-hx-en="Sign up">Đăng ký</a>
             @endguest
             @auth
                 <details class="ha-account" id="haAccountMenu">
@@ -69,6 +71,9 @@
                     </div>
                 </details>
             @endauth
+            <button class="ha-language" id="haLangToggle" type="button" aria-label="Switch to English" title="Switch to English">
+                <img id="haLangFlag" src="{{ asset('images/flags/gb.svg') }}" data-gb="{{ asset('images/flags/gb.svg') }}" data-vn="{{ asset('images/flags/vn.svg') }}" alt="" aria-hidden="true" width="26" height="26">
+            </button>
             <button id="haMenuButton" class="ha-menu-button" type="button" aria-controls="haNavigation" aria-expanded="false" aria-label="Mở menu điều hướng"><span></span><span></span><span></span></button>
         </div>
     </div>

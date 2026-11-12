@@ -48,6 +48,8 @@
     </style>
     <link rel="stylesheet" href="{{ asset('css/hexagon-web-polish.css') }}?v=4">
     <script src="{{ asset('js/hexagon-web-polish.js') }}?v=4" defer></script>
+    <link rel="stylesheet" href="{{ asset('css/hexagon-unified-ui-v1.css') }}?v=1">
+    <script src="{{ asset('js/hexagon-unified-ui-v1.js') }}?v=1" defer></script>
 </head>
 <body>
 <main>
