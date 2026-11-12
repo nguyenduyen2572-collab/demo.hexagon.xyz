@@ -16,3 +16,5 @@ Route::get(
     [DomainController::class, 'check']
 )->middleware('throttle:hexagon-domain-search')->middleware(\App\Http\Middleware\HexagonDomainSearchCooldown::class);
 
+// GoDaddy natural-language domain ideas (read-only).
+require __DIR__ . '/hexagon_godaddy.php';
