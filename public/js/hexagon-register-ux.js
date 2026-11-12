@@ -43,6 +43,23 @@
   } : {};
   const touched = new Set();
   const letters = /^\p{L}[\p{L}\p{M}]*(?: +\p{L}[\p{L}\p{M}]*)*$/u;
+  // Browser-side friendly check for common email addresses; the Laravel RFC
+  // validator remains authoritative when the form is submitted.
+  function hexagonEmailValid(raw) {
+    const email = raw.trim();
+    if (email.length > 190 || /\s|\.\./.test(email)) return false;
+    const at = email.indexOf('@');
+    if (at < 1 || at !== email.lastIndexOf('@')) return false;
+    const local = email.slice(0, at);
+    const domain = email.slice(at + 1);
+    if (local.length > 64 || local.startsWith('.') || local.endsWith('.')) return false;
+    if (!/^[A-Za-z0-9!#$%&'*+/=?^_`{|}~.-]+$/.test(local)) return false;
+    const labels = domain.split('.');
+    if (labels.length < 2) return false;
+    if (labels.some(label => !/^[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?$/.test(label))) return false;
+    const tld = labels[labels.length - 1];
+    return /^(?:[A-Za-z]{2,63}|xn--[A-Za-z0-9-]{2,59})$/.test(tld);
+  }
   function check(key) {
     if (!form) return null;
     const value = fields[key][0].value;
@@ -53,7 +70,7 @@
     }
     if (key === 'email') {
       if (!value.trim()) return text('requiredEmail');
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) return text('emailFormat');
+      if (!hexagonEmailValid(value)) return text('emailFormat');
     }
     if (key === 'password') {
       if (!value) return text('requiredPassword');
@@ -88,6 +105,7 @@
       if (!input || !output) return;
       input.addEventListener('blur', () => { touched.add(key); render(key, check(key)); });
       input.addEventListener('input', () => {
+        if (key === 'email') touched.add(key);
         if (output.dataset.serverError === '1') { render(key, null); }
         if (touched.has(key)) render(key, check(key));
         if (key === 'password' && touched.has('password_confirmation')) {

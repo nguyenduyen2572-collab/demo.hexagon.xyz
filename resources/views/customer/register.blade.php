@@ -82,5 +82,5 @@
         <p class="hx-bottom"><span data-i18n="haveAccount">Đã có tài khoản?</span> <a href="{{ route('customer.login') }}" data-i18n="login">Đăng nhập</a></p>
     @endif
 </div>
-<script src="{{ asset('js/hexagon-register-ux.js') }}?v=2" defer></script>
+<script src="{{ asset('js/hexagon-register-ux.js') }}?v=4" defer></script>
 @endsection
