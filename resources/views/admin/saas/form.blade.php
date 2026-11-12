@@ -6,7 +6,7 @@
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/hexagon-saas.css') }}?v=1">
     <link rel="stylesheet" href="{{ asset('css/hexagon-saas-admin-v2.css') }}?v=2">
-    <script src="{{ asset('js/hexagon-saas-admin-v2.js') }}?v=2" defer></script>
+    <script src="{{ asset('js/hexagon-saas-admin-v2.js') }}?v=3" defer></script>
 
     <div class="page-heading saas-v2-heading">
         <div>
@@ -50,7 +50,7 @@
                             value="{{ old('price_monthly', $service?->price_monthly ?? '') }}" placeholder="199.000" aria-describedby="saas-price-help saas-price-error">
                         <span class="saas-v2-currency-unit" aria-hidden="true">₫ / tháng</span>
                     </div>
-                    <small id="saas-price-help">Nhập 199000 hoặc 199.000 để lưu giá 199.000đ; để trống nếu cần báo giá.</small>
+                    <small id="saas-price-help">Nhập 199000 hoặc 199.000. Khi rời ô, hệ thống định dạng thành 199.000đ. Để trống nếu cần báo giá.</small>
                     <small id="saas-price-error" class="saas-v2-input-error" role="status" hidden></small>
                 </label>
                 <label for="saas-sort">Thứ tự hiển thị

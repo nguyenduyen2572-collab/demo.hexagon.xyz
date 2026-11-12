@@ -22,54 +22,50 @@
   slug.addEventListener('input', () => { slugManaged = slug.value === generatedSlug || slug.value === ''; });
   slug.addEventListener('blur', () => { slug.value = slug.value.trim().toLowerCase(); });
 
-  // Giá VND: hiển thị theo nhóm nghìn, cấm nhập dấu chấm thập phân và dấu âm.
+  // Giá VND: KHÔNG định dạng trong sự kiện input. Tránh lệch con trỏ / chèn sai số.
+  // Chấp nhận 199000 hoặc 199.000; chỉ format khi rời trường hoặc khi gửi form.
+  const validPrice = (raw) => {
+    if (raw === '') return true; // Để trống = liên hệ báo giá.
+    if (!/^(?:[0-9]+|[0-9]{1,3}(?:\.[0-9]{3})+)$/.test(raw)) return false;
+    const digits = raw.replace(/\./g, '').replace(/^0+(?=\d)/, '');
+    // Trùng giới hạn Laravel: max:999999999999.
+    return digits.length <= 12;
+  };
   const formatVnd = (raw) => {
-    const digits = String(raw || '').replace(/\D/g, '');
-    if (!digits) return '';
-    return digits.replace(/^0+(?=\d)/, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    const digits = raw.replace(/\./g, '').replace(/^0+(?=\d)/, '');
+    return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   };
-  const validPrice = (raw) => raw === '' || /^(?:\d+|\d{1,3}(?:\.\d{3})+)$/.test(raw);
   const showPriceError = (message) => {
-    priceError.textContent = message;
-    priceError.hidden = !message;
-    price.setCustomValidity(message || '');
-  };
-  if (validPrice(price.value.trim())) price.value = formatVnd(price.value);
-  price.addEventListener('keydown', (event) => {
-    if (event.ctrlKey || event.metaKey || event.altKey || event.key.length !== 1) return;
-    if (!/^[0-9]$/.test(event.key)) event.preventDefault();
-  });
-  price.addEventListener('paste', (event) => {
-    const pasted = event.clipboardData?.getData('text')?.trim() || '';
-    if (!validPrice(pasted)) {
-      event.preventDefault();
-      showPriceError('Chỉ nhập số nguyên VND, ví dụ 199000 hoặc 199.000.');
+    if (priceError) {
+      priceError.textContent = message;
+      priceError.hidden = !message;
     }
-  });
-  price.addEventListener('input', () => {
-    const raw = price.value;
+    price.setCustomValidity(message || '');
+    if (message) price.setAttribute('aria-invalid', 'true');
+    else price.removeAttribute('aria-invalid');
+  };
+  const validateAndFormat = () => {
+    const raw = price.value.trim();
     if (!validPrice(raw)) {
-      showPriceError('Giá phải là số nguyên VND; không dùng dấu phẩy hoặc số thập phân.');
-      return;
+      showPriceError('Giá không hợp lệ. Nhập 199000 hoặc 199.000; không dùng số thập phân, dấu phẩy hay số âm.');
+      return false;
     }
     showPriceError('');
-    const start = price.selectionStart ?? raw.length;
-    const digitsBeforeCursor = (raw.slice(0, start).match(/\d/g) || []).length;
+    // Chỉ sửa phần hiển thị sau khi nhập xong; không tạo thêm chữ số nào.
     price.value = formatVnd(raw);
-    let cursor = 0, count = 0;
-    while (cursor < price.value.length && count < digitsBeforeCursor) {
-      if (/\d/.test(price.value[cursor])) count++;
-      cursor++;
-    }
-    price.setSelectionRange(cursor, cursor);
-  });
-  price.addEventListener('blur', () => { if (validPrice(price.value)) price.value = formatVnd(price.value); });
+    return true;
+  };
+
+  // Giữ nguyên giá trị khi gõ, kể cả các bước đang nhập '199.' -> '199.000'.
+  // Không dùng keydown/paste để ngăn người dùng gõ từng bước hợp lệ.
+  price.addEventListener('input', () => showPriceError(''));
+  price.addEventListener('blur', validateAndFormat);
+  if (validPrice(price.value.trim())) price.value = formatVnd(price.value.trim());
   form.addEventListener('submit', (event) => {
-    if (!validPrice(price.value.trim())) {
-      event.preventDefault();
-      showPriceError('Giá tháng không hợp lệ. Hãy nhập 199000 hoặc 199.000.');
-      price.focus();
-    }
+    if (validateAndFormat()) return;
+    event.preventDefault();
+    price.focus();
+    price.reportValidity();
   });
 
   const viFields = [
