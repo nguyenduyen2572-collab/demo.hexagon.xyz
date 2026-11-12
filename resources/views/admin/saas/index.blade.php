@@ -8,7 +8,7 @@
     <div class="page-heading saas-admin-head">
         <div>
             <h1>Danh mục dịch vụ SaaS</h1>
-            <p>Thêm, chỉnh sửa và bật/tắt dịch vụ. Không ảnh hưởng hệ thống tên miền hiện tại.</p>
+            <p>Thêm, chỉnh sửa và quản lý các dịch vụ đang kinh doanh.</p>
         </div>
         <a class="saas-button" href="{{ route('admin.saas.create') }}">+ Thêm dịch vụ</a>
     </div>

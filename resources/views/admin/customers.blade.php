@@ -50,7 +50,7 @@
                     <th>Email</th>
                     <th>Số điện thoại</th>
                     <th>Số đơn</th>
-                    <th>Tổng giá trị demo</th>
+                    <th>Tổng giá trị đặt hàng</th>
                     <th>Đơn gần nhất</th>
                     <th>Thao tác</th>
                 </tr>

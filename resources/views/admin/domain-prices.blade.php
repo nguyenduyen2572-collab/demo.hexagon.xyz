@@ -129,71 +129,25 @@
                             {{ number_format($price->renewal_price, 0, ',', '.') }}đ
                         </td>
 
-                        <td>{{ $price->updated_at }}</td>
+                        <td>{{ \Illuminate\Support\Carbon::parse($price->updated_at)->format('d/m/Y') }}</td>
                         
                         <td>
-                            @if($price->is_active)
-                                <span style="
-                                    background:#dcfce7;
-                                    color:#166534;
-                                    padding:7px 12px;
-                                    border-radius:20px;
-                                    font-weight:600;
-                                    font-size:12px;
-                                ">
-                                    Đang bán
-                                </span>
-                            @else
-                                <span style="
-                                    background:#f1f5f9;
-                                    color:#64748b;
-                                    padding:7px 12px;
-                                    border-radius:20px;
-                                    font-weight:600;
-                                    font-size:12px;
-                                ">
-                                    Tạm ngừng
-                                </span>
-                            @endif
+                            <span class="hx-price-status {{ $price->is_active ? '' : 'is-off' }}">{{ $price->is_active ? 'Đang bán' : 'Tạm ngừng' }}</span>
                         </td>
-
-
                         <td>
-                            <a class="edit-button"
-                               href="{{ route('admin.domain-prices.edit', ['id' => $price->id]) }}">
-                                Chỉnh sửa
-                                
-<form
-    method="POST"
-    action="{{ route('admin.domain-prices.toggle', ['id' => $price->id]) }}"
-    style="margin-top:10px;"
->
-    @csrf
-    @method('PATCH')
-
-    <button
-        type="submit"
-        onclick="return confirm('Bạn chắc chắn muốn thay đổi trạng thái kinh doanh?')"
-        style="
-            padding:9px 13px;
-            border-radius:8px;
-            border:1px solid #cbd5e1;
-            background:#ffffff;
-            color:#172c49;
-            cursor:pointer;
-            font-weight:600;
-        "
-    >
-        {{ $price->is_active ? 'Tắt kinh doanh' : 'Bật kinh doanh' }}
-    </button>
-</form>
-
-                            </a>
+                            <div class="hx-price-actions">
+                                <a class="edit-button" href="{{ route('admin.domain-prices.edit', ['id' => $price->id]) }}">Chỉnh sửa</a>
+                                <form method="POST" action="{{ route('admin.domain-prices.toggle', ['id' => $price->id]) }}" onsubmit="return confirm('Bạn có chắc muốn thay đổi trạng thái kinh doanh?')">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="hx-inline-toggle">{{ $price->is_active ? 'Tạm ngừng' : 'Bật kinh doanh' }}</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="empty-cell">
+                        <td colspan="7" class="empty-cell">
                             Chưa có bảng giá tên miền.
                         </td>
                     </tr>

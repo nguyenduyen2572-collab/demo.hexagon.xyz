@@ -73,6 +73,6 @@
             <div class="hxc-pagination">{{ $customers->links() }}</div>
         @endif
     </section>
-    <p class="hxc-note">Số đơn và giá trị chỉ tính các đơn gắn bằng mã tài khoản khách hàng. Đơn khách vãng lai không tự động được ghép theo email. Giá trị đơn chưa hủy không phải doanh thu đã thu.</p>
+
 </section>
 @endsection

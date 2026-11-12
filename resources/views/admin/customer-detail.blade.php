@@ -60,7 +60,7 @@
     </div>
 
     <div class="customer-stat-card">
-        <span>Tổng giá trị đặt hàng demo</span>
+        <span>Tổng giá trị đặt hàng</span>
         <strong>
             {{ number_format($stats->total_value, 0, ',', '.') }}đ
         </strong>

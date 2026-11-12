@@ -12,7 +12,7 @@ Route::get('/saas/{slug}', [SaasCatalogController::class, 'show'])->name('saas.s
 // Chỉ Admin đã đăng nhập mới có quyền thêm/sửa/bật tắt dịch vụ.
 Route::prefix('admin/saas')
     ->name('admin.saas.')
-    ->middleware(['auth', EnsureAdmin::class])
+    ->middleware([\App\Http\Middleware\EnsureAdminSession::class, EnsureAdmin::class])
     ->group(function () {
         Route::get('/', [SaasServiceController::class, 'index'])->name('index');
         Route::get('/create', [SaasServiceController::class, 'create'])->name('create');

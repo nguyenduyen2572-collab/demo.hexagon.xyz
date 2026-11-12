@@ -19,7 +19,7 @@
         <div class="hxc-stat"><span>Tổng số đơn hàng</span><strong>{{ number_format($summary['count'], 0, ',', '.') }}</strong><small>Liên kết với tài khoản này</small></div>
         <div class="hxc-stat"><span>Đã xử lý</span><strong>{{ number_format($summary['completed'], 0, ',', '.') }}</strong><small>Trạng thái hoàn tất</small></div>
         <div class="hxc-stat"><span>Đơn đã hủy</span><strong>{{ number_format($summary['cancelled'], 0, ',', '.') }}</strong><small>Không tính vào giá trị</small></div>
-        <div class="hxc-stat"><span>Giá trị đơn chưa hủy</span><strong class="hxc-stat-money">{{ number_format((float) $summary['amount'], 0, ',', '.') }}đ</strong><small>Không phải tiền đã thu</small></div>
+        <div class="hxc-stat"><span>Giá trị đơn chưa hủy</span><strong class="hxc-stat-money">{{ number_format((float) $summary['amount'], 0, ',', '.') }}đ</strong><small>Không bao gồm đơn đã hủy</small></div>
     </div>
 
     <section class="hxc-panel" aria-labelledby="hxc-profile-title">
@@ -55,6 +55,6 @@
         </div>
         @if($orders->hasPages())<div class="hxc-pagination">{{ $orders->links() }}</div>@endif
     </section>
-    <p class="hxc-note">Chỉ xem dữ liệu, không có thao tác thay đổi hoặc xóa tài khoản. Các đơn đặt khi chưa đăng nhập không tự động được nối vào hồ sơ theo email.</p>
+
 </section>
 @endsection

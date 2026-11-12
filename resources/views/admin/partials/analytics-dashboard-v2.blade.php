@@ -28,7 +28,7 @@
         <article>
             <span>Giá trị đơn chưa hủy</span>
             <strong>{{ number_format($hxAnalytics['active_order_value'], 0, ',', '.') }}<em>đ</em></strong>
-            <small>Giá trị đơn demo, không phải doanh thu thực thu</small>
+            <small>Giá trị các đơn chưa bị hủy</small>
         </article>
     </div>
 
@@ -83,5 +83,4 @@
             <a class="hx-ana-details-link" href="{{ route('admin.orders.index') }}">Mở danh sách đơn hàng <span aria-hidden="true">→</span></a>
         </section>
     </div>
-    <p class="hx-ana-disclaimer"><strong>Lưu ý:</strong> Đây là thống kê đơn hàng trong hệ thống hiện tại. Giá trị đơn chỉ mang tính tham khảo, không thể hiện tiền đã thu hoặc giao dịch thanh toán thành công.</p>
 </section>
