@@ -6,6 +6,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\PendingRequest;
 use RuntimeException;
 
 /**
@@ -46,7 +47,7 @@ final class SaasEnglishTranslator
                 }
                 $pieces = [];
                 foreach ($this->segments($line, 440) as $segment) {
-                    $response = Http::acceptJson()->timeout(10)->get('https://api.mymemory.translated.net/get', [
+                    $response = $this->saasHttpsRequest(10)->get('https://api.mymemory.translated.net/get', [
                         'q' => $segment,
                         'langpair' => 'vi|en',
                     ]);
@@ -65,6 +66,20 @@ final class SaasEnglishTranslator
         });
     }
 
+    /** Reuse existing CA certificate (same as GoDaddy); TLS verification remains enabled. */
+    private function saasHttpsRequest(int $seconds): PendingRequest
+    {
+        $request = Http::acceptJson()->timeout($seconds);
+        // Optional SaaS-specific config takes priority if added in the future.
+        $caBundle = trim((string) (config('services.hexagon_saas_translation.ca_bundle') ?: config('hexagon_godaddy.ca_bundle', '')));
+        if ($caBundle === '') {
+            return $request;
+        }
+        if (!is_file($caBundle) || !is_readable($caBundle)) {
+            throw new RuntimeException('Không đọc được chứng chỉ CA đã cấu hình. Vui lòng kiểm tra GODADDY_CA_BUNDLE trong .env.');
+        }
+        return $request->withOptions(['verify' => $caBundle]);
+    }
     /** @return list<string> */
     private function segments(string $line, int $maxBytes): array
     {
@@ -97,7 +112,7 @@ final class SaasEnglishTranslator
         if ($key === '') {
             throw new RuntimeException('Chưa cấu hình GOOGLE_TRANSLATE_API_KEY trong .env.');
         }
-        $response = Http::acceptJson()->timeout(15)
+        $response = $this->saasHttpsRequest(15)
             ->post('https://translation.googleapis.com/language/translate/v2?key='.rawurlencode($key), [
                 'q' => $text,
                 'source' => 'vi',
