@@ -12,7 +12,6 @@
       nameLength: 'Họ và tên phải có ít nhất 2 ký tự.',
       requiredEmail: 'Vui lòng nhập email.',
       emailFormat: 'Email không đúng định dạng.',
-      gmail: 'Chỉ chấp nhận email có đuôi @gmail.com.',
       requiredPassword: 'Vui lòng nhập mật khẩu.',
       passwordLength: 'Mật khẩu phải có ít nhất 8 ký tự.',
       passwordComplex: 'Mật khẩu phải có chữ hoa, chữ thường, số và ký tự đặc biệt.',
@@ -25,7 +24,6 @@
       nameLength: 'The name must contain at least 2 characters.',
       requiredEmail: 'Please enter your email.',
       emailFormat: 'Please enter a valid email address.',
-      gmail: 'Only @gmail.com addresses are accepted.',
       requiredPassword: 'Please enter a password.',
       passwordLength: 'The password must contain at least 8 characters.',
       passwordComplex: 'Use uppercase, lowercase, a number and a special character.',
@@ -45,7 +43,6 @@
   } : {};
   const touched = new Set();
   const letters = /^\p{L}[\p{L}\p{M}]*(?: +\p{L}[\p{L}\p{M}]*)*$/u;
-  const gmail = /^[^\s@]+@gmail\.com$/i;
   function check(key) {
     if (!form) return null;
     const value = fields[key][0].value;
@@ -57,7 +54,6 @@
     if (key === 'email') {
       if (!value.trim()) return text('requiredEmail');
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) return text('emailFormat');
-      if (!gmail.test(value.trim())) return text('gmail');
     }
     if (key === 'password') {
       if (!value) return text('requiredPassword');

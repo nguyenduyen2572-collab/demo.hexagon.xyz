@@ -26,15 +26,38 @@ class RegistrationValidationTest extends HexagonIsolatedTestCase
         $this->assertSame(0, DB::table('users')->count());
     }
 
-    public function test_only_valid_gmail_email_is_accepted(): void
+    public function test_valid_emails_from_multiple_providers_are_accepted(): void
     {
-        $this->post(route('customer.register.store'), $this->data(['email' => 'an@yahoo.com']))
-            ->assertSessionHasErrors('email');
+        $this->withoutMiddleware(\Illuminate\Routing\Middleware\ThrottleRequests::class);
+        foreach ([
+            'an@gmail.com',
+            'an@outlook.com',
+            'an@yahoo.com',
+            'an@icloud.com',
+            'an@congty.vn',
+            'an@doanhnghiep.com.vn',
+        ] as $email) {
+            $this->post(route('customer.register.store'), $this->data(['email' => $email]))
+                ->assertRedirect(route('customer.register'))
+                ->assertSessionHasNoErrors();
 
-        $this->post(route('customer.register.store'), $this->data(['email' => 'an@@gmail.com']))
-            ->assertSessionHasErrors('email');
+            $this->assertDatabaseHas('users', ['email' => $email, 'is_admin' => 0]);
+        }
     }
 
+    public function test_invalid_emails_and_duplicate_email_are_rejected(): void
+    {
+        $this->withoutMiddleware(\Illuminate\Routing\Middleware\ThrottleRequests::class);
+        foreach (['an@@gmail.com', 'khongcodauat', 'an@.com', 'an com@gmail.com'] as $invalid) {
+            $this->post(route('customer.register.store'), $this->data(['email' => $invalid]))
+                ->assertSessionHasErrors('email');
+        }
+
+        $this->post(route('customer.register.store'), $this->data(['email' => 'an@outlook.com']))
+            ->assertSessionHasNoErrors();
+        $this->post(route('customer.register.store'), $this->data(['email' => 'an@outlook.com']))
+            ->assertSessionHasErrors('email');
+    }
     public function test_password_requires_at_least_eight_characters_and_complexity(): void
     {
         $this->post(route('customer.register.store'), $this->data(['password' => 'abcdefgh', 'password_confirmation' => 'abcdefgh']))

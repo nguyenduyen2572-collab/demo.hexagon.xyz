@@ -37,7 +37,7 @@
                 <label for="email" data-i18n="email">Email</label>
                 <input class="hx-input" id="email" name="email" type="email" inputmode="email" maxlength="190"
                        autocomplete="email" autocapitalize="none" spellcheck="false"
-                       placeholder="example@gmail.com" value="{{ old('email') }}" required
+                       placeholder="ten@congty.com" value="{{ old('email') }}" required
                        aria-describedby="hxRegEmailError" aria-invalid="{{ $errors->has('email') ? 'true' : 'false' }}">
                 <p class="hx-reg-error" id="hxRegEmailError" aria-live="polite" data-server-error="{{ $errors->has('email') ? '1' : '0' }}">{{ $errors->first('email') }}</p>
             </div>
