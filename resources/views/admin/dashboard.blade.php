@@ -3,19 +3,19 @@
 @section('title', 'Tổng quan - HEXAGON Admin')
 @section('topbar_title', 'Tổng quan')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/hexagon-admin-dashboard-v3.css') }}?v=1">
+@endpush
 @section('content')
-    <section class="hx-dashboard-hero" aria-labelledby="hx-admin-home-title">
-        <div>
-            <span class="hx-hero-eyebrow">TRUNG TÂM ĐIỀU HÀNH</span>
-            <h1 id="hx-admin-home-title">Chào mừng trở lại!</h1>
-            <p>Theo dõi đơn hàng và quản lý hoạt động kinh doanh ngay tại đây.</p>
-        </div>
-        <div class="hx-hero-actions">
-            <a class="hx-hero-primary" href="{{ route('admin.orders.index') }}"><svg class="hx-icon"><use href="#hx-ico-orders"/></svg> Xử lý đơn hàng</a>
-            <a class="hx-hero-secondary" href="{{ route('admin.domain-prices.index') }}">Quản lý bảng giá <svg class="hx-icon"><use href="#hx-ico-arrow"/></svg></a>
-        </div>
-    </section>
-
+    {{-- HEXAGON DASHBOARD V3: BEGIN --}}
+    <section class="hx-dash-v3-totals" aria-labelledby="hx-dash-v3-totals-title">
+        <header class="hx-dash-v3-overview-head">
+            <div>
+                <span class="hx-dash-v3-eyebrow">TOÀN BỘ THỜI GIAN</span>
+                <h2 id="hx-dash-v3-totals-title">Chỉ số tổng hợp</h2>
+            </div>
+            <a class="hx-dash-v3-all-orders" href="{{ route('admin.orders.index') }}">Xem danh sách đơn hàng <span aria-hidden="true">→</span></a>
+        </header>
     <section class="stats-grid" aria-label="Thống kê đơn hàng">
         <div class="stat-card">
             <div class="stat-label">Tổng đơn hàng</div>
@@ -39,13 +39,18 @@
         </div>
     </section>
 
+    </section>
+
+    <x-admin.dashboard-analytics />
+
+    <h2 class="hx-dash-v3-tools-title">Thao tác nhanh</h2>
     <nav class="hx-dashboard-tools" aria-label="Truy cập nhanh">
         <a href="{{ route('admin.orders.index') }}"><svg class="hx-icon"><use href="#hx-ico-orders"/></svg> Đơn hàng</a>
         <a href="{{ route('admin.customers.index') }}"><svg class="hx-icon"><use href="#hx-ico-users"/></svg> Khách hàng</a>
         <a href="{{ route('admin.domain-prices.index') }}"><svg class="hx-icon"><use href="#hx-ico-domain"/></svg> Tên miền</a>
         <a href="{{ route('admin.saas.index') }}"><svg class="hx-icon"><use href="#hx-ico-saas"/></svg> Dịch vụ SaaS</a>
     </nav>
-    <section class="panel">
+    <section class="panel hx-dash-v3-recent">
         <div class="panel-heading">
             <h2>Đơn hàng mới nhất</h2>
             <a class="text-link" href="{{ route('admin.orders.index') }}">Xem tất cả</a>
@@ -74,8 +79,6 @@
         </div>
     </section>
 
-{{-- HEXAGON ANALYTICS V2.1: BEGIN --}}
-<x-admin.dashboard-analytics />
-{{-- HEXAGON ANALYTICS V2.1: END --}}
+
+    {{-- HEXAGON DASHBOARD V3: END --}}
 @endsection
-    
