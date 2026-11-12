@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700;800&amp;display=swap">
     <link rel="stylesheet" href="{{ asset('css/hexagon-font-source-sans-v1.css') }}?v=1">
     <!-- HEXAGON_FONT_SOURCE_SANS_V1_END -->
+    <link rel="stylesheet" href="{{ asset('css/hexagon-saas-inquiries-v1.css') }}?v=1">
 </head>
 <body data-saas-title-vi="{{ $service->name_vi }} - HEXAGON" data-saas-title-en="{{ $service->name_en ?: $service->name_vi }} - HEXAGON">
     @include('partials.hexagon-shop-header')
@@ -50,9 +51,10 @@
                         <small data-saas-vi="/tháng" data-saas-en="/month">/tháng</small>
                     @endif
                 </div>
-                <p class="saas-detail-note" data-saas-vi="Đây là danh mục giới thiệu. Chưa kích hoạt đăng ký hoặc thanh toán dịch vụ SaaS." data-saas-en="This is a service catalog. SaaS subscriptions and payments are not enabled yet.">Đây là danh mục giới thiệu. Chưa kích hoạt đăng ký hoặc thanh toán dịch vụ SaaS.</p>
+                <p class="saas-detail-note" data-saas-vi="Liên hệ HEXAGON để được tư vấn và xác nhận giải pháp phù hợp." data-saas-en="Contact HEXAGON for consultation and a suitable solution.">Liên hệ HEXAGON để được tư vấn và xác nhận giải pháp phù hợp.</p>
             </aside>
         </article>
+        @include('partials.saas-inquiry-form')
     </main>
     @include('partials.hexagon-premium-footer')
 </body>

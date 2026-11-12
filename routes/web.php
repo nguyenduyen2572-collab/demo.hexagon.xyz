@@ -251,3 +251,4 @@ Route::middleware([\App\Http\Middleware\EnsureAdminSession::class, EnsureAdmin::
 
 // HEXAGON public About page
 require __DIR__.'/hexagon_about.php';
+require __DIR__.'/hexagon_saas_inquiries.php';

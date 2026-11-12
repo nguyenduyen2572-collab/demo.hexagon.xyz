@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700;800&amp;display=swap">
     <link rel="stylesheet" href="{{ asset('css/hexagon-font-source-sans-v1.css') }}?v=1">
     <!-- HEXAGON_FONT_SOURCE_SANS_V1_END -->
+    <link rel="stylesheet" href="{{ asset('css/hexagon-saas-inquiries-v1.css') }}?v=1">
 </head>
 <body class="hx-admin-v3 hx-admin-pro">
 <a class="hx-skip-link" href="#admin-main">Bỏ qua menu, đến nội dung chính</a>
@@ -67,6 +68,10 @@
                     <svg class="hx-icon"><use href="#hx-ico-users"/></svg><span class="hx-nav-text">Khách hàng</span><svg class="hx-icon hx-nav-arrow"><use href="#hx-ico-chevron"/></svg>
                 </a>
             </div>
+                    <a class="nav-link {{ request()->routeIs('admin.saas-inquiries.*') ? 'active' : '' }}"
+               href="{{ route('admin.saas-inquiries.index') }}" title="Yêu cầu tư vấn SaaS">
+                <span aria-hidden="true">✉</span><span class="hx-nav-text">Yêu cầu tư vấn SaaS</span>
+            </a>
         </nav>
         <div class="hx-sidebar-footer">
             <a class="hx-website-link" href="{{ url('/') }}" target="_blank" rel="noopener noreferrer"><svg class="hx-icon"><use href="#hx-ico-external"/></svg><span class="hx-nav-text">Xem trang bán hàng</span></a>
@@ -95,6 +100,7 @@
     <div class="hx-quick-search-box" role="dialog" aria-modal="true" aria-labelledby="hx-quick-title">
         <div class="hx-quick-header"><svg class="hx-icon"><use href="#hx-ico-search"/></svg><label class="hx-visually-hidden" for="hx-quick-input" id="hx-quick-title">Tìm chức năng quản trị</label><input id="hx-quick-input" type="search" placeholder="Tìm đơn hàng, khách hàng, bảng giá..." autocomplete="off"><button type="button" class="hx-icon-button" data-search-close aria-label="Đóng tìm kiếm"><svg class="hx-icon"><use href="#hx-ico-close"/></svg></button></div>
         <div class="hx-quick-results" data-search-results>
+            <a href="{{ route('admin.saas-inquiries.index') }}" data-search-item data-keywords="tư vấn saas yêu cầu liên hệ"><span aria-hidden="true">✉</span><span>Yêu cầu tư vấn SaaS</span><small>Đi tới</small></a>
             <a href="{{ route('admin.dashboard') }}" data-search-item data-keywords="dashboard tổng quan thống kê"><svg class="hx-icon"><use href="#hx-ico-grid"/></svg><span>Bảng điều khiển</span><small>Đi tới</small></a>
             <a href="{{ route('admin.orders.index') }}" data-search-item data-keywords="đơn hàng đặt hàng xử lý"><svg class="hx-icon"><use href="#hx-ico-orders"/></svg><span>Đơn hàng</span><small>Đi tới</small></a>
             <a href="{{ route('admin.domain-prices.index') }}" data-search-item data-keywords="bảng giá tên miền thêm sửa đuôi"><svg class="hx-icon"><use href="#hx-ico-domain"/></svg><span>Bảng giá tên miền</span><small>Đi tới</small></a>
