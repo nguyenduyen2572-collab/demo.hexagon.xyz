@@ -1,0 +1,41 @@
+/* HEXAGON - typography V1
+ * Single typeface for storefront, customer screens, SaaS and Admin.
+ * Keep existing font sizes, colors, spacing and icon fonts untouched.
+ * This stylesheet is loaded last in every full HTML document.
+ */
+:root {
+  --hx-font-primary: "Source Sans 3", "Segoe UI", Arial, sans-serif;
+  /* The existing unified-ui stylesheet uses this variable with !important.
+     Overriding it is the safest way to keep legacy components consistent. */
+  --hx-unified-font: var(--hx-font-primary);
+  --font-sans: var(--hx-font-primary);
+}
+
+html,
+body {
+  font-family: var(--hx-font-primary) !important;
+}
+
+/* Text-bearing controls and copy; exclude icon-font classes explicitly. */
+body :where(
+  h1,h2,h3,h4,h5,h6,p,a,button,input,textarea,select,option,label,
+  small,strong,b,em,th,td,li,dt,dd,summary,blockquote,figcaption,
+  legend,caption,time,output,mark,div,span,section,
+  article,header,footer,nav,aside,main
+):not(.fa):not(.fas):not(.far):not(.fab):not(.fal):not(.material-icons):not(.material-symbols-outlined):not(.glyphicon):not([class^="bi-"]):not([class*=" icon-"]) {
+  font-family: var(--hx-font-primary) !important;
+}
+
+/* Make the Admin input typography consistent even with imported templates. */
+body :where(input,textarea,select,button)::placeholder {
+  font-family: var(--hx-font-primary);
+}
+
+/* Text drawn inside SVG charts should visually match their labels. */
+svg text,
+svg tspan {
+  font-family: var(--hx-font-primary);
+}
+
+/* Avoid synthetic bold and odd spacing from legacy mixed-font components. */
+html { text-rendering: optimizeLegibility; }

@@ -14,6 +14,12 @@
     <link rel="stylesheet" href="{{ asset('css/hexagon-unified-ui-v1.css') }}?v=1">
     <link rel="stylesheet" href="{{ asset('css/hexagon-header-cta-v2.css') }}?v=2">
     <script src="{{ asset('js/hexagon-unified-ui-v1.js') }}?v=1" defer></script>
+    <!-- HEXAGON_FONT_SOURCE_SANS_V1_START -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700;800&amp;display=swap">
+    <link rel="stylesheet" href="{{ asset('css/hexagon-font-source-sans-v1.css') }}?v=1">
+    <!-- HEXAGON_FONT_SOURCE_SANS_V1_END -->
 </head>
 <body data-saas-title-vi="Dịch vụ SaaS - HEXAGON" data-saas-title-en="SaaS Services - HEXAGON">
     @include('partials.hexagon-shop-header')

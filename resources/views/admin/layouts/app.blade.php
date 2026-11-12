@@ -12,6 +12,12 @@
     <link rel="stylesheet" href="{{ asset('css/hexagon-admin-pro-v1.css') }}?v=1">
     <script src="{{ asset('js/hexagon-admin-pro-v1.js') }}?v=1" defer></script>
     @stack('scripts')
+    <!-- HEXAGON_FONT_SOURCE_SANS_V1_START -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700;800&amp;display=swap">
+    <link rel="stylesheet" href="{{ asset('css/hexagon-font-source-sans-v1.css') }}?v=1">
+    <!-- HEXAGON_FONT_SOURCE_SANS_V1_END -->
 </head>
 <body class="hx-admin-v3 hx-admin-pro">
 <a class="hx-skip-link" href="#admin-main">Bỏ qua menu, đến nội dung chính</a>
