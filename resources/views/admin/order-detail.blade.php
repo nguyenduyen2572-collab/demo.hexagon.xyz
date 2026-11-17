@@ -3,11 +3,23 @@
 @section('title', 'Chi tiết đơn hàng - HEXAGON Admin')
 @section('topbar_title', 'Chi tiết đơn hàng')
 
-@section('content')
-    <a class="back-button" href="{{ route('admin.orders.index') }}">← Quay lại danh sách</a>
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/hexagon-admin-order-detail-v2.css') }}?v=1">
+@endpush
+@push('scripts')
+    <script src="{{ asset('js/hexagon-admin-order-detail-v2.js') }}?v=1" defer></script>
+@endpush
 
-    <div class="page-heading">
-        <h1>Đơn hàng {{ \App\Support\HexagonOrderCode::forOrder($order) }}</h1>
+@section('content')
+<div class="hx-order-v2">
+    <a class="back-button" href="{{ route('admin.orders.index') }}">← Quay lại danh sách đơn hàng</a>
+
+    <div class="page-heading hx-order-v2__heading">
+        <div>
+            <h1>Đơn hàng {{ \App\Support\HexagonOrderCode::forOrder($order) }}</h1>
+            <p>Được tạo lúc {{ \Illuminate\Support\Carbon::parse($order->created_at)->format('d/m/Y H:i') }}</p>
+        </div>
+        <x-admin.status :status="$order->status" />
     </div>
 
     @if(session('success'))
@@ -18,14 +30,14 @@
         <div class="alert alert-error" role="alert">{{ $errors->first() }}</div>
     @endif
 
-    <div class="detail-grid">
-        <div>
+    <div class="detail-grid hx-order-v2__grid">
+        <div class="hx-order-v2__column">
             <section class="panel detail-panel">
                 <h2>Thông tin khách hàng</h2>
                 <div class="info-row"><span>Họ tên</span><strong>{{ $order->customer_name }}</strong></div>
-                <div class="info-row"><span>Email</span><strong>{{ $order->customer_email }}</strong></div>
+                <div class="info-row"><span>Email</span><strong><a class="hx-order-v2__inline-link" href="mailto:{{ $order->customer_email }}">{{ $order->customer_email }}</a></strong></div>
                 <div class="info-row"><span>Số điện thoại</span><strong>{{ $order->customer_phone }}</strong></div>
-                <div class="info-row"><span>Ngày tạo</span><strong>{{ $order->created_at }}</strong></div>
+                <div class="info-row"><span>Ngày tạo</span><strong>{{ \Illuminate\Support\Carbon::parse($order->created_at)->format('d/m/Y H:i') }}</strong></div>
             </section>
 
             <section class="panel detail-panel">
@@ -43,44 +55,62 @@
                 @endforelse
 
                 <div class="order-total">
-                    <strong>Tổng tiền</strong>
+                    <strong>Tổng giá trị đơn</strong>
                     <strong>{{ number_format($order->total_amount, 0, ',', '.') }}đ</strong>
                 </div>
+                <p class="hx-order-v2__price-note">Giá trị đơn hàng không xác nhận rằng khách hàng đã thanh toán.</p>
             </section>
         </div>
 
-        <section class="panel detail-panel status-panel">
-            <h2>Trạng thái đơn hàng</h2>
-            <x-admin.status :status="$order->status" />
+        <div class="hx-order-v2__column">
+            <section class="panel detail-panel status-panel">
+                <h2>Trạng thái đơn hàng</h2>
+                <x-admin.status :status="$order->status" />
 
-            @if(count($nextStatuses) > 0)
-                <form method="POST"
-                      action="{{ route('admin.orders.update-status', ['id' => $order->id]) }}"
-                      class="status-form">
-                    @csrf
-                    @method('PATCH')
+                @if(count($nextStatuses) > 0)
+                    <form method="POST"
+                          action="{{ route('admin.orders.update-status', ['id' => $order->id]) }}"
+                          class="status-form"
+                          data-hx-order-status-form>
+                        @csrf
+                        @method('PATCH')
 
-                    <label for="status">Chuyển trạng thái</label>
-                    <select id="status" name="status" required>
-                        <option value="">-- Chọn trạng thái --</option>
-                        @foreach($nextStatuses as $next)
-                            <option value="{{ $next }}" @selected(old('status') === $next)>{{ $statusLabels[$next] ?? $next }}</option>
-                        @endforeach
-                    </select>
+                        <label for="status">Chuyển trạng thái</label>
+                        <select id="status" name="status" required @error('status') aria-invalid="true" @enderror>
+                            <option value="">-- Chọn trạng thái --</option>
+                            @foreach($nextStatuses as $next)
+                                <option value="{{ $next }}" @selected(old('status') === $next)>{{ $statusLabels[$next] ?? $next }}</option>
+                            @endforeach
+                        </select>
+                        @error('status')
+                            <p class="hx-order-v2__error">{{ $message }}</p>
+                        @enderror
 
-                    <label for="status_note">Ghi chú xử lý (không bắt buộc)</label>
-                    <textarea id="status_note"
-                              name="status_note"
-                              rows="3"
-                              maxlength="500"
-                              placeholder="Ví dụ: Đã kiểm tra thông tin và liên hệ khách hàng">{{ old('status_note') }}</textarea>
+                        <label for="status_note" data-hx-order-note-label>Ghi chú xử lý (không bắt buộc)</label>
+                        <textarea id="status_note"
+                                  name="status_note"
+                                  rows="3"
+                                  maxlength="500"
+                                  @error('status_note') aria-invalid="true" @enderror
+                                  aria-describedby="hx-order-note-hint"
+                                  placeholder="Nội dung xử lý, thông tin liên hệ khách hàng...">{{ old('status_note') }}</textarea>
+                        <p id="hx-order-note-hint" class="hx-order-v2__hint">Khi hủy đơn hàng, bắt buộc ghi rõ lý do (tối đa 500 ký tự).</p>
+                        @error('status_note')
+                            <p class="hx-order-v2__error">{{ $message }}</p>
+                        @enderror
 
-                    <button type="submit" class="btn btn-primary">Cập nhật trạng thái</button>
-                </form>
-            @else
-                <p class="muted">Đơn hàng đã kết thúc, không thể chuyển sang trạng thái khác.</p>
-            @endif
-        </section>
+                        <p class="hx-order-v2__cancel-warning" data-hx-order-cancel-warning hidden>
+                            Hủy đơn sẽ kết thúc quy trình xử lý và không thể hoàn tác bằng thao tác đổi trạng thái.
+                        </p>
+                        <button type="submit" class="btn btn-primary">Cập nhật trạng thái</button>
+                    </form>
+                @else
+                    <p class="hx-order-v2__finished">Đơn hàng đã ở trạng thái cuối, không thể chuyển sang trạng thái khác.</p>
+                @endif
+            </section>
+
+            <x-admin.order-status-timeline :order-id="(int) $order->id" />
+        </div>
     </div>
-
+</div>
 @endsection

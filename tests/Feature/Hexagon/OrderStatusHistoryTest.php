@@ -60,10 +60,15 @@ class OrderStatusHistoryTest extends HexagonIsolatedTestCase
         $this->actingAs($this->admin(), 'admin')
             ->patch(route('admin.orders.update-status', ['id' => $orderId]), [
                 'status' => 'cancelled_demo',
+                'status_note' => 'Khach hang yeu cau huy',
             ])->assertRedirect();
 
         $this->assertDatabaseHas('orders', ['id' => $orderId, 'status' => 'cancelled_demo']);
-        $this->assertDatabaseCount('order_status_histories', 1);
+        $this->assertDatabaseHas('order_status_histories', [
+            'order_id' => $orderId,
+            'to_status' => 'cancelled_demo',
+            'note' => 'Khach hang yeu cau huy',
+        ]);
     }
 
     public function test_cannot_skip_processing_step(): void
@@ -87,6 +92,7 @@ class OrderStatusHistoryTest extends HexagonIsolatedTestCase
         $this->actingAs($this->admin(), 'admin')
             ->patch(route('admin.orders.update-status', ['id' => $orderId]), [
                 'status' => 'cancelled_demo',
+                'status_note' => 'Khong the huy don da hoan tat',
             ])->assertSessionHasErrors('status');
 
         $this->assertDatabaseHas('orders', ['id' => $orderId, 'status' => 'completed_demo']);
@@ -106,7 +112,7 @@ class OrderStatusHistoryTest extends HexagonIsolatedTestCase
         $this->assertDatabaseCount('order_status_histories', 0);
     }
 
-    public function test_status_history_is_saved_but_not_displayed_in_admin(): void
+    public function test_status_history_is_displayed_in_admin_order_detail(): void
     {
         $orderId = $this->createOrder();
         DB::table('order_status_histories')->insert([
@@ -121,8 +127,9 @@ class OrderStatusHistoryTest extends HexagonIsolatedTestCase
         $this->actingAs($this->admin(), 'admin')
             ->get(route('admin.orders.show', ['id' => $orderId]))
             ->assertOk()
-            ->assertDontSee('Lịch sử xử lý đơn hàng')
-            ->assertDontSee('Ghi chu xu ly thu nghiem');
+            ->assertSee('Lịch sử xử lý đơn hàng')
+            ->assertSee('Ghi chu xu ly thu nghiem')
+            ->assertSee('Đang xử lý');
 
         $this->assertDatabaseHas('order_status_histories', [
             'order_id' => $orderId,
@@ -141,5 +148,76 @@ class OrderStatusHistoryTest extends HexagonIsolatedTestCase
             ])->assertSessionHasErrors('status_note');
 
         $this->assertDatabaseCount('order_status_histories', 0);
+    }
+
+    public function test_cancel_requires_a_reason_and_does_not_change_order_without_one(): void
+    {
+        $orderId = $this->createOrder();
+
+        $this->actingAs($this->admin(), 'admin')
+            ->from(route('admin.orders.show', ['id' => $orderId]))
+            ->patch(route('admin.orders.update-status', ['id' => $orderId]), [
+                'status' => 'cancelled_demo',
+                'status_note' => '  ',
+            ])->assertRedirect()->assertSessionHasErrors('status_note');
+
+        $this->assertDatabaseHas('orders', ['id' => $orderId, 'status' => 'pending_demo']);
+        $this->assertDatabaseCount('order_status_histories', 0);
+    }
+
+    public function test_cancel_processing_requires_a_reason(): void
+    {
+        $orderId = $this->createOrder('processing_demo');
+
+        $this->actingAs($this->admin(), 'admin')
+            ->patch(route('admin.orders.update-status', ['id' => $orderId]), [
+                'status' => 'cancelled_demo',
+            ])->assertSessionHasErrors('status_note');
+
+        $this->assertDatabaseHas('orders', ['id' => $orderId, 'status' => 'processing_demo']);
+        $this->assertDatabaseCount('order_status_histories', 0);
+    }
+
+    public function test_other_status_transitions_still_allow_empty_note(): void
+    {
+        $orderId = $this->createOrder();
+
+        $this->actingAs($this->admin(), 'admin')
+            ->patch(route('admin.orders.update-status', ['id' => $orderId]), [
+                'status' => 'processing_demo',
+            ])->assertRedirect();
+
+        $this->assertDatabaseHas('orders', ['id' => $orderId, 'status' => 'processing_demo']);
+        $this->assertDatabaseHas('order_status_histories', [
+            'order_id' => $orderId,
+            'to_status' => 'processing_demo',
+            'note' => null,
+        ]);
+    }
+
+    public function test_status_history_note_is_escaped_in_admin_html(): void
+    {
+        $orderId = $this->createOrder();
+        DB::table('order_status_histories')->insert([
+            'order_id' => $orderId,
+            'changed_by' => $this->admin()->id,
+            'from_status' => 'pending_demo',
+            'to_status' => 'processing_demo',
+            'note' => '<script>alert(1)</script>',
+            'created_at' => now(),
+        ]);
+
+        $this->actingAs($this->admin(), 'admin')
+            ->get(route('admin.orders.show', ['id' => $orderId]))
+            ->assertOk()->assertSee('&lt;script&gt;alert(1)&lt;/script&gt;', false)
+            ->assertDontSee('<script>alert(1)</script>', false);
+    }
+
+    public function test_non_admin_cannot_view_order_history(): void
+    {
+        $orderId = $this->createOrder();
+        $this->actingAs(User::factory()->create(['is_admin' => false]))
+            ->get(route('admin.orders.show', ['id' => $orderId]))
+            ->assertForbidden();
     }
 }

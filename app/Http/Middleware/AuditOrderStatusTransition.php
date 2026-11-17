@@ -24,11 +24,12 @@ class AuditOrderStatusTransition
 
         $validated = $request->validate([
             'status' => ['required', 'string', Rule::in(HexagonOrderStatus::values())],
-            'status_note' => ['nullable', 'string', 'max:500'],
+            'status_note' => ['nullable', 'required_if:status,cancelled_demo', 'string', 'max:500'],
         ], [
             'status.required' => 'Vui lòng chọn trạng thái đơn hàng.',
             'status.in' => 'Trạng thái đơn hàng không hợp lệ.',
             'status_note.max' => 'Ghi chú không được vượt quá 500 ký tự.',
+            'status_note.required_if' => 'Vui lòng nhập lý do khi hủy đơn hàng.',
         ]);
 
         $id = $request->route('id');

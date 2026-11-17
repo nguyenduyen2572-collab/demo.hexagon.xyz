@@ -1,0 +1,30 @@
+/* HEXAGON Admin - Order Detail V2. Scoped to order detail only. */
+.hx-admin-pro .hx-order-v2 {max-width:1320px;margin-inline:auto}
+.hx-admin-pro .hx-order-v2__heading {display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin:0 0 22px}
+.hx-admin-pro .hx-order-v2__heading h1 {overflow-wrap:anywhere;margin-bottom:7px}
+.hx-admin-pro .hx-order-v2__heading p {color:#66788f;font-size:13px}
+.hx-admin-pro .hx-order-v2__grid {grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:20px}
+.hx-admin-pro .hx-order-v2__column {min-width:0}
+.hx-admin-pro .hx-order-v2__inline-link {color:#2366ce;text-decoration:none;overflow-wrap:anywhere}
+.hx-admin-pro .hx-order-v2__inline-link:hover {text-decoration:underline}
+.hx-admin-pro .hx-order-v2__price-note {color:#68778e;font-size:12px;line-height:1.6;margin:11px 0 0}
+.hx-admin-pro .hx-order-v2__hint {color:#66788f;font-size:12px;margin:7px 0 0;line-height:1.55}
+.hx-admin-pro .hx-order-v2__error {color:#b42318;font-weight:600;font-size:12px;margin:7px 0 0}
+.hx-admin-pro .hx-order-v2__finished {color:#526581;line-height:1.6;font-size:13px;margin:17px 0 0}
+.hx-admin-pro .hx-order-v2 .status-form [aria-invalid="true"] {border-color:#db514b;box-shadow:0 0 0 2px rgb(219 81 75 / 11%)}
+.hx-admin-pro .hx-order-v2 .status-form textarea {min-height:88px;resize:vertical;box-sizing:border-box}
+.hx-admin-pro .hx-order-v2__cancel-warning {margin:14px 0 0;color:#8d351b;background:#fff6ed;border:1px solid #fed4ac;border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.55}
+.hx-admin-pro .hx-order-v2__cancel-warning[hidden] {display:none}
+.hx-admin-pro .hx-order-history {padding:23px;margin-bottom:20px}
+.hx-admin-pro .hx-order-history__heading h2 {margin:0 0 8px;font-size:16px}
+.hx-admin-pro .hx-order-history__intro,.hx-admin-pro .hx-order-history__empty {font-size:13px;color:#6a7c91;line-height:1.65;margin:0}
+.hx-admin-pro .hx-order-history__list {list-style:none;border-left:2px solid #d8e6f7;margin:22px 0 0 6px;padding:0 0 0 18px}
+.hx-admin-pro .hx-order-history__item {position:relative;margin-bottom:23px;min-width:0}
+.hx-admin-pro .hx-order-history__item:last-child {margin-bottom:0}
+.hx-admin-pro .hx-order-history__item::before {content:"";position:absolute;left:-26px;top:5px;width:12px;height:12px;border-radius:50%;background:#2771dc;border:3px solid #e6effd}
+.hx-admin-pro .hx-order-history__transition {display:flex;align-items:center;flex-wrap:wrap;gap:7px;color:#25354d;font-size:13px;line-height:1.5}
+.hx-admin-pro .hx-order-history__arrow {color:#7890ae}
+.hx-admin-pro .hx-order-history__meta {display:flex;flex-wrap:wrap;gap:5px 14px;margin-top:6px;font-size:12px;color:#6b7f99}
+.hx-admin-pro .hx-order-history__note {margin-top:10px;padding:10px 12px;border-radius:10px;background:#f2f6fc;color:#334765;font-size:13px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:900px) {.hx-admin-pro .hx-order-v2__grid {grid-template-columns:1fr}}
+@media(max-width:600px) {.hx-admin-pro .hx-order-history {padding:18px}.hx-admin-pro .hx-order-v2__heading h1 {font-size:22px}}
