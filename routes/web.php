@@ -240,6 +240,14 @@ Route::middleware([\App\Http\Middleware\EnsureAdminSession::class, EnsureAdmin::
 
 
 
+        // Bảo mật tài khoản Admin: luôn xác thực qua Admin guard.
+        Route::get('/security/password', [
+            \App\Http\Controllers\Admin\AdminSecurityController::class, 'editPassword'
+        ])->name('security.password.edit');
+        Route::patch('/security/password', [
+            \App\Http\Controllers\Admin\AdminSecurityController::class, 'updatePassword'
+        ])->middleware('throttle:5,1')->name('security.password.update');
+
         // Đăng xuất Admin
         Route::post('/logout', [
             SeparatedAdminAuthController::class,

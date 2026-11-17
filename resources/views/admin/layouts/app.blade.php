@@ -26,6 +26,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/hexagon-admin-typography-customers-v1.css') }}?v=1">
     <link rel="stylesheet" href="{{ asset('css/hexagon-saas-inquiries-admin-v3.css') }}?v=3">
+    <link rel="stylesheet" href="{{ asset('css/hexagon-admin-security-v4.css') }}?v=4">
 </head>
 <body class="hx-admin-v3 hx-admin-pro">
 <a class="hx-skip-link" href="#admin-main">Bỏ qua menu, đến nội dung chính</a>
@@ -102,7 +103,7 @@
             </div>
             <div class="hx-topbar-right">
                 <button type="button" class="hx-search-trigger" data-search-open title="Tìm nhanh (Ctrl + K)"><svg class="hx-icon"><use href="#hx-ico-search"/></svg><span>Tìm chức năng...</span><kbd>Ctrl K</kbd></button>
-                <details class="hx-admin-account"><summary aria-label="Tài khoản quản trị"><span class="hx-admin-avatar">{{ mb_strtoupper(mb_substr(trim((string) (auth('admin')->user()?->name ?? 'A')), 0, 1)) }}</span><span class="hx-admin-account-label"><strong>{{ auth('admin')->user()?->name ?? 'Quản trị viên' }}</strong><small>Quản trị viên</small></span><svg class="hx-icon hx-account-chevron"><use href="#hx-ico-chevron"/></svg></summary><div class="hx-account-dropdown"><div class="hx-account-name">{{ auth('admin')->user()?->email ?? 'Tài khoản quản trị' }}</div><form method="POST" action="{{ route('admin.logout') }}">@csrf<button type="submit"><svg class="hx-icon"><use href="#hx-ico-logout"/></svg> Đăng xuất</button></form></div></details>
+                <details class="hx-admin-account"><summary aria-label="Tài khoản quản trị"><span class="hx-admin-avatar">{{ mb_strtoupper(mb_substr(trim((string) (auth('admin')->user()?->name ?? 'A')), 0, 1)) }}</span><span class="hx-admin-account-label"><strong>{{ auth('admin')->user()?->name ?? 'Quản trị viên' }}</strong><small>Quản trị viên</small></span><svg class="hx-icon hx-account-chevron"><use href="#hx-ico-chevron"/></svg></summary><div class="hx-account-dropdown"><div class="hx-account-name">{{ auth('admin')->user()?->email ?? 'Tài khoản quản trị' }}</div><a class="hx-admin-security-link" href="{{ route('admin.security.password.edit') }}">Đổi mật khẩu</a><form method="POST" action="{{ route('admin.logout') }}">@csrf<button type="submit"><svg class="hx-icon"><use href="#hx-ico-logout"/></svg> Đăng xuất</button></form></div></details>
             </div>
         </header>
         <main class="admin-main" id="admin-main" tabindex="-1">@yield('content')</main>

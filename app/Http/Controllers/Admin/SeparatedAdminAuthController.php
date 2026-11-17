@@ -54,6 +54,10 @@ final class SeparatedAdminAuthController extends Controller
 
         // Keep cart and any genuine Customer authentication intact.
         $request->session()->regenerate();
+        // Admin-only security metadata: never overwrite customer session keys.
+        $admin = Auth::guard('admin')->user();
+        $request->session()->put('hexagon_admin_password_stamp', hash('sha256', (string) $admin->getAuthPassword()));
+        $request->session()->put('hexagon_admin_last_activity_at', time());
 
         return redirect()->route('admin.dashboard');
     }
@@ -61,6 +65,7 @@ final class SeparatedAdminAuthController extends Controller
     public function logout(Request $request): RedirectResponse
     {
         Auth::guard('admin')->logout();
+        $request->session()->forget(['hexagon_admin_password_stamp', 'hexagon_admin_last_activity_at']);
         // Do not invalidate the entire session: doing so would log out Customer too.
         $request->session()->regenerate();
 

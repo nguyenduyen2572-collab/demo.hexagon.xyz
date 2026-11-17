@@ -1,0 +1,28 @@
+/* HEXAGON Admin V4: account security, no global CSS overrides. */
+.hx-admin-security-link{display:flex;align-items:center;padding:11px 15px;color:inherit;text-decoration:none;font-weight:650;line-height:1.5;border-radius:7px;}
+.hx-admin-security-link:hover,.hx-admin-security-link:focus-visible{background:#edf3fb;color:#163d7b;outline-offset:2px;}
+.hx-security-v4{width:100%;max-width:800px;margin:0 auto;padding:4px 0 40px;color:#182b45;}
+.hx-security-v4-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:22px;}
+.hx-security-v4-heading h1{font-size:clamp(23px,2.4vw,30px);margin:3px 0 8px;font-weight:800;color:#122440;}
+.hx-security-v4-heading p{margin:0;color:#54657f;line-height:1.65;}
+.hx-security-v4-heading .hx-security-v4-eyebrow{font-size:11px;font-weight:800;letter-spacing:.11em;color:#436c9d;}
+.hx-security-v4-back{color:#235caa;text-decoration:none;white-space:nowrap;font-weight:650;margin-top:14px;}
+.hx-security-v4-back:hover{text-decoration:underline;}
+.hx-security-v4-card{background:white;border:1px solid #e4eaf2;border-radius:16px;box-shadow:0 7px 25px rgba(20,45,85,.06);overflow:hidden;}
+.hx-security-v4-account{display:flex;flex-direction:column;gap:4px;background:#f5f8fc;border-bottom:1px solid #e6edf6;padding:18px 28px;overflow-wrap:anywhere;}
+.hx-security-v4-account span{font-size:12px;color:#64768e;}.hx-security-v4-account strong{font-size:15px;color:#1c395a;}
+.hx-security-v4-form{padding:28px;}.hx-security-v4-field{margin-bottom:20px;}
+.hx-security-v4-field label{display:block;font-size:14px;font-weight:700;margin-bottom:9px;color:#1d344f;}
+.hx-security-v4-field label span{color:#c33139;}
+.hx-security-v4-field input{box-sizing:border-box;display:block;width:100%;min-height:45px;background:#fff;border:1px solid #c7d2df;border-radius:9px;padding:10px 12px;color:#1e334c;font:inherit;}
+.hx-security-v4-field input:focus{outline:3px solid #cfe1ff;border-color:#2e70bb;}
+.hx-security-v4-field input[aria-invalid=true]{border-color:#be313f;}
+.hx-security-v4-hint{font-size:12px;line-height:1.5;margin:7px 0 0;color:#62748b;}
+.hx-security-v4-error{font-size:13px;color:#b32232;margin:7px 0 0;font-weight:600;}
+.hx-security-v4-notice{font-size:13px;line-height:1.6;border:1px solid #d7e5f7;background:#f2f7ff;color:#27496d;padding:12px 14px;border-radius:9px;}
+.hx-security-v4-actions{display:flex;align-items:center;gap:22px;margin-top:24px;flex-wrap:wrap;}
+.hx-security-v4-submit{border:0;border-radius:9px;background:#184b93;color:#fff;padding:12px 22px;font:inherit;font-weight:750;cursor:pointer;min-height:44px;}
+.hx-security-v4-submit:hover,.hx-security-v4-submit:focus-visible{background:#103c7b;}
+.hx-security-v4-actions a{color:#4d617c;text-decoration:none;font-weight:650;}
+.hx-security-v4-actions a:hover{text-decoration:underline;}
+@media(max-width:600px){.hx-security-v4-heading{display:block;}.hx-security-v4-back{display:inline-block;margin-top:9px;}.hx-security-v4-form{padding:20px;}.hx-security-v4-account{padding:16px 20px;}.hx-security-v4-submit{width:100%;}}
