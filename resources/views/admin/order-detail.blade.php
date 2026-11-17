@@ -7,8 +7,7 @@
     <a class="back-button" href="{{ route('admin.orders.index') }}">← Quay lại danh sách</a>
 
     <div class="page-heading">
-        <h1>Đơn hàng #{{ $order->id }}</h1>
-        <p class="order-code-line">Mã đơn: {{ \App\Support\HexagonOrderCode::forOrder($order) }}</p>
+        <h1>Đơn hàng {{ \App\Support\HexagonOrderCode::forOrder($order) }}</h1>
     </div>
 
     @if(session('success'))
@@ -84,5 +83,4 @@
         </section>
     </div>
 
-    <x-admin.order-status-timeline :order-id="$order->id" />
 @endsection
