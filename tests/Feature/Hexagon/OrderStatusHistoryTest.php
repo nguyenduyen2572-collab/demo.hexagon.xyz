@@ -106,7 +106,7 @@ class OrderStatusHistoryTest extends HexagonIsolatedTestCase
         $this->assertDatabaseCount('order_status_histories', 0);
     }
 
-    public function test_status_history_is_visible_in_admin_order_details(): void
+    public function test_status_history_is_saved_but_not_displayed_in_admin(): void
     {
         $orderId = $this->createOrder();
         DB::table('order_status_histories')->insert([
@@ -121,8 +121,13 @@ class OrderStatusHistoryTest extends HexagonIsolatedTestCase
         $this->actingAs($this->admin(), 'admin')
             ->get(route('admin.orders.show', ['id' => $orderId]))
             ->assertOk()
-            ->assertSee('Lịch sử xử lý đơn hàng')
-            ->assertSee('Ghi chu xu ly thu nghiem');
+            ->assertDontSee('Lịch sử xử lý đơn hàng')
+            ->assertDontSee('Ghi chu xu ly thu nghiem');
+
+        $this->assertDatabaseHas('order_status_histories', [
+            'order_id' => $orderId,
+            'note' => 'Ghi chu xu ly thu nghiem',
+        ]);
     }
 
     public function test_rejects_note_over_500_characters(): void

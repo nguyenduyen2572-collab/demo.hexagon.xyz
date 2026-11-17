@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Hexagon;
 
 use App\Models\User;
+use App\Support\HexagonOrderCode;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Tests\Support\HexagonIsolatedTestCase;
@@ -14,7 +15,7 @@ final class AdminOrderFiltersTest extends HexagonIsolatedTestCase
     private function makeOrder(string $name, string $email, string $status, string $createdAt): string
     {
         $code = (string) Str::uuid();
-        DB::table('orders')->insert([
+        $id = DB::table('orders')->insertGetId([
             'order_code' => $code,
             'customer_name' => $name,
             'customer_email' => $email,
@@ -26,7 +27,7 @@ final class AdminOrderFiltersTest extends HexagonIsolatedTestCase
             'created_at' => $createdAt,
             'updated_at' => $createdAt,
         ]);
-        return $code;
+        return HexagonOrderCode::fromId((int) $id);
     }
 
     private function admin(): User

@@ -13,6 +13,7 @@ use Illuminate\Validation\Rule;
  * Read-only insights for registered customers. Only routes with auth + EnsureAdmin
  * may point to this controller. Guest orders are deliberately not matched by email.
  */
+// HEXAGON-CUSTOMERS-FILTER-CLEAN-V1: verification remains in customer auth, not admin insights.
 final class AdminCustomerInsightsController extends Controller
 {
     private const PAGE_SIZE = 15;
@@ -28,19 +29,17 @@ final class AdminCustomerInsightsController extends Controller
     {
         $filters = $request->validate([
             'q' => ['nullable', 'string', 'max:120'],
-            'verified' => ['nullable', Rule::in(['all', 'yes', 'no'])],
             'orders' => ['nullable', Rule::in(['all', 'yes', 'no'])],
             'sort' => ['nullable', Rule::in(['latest', 'oldest', 'orders', 'value'])],
         ]);
 
         $filters['q'] = trim((string) ($filters['q'] ?? ''));
-        $filters['verified'] = $filters['verified'] ?? 'all';
         $filters['orders'] = $filters['orders'] ?? 'all';
         $filters['sort'] = $filters['sort'] ?? 'latest';
 
         $customers = DB::table('users as u')
             ->where('u.is_admin', false)
-            ->select(['u.id', 'u.name', 'u.email', 'u.email_verified_at', 'u.created_at'])
+            ->select(['u.id', 'u.name', 'u.email', 'u.created_at'])
             ->selectSub(
                 DB::table('orders as o')
                     ->selectRaw('COUNT(*)')
@@ -67,12 +66,6 @@ final class AdminCustomerInsightsController extends Controller
                 $query->where('u.name', 'like', $term)
                     ->orWhere('u.email', 'like', $term);
             });
-        }
-
-        if ($filters['verified'] === 'yes') {
-            $customers->whereNotNull('u.email_verified_at');
-        } elseif ($filters['verified'] === 'no') {
-            $customers->whereNull('u.email_verified_at');
         }
 
         if ($filters['orders'] !== 'all') {
@@ -105,7 +98,6 @@ final class AdminCustomerInsightsController extends Controller
 
         $overview = [
             'all' => DB::table('users')->where('is_admin', false)->count(),
-            'verified' => DB::table('users')->where('is_admin', false)->whereNotNull('email_verified_at')->count(),
             'ordered' => DB::table('users as u')
                 ->where('u.is_admin', false)
                 ->whereExists(fn ($query) => $query->selectRaw('1')
@@ -123,7 +115,7 @@ final class AdminCustomerInsightsController extends Controller
         $customer = DB::table('users')
             ->where('id', (int) $id)
             ->where('is_admin', false)
-            ->first(['id', 'name', 'email', 'email_verified_at', 'created_at']);
+            ->first(['id', 'name', 'email', 'created_at']);
 
         abort_if($customer === null, 404);
 

@@ -20,6 +20,11 @@
     <!-- HEXAGON_FONT_SOURCE_SANS_V1_END -->
     <link rel="stylesheet" href="{{ asset('css/hexagon-saas-inquiries-v1.css') }}?v=1">
     <link rel="stylesheet" href="{{ asset('css/hexagon-renewal-compact-v1-2.css') }}?v=1">
+    <!-- HEXAGON ADMIN TYPOGRAPHY + CUSTOMER CLEAN V1 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/hexagon-admin-typography-customers-v1.css') }}?v=1">
 </head>
 <body class="hx-admin-v3 hx-admin-pro">
 <a class="hx-skip-link" href="#admin-main">Bỏ qua menu, đến nội dung chính</a>

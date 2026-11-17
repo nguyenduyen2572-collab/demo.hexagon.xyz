@@ -1,0 +1,55 @@
+/* HEXAGON Admin / Customers unified typography V1
+ * Loaded last on admin pages, leaving existing components and JS untouched.
+ */
+:root { --hx-admin-typography: "Source Sans 3", "Segoe UI", Arial, sans-serif; }
+body.hx-admin-pro,
+body.hx-admin-pro :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,a,button,input,select,textarea,option,div,th,td,dt,dd,label,summary,nav,main,header,footer,aside,section,article,time,li),
+body.hx-admin-pro .admin-main,
+body.hx-admin-pro svg text,
+body.hx-admin-pro svg tspan {
+  font-family: var(--hx-admin-typography) !important;
+}
+body.hx-admin-pro { font-size: 14px; -webkit-font-smoothing: antialiased; }
+body.hx-admin-pro :is(h1,h2,h3,h4,h5,h6) { font-weight: 700 !important; letter-spacing: -.025em !important; }
+body.hx-admin-pro :is(input,textarea,select,button) { font-size: 14px; }
+body.hx-admin-pro .admin-nav .nav-link,
+body.hx-admin-pro .hx-topbar-titles > strong,
+body.hx-admin-pro .hx-admin-account-label strong { font-weight: 650 !important; letter-spacing: 0 !important; }
+body.hx-admin-pro .admin-table th,
+body.hx-admin-pro .hxc-table th { font-weight: 650 !important; letter-spacing: .02em !important; }
+body.hx-admin-pro .stat-label,
+body.hx-admin-pro .hxc-stat span { font-weight: 600 !important; }
+body.hx-admin-pro .stat-value,
+body.hx-admin-pro .hxc-stat strong { font-weight: 700 !important; letter-spacing: -.025em !important; }
+body.hx-admin-pro .hxc-eyebrow,
+body.hx-admin-pro .hx-nav-label { font-weight: 700 !important; letter-spacing: .08em !important; }
+body.hx-admin-pro .hxc-table td strong,
+body.hx-admin-pro .hxc-detail-link,
+body.hx-admin-pro .hxc-field {font-weight: 650 !important;}
+/* Customer overview no longer has an oversized advertising banner. */
+body.hx-admin-pro .hxc-page-heading {display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin:0 0 20px;}
+body.hx-admin-pro .hxc-page-heading h1 {font-size:clamp(23px,2.25vw,30px);margin:0 0 5px;line-height:1.25;color:#102447;}
+body.hx-admin-pro .hxc-page-heading p {font-size:14px;line-height:1.5;color:#667a99;margin:0;}
+body.hx-admin-pro .hxc-page-heading-detail {margin-top:6px;}
+body.hx-admin-pro .hxc-overview-stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
+body.hx-admin-pro .hxc-detail-stats { grid-template-columns:repeat(4,minmax(0,1fr)); }
+body.hx-admin-pro .hxc-form { grid-template-columns:minmax(210px,1.7fr) repeat(2,minmax(160px,1fr)); }
+body.hx-admin-pro .hxc-search {grid-column:auto;}
+body.hx-admin-pro .hxc-actions {grid-column:1/-1;}
+body.hx-admin-pro .hxc-stat { padding:18px 22px; }
+body.hx-admin-pro .hxc-stat strong {font-size:26px;}
+body.hx-admin-pro .hxc-table {min-width:660px;}
+@media(max-width:950px) {
+ body.hx-admin-pro .hxc-form { grid-template-columns:repeat(2,minmax(0,1fr)); }
+ body.hx-admin-pro .hxc-search {grid-column:1/-1;}
+}
+@media(max-width:650px) {
+ body.hx-admin-pro .hxc-page-heading {align-items:flex-start;flex-direction:column;}
+ body.hx-admin-pro .hxc-overview-stats, body.hx-admin-pro .hxc-detail-stats {grid-template-columns:1fr 1fr;}
+ body.hx-admin-pro .hxc-form {grid-template-columns:1fr;}
+ body.hx-admin-pro .hxc-search {grid-column:auto;}
+ body.hx-admin-pro .hxc-table {min-width:620px;}
+}
+@media(max-width:400px) {
+ body.hx-admin-pro .hxc-overview-stats, body.hx-admin-pro .hxc-detail-stats {grid-template-columns:1fr;}
+}

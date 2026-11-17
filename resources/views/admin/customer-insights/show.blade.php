@@ -10,12 +10,10 @@
 @section('content')
 <section class="hxc-page" aria-labelledby="hxc-title">
     <a class="hxc-back" href="{{ route('admin.customers.index') }}">← Quay lại danh sách khách hàng</a>
-    <header class="hxc-hero hxc-hero-detail">
-        <div><span class="hxc-eyebrow">HỒ SƠ KHÁCH HÀNG</span><h1 id="hxc-title">{{ $customer->name }}</h1><p>{{ $customer->email }}</p></div>
-        @if($customer->email_verified_at)<span class="hxc-pill hxc-pill-success">Đã xác minh email</span>@else<span class="hxc-pill hxc-pill-warn">Chưa xác minh email</span>@endif
-    </header>
+    {{-- HEXAGON-CUSTOMER-DETAIL-CLEAN-V1 --}}
+    <header class="hxc-page-heading hxc-page-heading-detail"><div><h1 id="hxc-title">{{ $customer->name }}</h1><p>{{ $customer->email }}</p></div></header>
 
-    <div class="hxc-stats" aria-label="Thống kê đơn hàng khách hàng">
+    <div class="hxc-stats hxc-detail-stats" aria-label="Thống kê đơn hàng khách hàng">
         <div class="hxc-stat"><span>Tổng số đơn hàng</span><strong>{{ number_format($summary['count'], 0, ',', '.') }}</strong><small>Liên kết với tài khoản này</small></div>
         <div class="hxc-stat"><span>Đã xử lý</span><strong>{{ number_format($summary['completed'], 0, ',', '.') }}</strong><small>Trạng thái hoàn tất</small></div>
         <div class="hxc-stat"><span>Đơn đã hủy</span><strong>{{ number_format($summary['cancelled'], 0, ',', '.') }}</strong><small>Không tính vào giá trị</small></div>
@@ -29,7 +27,7 @@
             <div><dt>Họ và tên</dt><dd>{{ $customer->name }}</dd></div>
             <div><dt>Địa chỉ email</dt><dd>{{ $customer->email }}</dd></div>
             <div><dt>Đăng ký lúc</dt><dd>{{ \Illuminate\Support\Carbon::parse($customer->created_at)->format('d/m/Y H:i') }}</dd></div>
-            <div><dt>Xác minh email</dt><dd>{{ $customer->email_verified_at ? \Illuminate\Support\Carbon::parse($customer->email_verified_at)->format('d/m/Y H:i') : 'Chưa xác minh' }}</dd></div>
+
         </dl>
     </section>
 

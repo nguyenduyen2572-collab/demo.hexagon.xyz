@@ -63,14 +63,16 @@ final class AdminCustomerInsightsTest extends HexagonIsolatedTestCase
             ->assertOk()->assertSee('Tran Ngoc Binh')->assertDontSee('Nguyen Phuoc An');
     }
 
-    public function test_verification_filter_only_shows_matching_customers(): void
+    // HEXAGON-CUSTOMER-TEST-CLEAN-V1: no verification status in the Admin UI.
+    public function test_verification_is_not_shown_or_used_as_admin_filter(): void
     {
         $this->customer('Duong Verified', 'verified@example.com', true);
         $this->customer('Duong Pending', 'pending@example.com', false);
 
         $this->actingAs($this->admin(), 'admin')
             ->get(route('admin.customers.index', ['verified' => 'no']))
-            ->assertOk()->assertSee('Duong Pending')->assertDontSee('Duong Verified');
+            ->assertOk()->assertSee('Duong Pending')->assertSee('Duong Verified')
+            ->assertDontSee('Xác minh email')->assertDontSee('Đã xác minh');
     }
 
     public function test_order_filter_and_totals_exclude_cancelled_amount(): void
@@ -104,8 +106,8 @@ final class AdminCustomerInsightsTest extends HexagonIsolatedTestCase
         $this->order($first->id, $first->email);
         $this->order($other->id, $other->email);
 
-        $ownCode = DB::table('orders')->where('user_id', $first->id)->value('order_code');
-        $otherCode = DB::table('orders')->where('user_id', $other->id)->value('order_code');
+        $ownCode = \App\Support\HexagonOrderCode::fromId((int) DB::table('orders')->where('user_id', $first->id)->value('id'));
+        $otherCode = \App\Support\HexagonOrderCode::fromId((int) DB::table('orders')->where('user_id', $other->id)->value('id'));
 
         $this->actingAs($this->admin(), 'admin')
             ->get(route('admin.customers.show', ['id' => $first->id]))
