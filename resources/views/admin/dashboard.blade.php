@@ -14,7 +14,6 @@
                 <span class="hx-dash-v3-eyebrow">TOÀN BỘ THỜI GIAN</span>
                 <h2 id="hx-dash-v3-totals-title">Chỉ số tổng hợp</h2>
             </div>
-            <a class="hx-dash-v3-all-orders" href="{{ route('admin.orders.index') }}">Xem danh sách đơn hàng <span aria-hidden="true">→</span></a>
         </header>
     <section class="stats-grid" aria-label="Thống kê đơn hàng">
         <div class="stat-card">
@@ -28,9 +27,9 @@
             <div class="stat-note">Trạng thái chờ xử lý</div>
         </div>
         <div class="stat-card">
-            <div class="stat-label">Giá trị đơn hàng</div>
-            <div class="stat-value">{{ number_format($stats['total_demo_amount'], 0, ',', '.') }}đ</div>
-            <div class="stat-note">Tổng giá trị đơn đã tạo</div>
+            <div class="stat-label">Đơn đã hoàn tất</div>
+            <div class="stat-value">{{ number_format($stats['completed_orders']) }}</div>
+            <div class="stat-note">Đã hoàn thành xử lý</div>
         </div>
         <div class="stat-card">
             <div class="stat-label">Khách đặt hàng</div>

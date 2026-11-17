@@ -18,8 +18,9 @@ class AdminDashboardController extends Controller
                 ->where('status', 'pending_demo')
                 ->count(),
 
-            'total_demo_amount' => DB::table('orders')
-                ->sum('total_amount'),
+            'completed_orders' => DB::table('orders')
+                ->where('status', 'completed_demo')
+                ->count(),
 
             'unique_customers' => DB::table('orders')
                 ->distinct()
