@@ -26,7 +26,7 @@
             <div class="hx-success-icon" aria-hidden="true">✓</div>
             <h1 data-i18n="successTitle">Đặt hàng thành công!</h1>
             <p class="hx-subtle" data-i18n="successDesc">Đơn hàng demo đã được lưu vào hệ thống HEXAGON.</p>
-            <p class="hx-order-code"><span data-i18n="orderCode">Mã đơn hàng:</span> <strong>{{ $order->order_code }}</strong></p>
+            <p class="hx-order-code"><span data-i18n="orderCode">Mã đơn hàng:</span> <strong>{{ \App\Support\HexagonOrderCode::forOrder($order) }}</strong></p>
             <div class="hx-order-rows">
                 <div class="hx-summary-row">
                     <span data-i18n="status">Trạng thái</span>

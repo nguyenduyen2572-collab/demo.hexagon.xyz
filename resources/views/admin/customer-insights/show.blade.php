@@ -41,7 +41,7 @@
                 <tbody>
                 @forelse($orders as $order)
                     <tr>
-                        <td><strong>#{{ $order->id }}</strong><small class="hxc-code">{{ $order->order_code }}</small></td>
+                        <td><strong class="hxc-code">{{ \App\Support\HexagonOrderCode::forOrder($order) }}</strong></td>
                         <td>{{ \Illuminate\Support\Carbon::parse($order->created_at)->format('d/m/Y H:i') }}</td>
                         <td><span class="hxc-pill {{ $order->status === 'cancelled_demo' ? 'hxc-pill-warn' : 'hxc-pill-neutral' }}">{{ $statusLabels[$order->status] ?? $order->status }}</span></td>
                         <td><strong>{{ number_format((float) $order->total_amount, 0, ',', '.') }}đ</strong></td>

@@ -32,13 +32,13 @@
             <tbody>
                 @forelse($orders as $order)
                     <tr>
-                        <td class="hx-order-code">{{ $order->order_code }}</td>
+                        <td class="hx-order-code">{{ \App\Support\HexagonOrderCode::forOrder($order) }}</td>
                         <td><strong>{{ number_format($order->total_amount, 0, ',', '.') }}đ</strong></td>
                         <td><span class="hx-status hx-status-{{ $statusCss[$order->status] ?? 'unknown' }}"
                                   data-vi="{{ $statusLabels[$order->status] ?? $order->status }}"
                                   data-en="{{ $statusEnglish[$order->status] ?? $order->status }}">{{ $statusLabels[$order->status] ?? $order->status }}</span></td>
                         <td>{{ $order->created_at }}</td>
-                        <td><a class="hx-detail-link" href="{{ route('customer.account.orders.show', ['code' => $order->order_code]) }}"><span data-vi="Xem chi tiết" data-en="View details">Xem chi tiết</span></a></td>
+                        <td><a class="hx-detail-link" href="{{ route('customer.account.orders.show', ['code' => \App\Support\HexagonOrderCode::forOrder($order)]) }}"><span data-vi="Xem chi tiết" data-en="View details">Xem chi tiết</span></a></td>
                     </tr>
                 @empty
                     <tr><td colspan="5" class="hx-empty" data-vi="Bạn chưa có đơn hàng nào liên kết với tài khoản này." data-en="No orders are linked to this account yet.">Bạn chưa có đơn hàng nào liên kết với tài khoản này.</td></tr>

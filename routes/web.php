@@ -80,7 +80,7 @@ Route::middleware(['auth', 'verified'])
             ->name('orders.index');
 
         Route::get('/orders/{code}', [CustomerAccountController::class, 'showOrder'])
-            ->whereUuid('code')
+            ->where('code', '(?:[Hh][Xx][Gg]-[0-9]{2,19}|[a-fA-F0-9-]{36})')
             ->name('orders.show');
         // Trang sửa hồ sơ
         Route::get('/edit', [CustomerSettingsController::class, 'editProfile'])
@@ -154,7 +154,7 @@ Route::post('/checkout', [OrderController::class, 'store'])
 // Trang xác nhận đơn hàng
 Route::get('/orders/{code}', [
     OrderController::class, 'show'
-])->whereUuid('code')->name('orders.show');
+])->where('code', '(?:[Hh][Xx][Gg]-[0-9]{2,19}|[a-fA-F0-9-]{36})')->name('orders.show');
 
 Route::get('/admin', function () {
             return redirect()->route('admin.dashboard');

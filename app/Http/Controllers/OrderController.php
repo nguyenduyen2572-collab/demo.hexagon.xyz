@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\HexagonOrderCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -151,7 +152,7 @@ class OrderController extends Controller
 
 
         // Chỉ hoàn tất khi cả đơn hàng và chi tiết đều lưu được
-        DB::transaction(function () use (
+        $createdOrderId = DB::transaction(function () use (
             $validated,
             $items,
             $total,
@@ -187,6 +188,7 @@ class OrderController extends Controller
                     'updated_at' => $now,
                 ]);
             }
+            return $orderId;
         });
 
         // Chỉ cho phiên làm việc tạo đơn xem trang xác nhận
@@ -217,7 +219,7 @@ class OrderController extends Controller
         // Xóa giỏ hàng sau khi lưu đơn thành công
         $request->session()->forget('hexagon_cart');
 
-        return redirect()->route('orders.show', $orderCode);
+        return redirect()->route('orders.show', HexagonOrderCode::fromId($createdOrderId));
     }
 
     // Hiển thị đơn hàng vừa tạo
@@ -228,15 +230,22 @@ class OrderController extends Controller
             []
         );
 
+        abort_unless(is_array($allowedCodes) && count($allowedCodes) > 0, 403);
+
+        $publicId = HexagonOrderCode::toId($code);
+        $orderQuery = DB::table('orders');
+        $order = ($publicId !== null
+            ? $orderQuery->where('id', $publicId)
+            : $orderQuery->where('order_code', $code)
+        )->firstOrFail();
+
         abort_unless(
             is_array($allowedCodes) &&
-            in_array($code, $allowedCodes, true),
+            in_array((string) $order->order_code, $allowedCodes, true),
             403
         );
 
-        $order = DB::table('orders')
-            ->where('order_code', $code)
-            ->firstOrFail();
+
 
         $items = DB::table('order_items')
             ->where('order_id', $order->id)

@@ -64,7 +64,7 @@
                 <tbody>
                 @forelse ($recentOrders as $order)
                     <tr>
-                        <td class="code-cell"><a class="text-link" href="{{ route('admin.orders.show', ['id' => $order->id]) }}">#{{ $order->id }}</a><br><span class="muted">{{ $order->order_code }}</span></td>
+                        <td class="code-cell"><a class="text-link" href="{{ route('admin.orders.show', ['id' => $order->id]) }}">{{ \App\Support\HexagonOrderCode::forOrder($order) }}</a></td>
                         <td>{{ $order->customer_name }}</td>
                         <td>{{ $order->customer_email }}</td>
                         <td><strong>{{ number_format($order->total_amount, 0, ',', '.') }}đ</strong></td>

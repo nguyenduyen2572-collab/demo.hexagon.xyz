@@ -8,7 +8,7 @@
 
     <div class="page-heading">
         <h1>Đơn hàng #{{ $order->id }}</h1>
-        <p class="order-code-line">Mã đơn: {{ $order->order_code }}</p>
+        <p class="order-code-line">Mã đơn: {{ \App\Support\HexagonOrderCode::forOrder($order) }}</p>
     </div>
 
     @if(session('success'))

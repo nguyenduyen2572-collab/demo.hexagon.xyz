@@ -32,11 +32,15 @@ final class HexagonAdminOrderFilters
             // Không để % và _ do người dùng nhập trở thành ký tự đại diện LIKE.
             $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $keyword);
             $pattern = '%' . $escaped . '%';
-            $query->where(static function (Builder $nested) use ($pattern): void {
+            $publicId = HexagonOrderCode::toId($keyword);
+            $query->where(static function (Builder $nested) use ($pattern, $publicId): void {
                 $nested->where('order_code', 'like', $pattern)
                     ->orWhere('customer_name', 'like', $pattern)
                     ->orWhere('customer_email', 'like', $pattern)
                     ->orWhere('customer_phone', 'like', $pattern);
+                if ($publicId !== null) {
+                    $nested->orWhere('id', $publicId);
+                }
             });
         }
 

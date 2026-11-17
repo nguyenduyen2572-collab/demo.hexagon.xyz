@@ -63,7 +63,7 @@
 
     <div class="card">
         <h1>Chi tiết đơn hàng</h1>
-        <p class="code">{{ $order->order_code }}</p>
+        <p class="code">{{ \App\Support\HexagonOrderCode::forOrder($order) }}</p>
 
         <p>Ngày tạo: {{ $order->created_at }}</p>
 

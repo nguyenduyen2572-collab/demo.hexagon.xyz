@@ -108,7 +108,7 @@
                         <td>{{ $order->id }}</td>
 
                         <td class="customer-order-code">
-                            {{ $order->order_code }}
+                            {{ \App\Support\HexagonOrderCode::forOrder($order) }}
                         </td>
 
                         <td>

@@ -1,0 +1,18 @@
+/* HEXAGON: nút xem và xử lý đơn hàng trong danh sách Admin */
+.hx-order-actions-v11 { white-space: nowrap; width: 1%; }
+.hx-order-action-v11 {
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    min-height: 36px; padding: 8px 12px; border: 1px solid #c8d8f2;
+    border-radius: 9px; background: #edf4ff; color: #1554bd !important;
+    text-decoration: none !important; font: inherit; font-size: 13px;
+    font-weight: 700; line-height: 1.25; white-space: nowrap;
+    transition: background-color .15s ease, border-color .15s ease;
+}
+.hx-order-action-v11:hover { background: #dfeeff; border-color: #8ab2ff; }
+.hx-order-action-v11:focus-visible { outline: 3px solid #92c3ff; outline-offset: 3px; }
+.hx-order-action-v11--pending {
+    border-color: #b2cdfb; background: #215ed2; color: #fff !important;
+}
+.hx-order-action-v11--pending:hover { background: #164daF; border-color: #164daF; }
+.hx-order-action-v11 svg { flex: none; width: 14px; height: 14px; }
+@media (max-width: 850px) { .hx-order-actions-v11 { white-space: normal; } }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Support\HexagonOrderCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -37,10 +38,14 @@ class CustomerAccountController extends Controller
         $user = $request->user();
         abort_if((bool) $user->is_admin, 403);
 
-        $order = DB::table('orders')
-            ->where('user_id', $user->id)
-            ->where('order_code', $code)
-            ->firstOrFail();
+        // Chỉ lấy đơn của tài khoản đã đăng nhập; mã công khai không
+        // thay thế kiểm tra quyền sở hữu đơn hàng.
+        $publicId = HexagonOrderCode::toId($code);
+        $query = DB::table('orders')->where('user_id', $user->id);
+        $order = ($publicId !== null
+            ? $query->where('id', $publicId)
+            : $query->where('order_code', $code)
+        )->firstOrFail();
 
         $items = DB::table('order_items')
             ->where('order_id', $order->id)
