@@ -188,7 +188,6 @@
                         <h2 id="pricingTitle"><span data-i18n="pricingTitle">Chọn đuôi tên miền.</span> <span class="hx-muted-title" data-i18n="pricingTitle2">Tỏa sáng theo cách của bạn.</span></h2>
                         <p data-i18n="pricingDescription">Mức giá được cập nhật từ hệ thống quản trị HEXAGON. Chọn một đuôi tên miền để bắt đầu tìm kiếm.</p>
                     </div>
-                    <a class="hx-text-link" href="#domain-search"><span data-i18n="pricingCta">Tìm tên miền ngay</span><span aria-hidden="true">↗</span></a>
                 </div>
                 <div class="hx-price-grid">
                     @forelse ($prices as $price)
@@ -197,7 +196,7 @@
                             <span class="hx-price-extension">{{ $price->extension }}</span>
                             <span class="hx-price-caption" data-i18n="firstYear">Đăng ký năm đầu</span>
                             <strong class="hx-price-amount" data-money="{{ $price->registration_price }}">{{ number_format($price->registration_price, 0, ',', '.') }}đ</strong>
-                            <span class="hx-price-renew"><span data-i18n="renewal">Gia hạn</span> <span data-money="{{ $price->renewal_price }}">{{ number_format($price->renewal_price, 0, ',', '.') }}đ</span><span data-i18n="perYear">/năm</span></span>
+                            <span class="hx-price-renew"><span data-i18n="renewal">Gia hạn</span> <span data-money="{{ $price->renewal_price }}">{{ number_format($price->renewal_price, 0, ',', '.') }}đ</span><span class="hx-renewal-period" data-renewal-months="{{ (int) ($price->renewal_period_months ?? 12) }}">/{{ (int) ($price->renewal_period_months ?? 12) }} tháng</span></span>
                         </button>
                     @empty
                         <p class="hx-price-empty" data-i18n="emptyPrices">Hiện chưa có bảng giá tên miền được công bố.</p>

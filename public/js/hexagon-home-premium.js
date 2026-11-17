@@ -129,6 +129,13 @@
 
   const t = key => messages[language][key] || key;
   const money = value => new Intl.NumberFormat(language === 'en' ? 'en-US' : 'vi-VN').format(Number(value)) + (language === 'en' ? ' VND' : 'đ');
+  /* HX_PUBLIC_RENEWAL_PERIOD_V1_3 */
+  const renewalPeriodText = value => {
+    const months = Number(value);
+    const count = Number.isInteger(months) && months > 0 ? months : 12;
+    return language === 'en' ? `/${count} ${count === 1 ? 'month' : 'months'}` : `/${count} tháng`;
+  };
+  const renewalPriceText = (price, period) => `${money(price)}${renewalPeriodText(period)}`;
   const normalized = value => String(value ?? '').trim().toLowerCase();
   function applyLanguage() {
     document.documentElement.lang = language;
@@ -139,11 +146,12 @@
     document.querySelectorAll('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', t(el.dataset.i18nAria)));
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
     document.querySelectorAll('[data-money]').forEach(el => { el.textContent = money(el.dataset.money); });
+    document.querySelectorAll('[data-renewal-months]').forEach(el => { el.textContent = renewalPeriodText(el.dataset.renewalMonths); });
     buttonText.textContent = busy ? t('searching') : t('search');
     if (currentData) {
       resultStatusText.textContent = t(currentData.available ? 'available' : 'unavailable');
       $('resultRegisterPrice').textContent = money(currentData.registration_price);
-      $('resultRenewPrice').textContent = money(currentData.renewal_price);
+      $('resultRenewPrice').textContent = renewalPriceText(currentData.renewal_price, currentData.renewal_period_months);
     }
     if (lastErrorKey || errorString) {
       resultMessage.textContent = lastErrorKey ? t(lastErrorKey) : errorString;
@@ -236,7 +244,7 @@
     resultMessage.hidden = true;
     resultDetails.hidden = false;
     $('resultRegisterPrice').textContent = money(data.registration_price);
-    $('resultRenewPrice').textContent = money(data.renewal_price);
+    $('resultRenewPrice').textContent = renewalPriceText(data.renewal_price, data.renewal_period_months);
     resultActions.hidden = !data.available;
     viewCartLink.hidden = true;
     cartMessage.textContent = '';

@@ -74,6 +74,7 @@ class DomainController extends Controller
                 'available' => (bool) $status->is_available,
                 'registration_price' => $price->registration_price,
                 'renewal_price' => $price->renewal_price,
+                'renewal_period_months' => (int) ($price->renewal_period_months ?? 12),
                 'currency' => 'VND',
                 'is_mock' => true,
             ],
