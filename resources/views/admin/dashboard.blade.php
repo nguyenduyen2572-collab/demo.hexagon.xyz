@@ -4,7 +4,7 @@
 @section('topbar_title', 'Tổng quan')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/hexagon-admin-dashboard-v3.css') }}?v=1">
+    <link rel="stylesheet" href="{{ asset('css/hexagon-admin-dashboard-v3.css') }}?v=2">
 @endpush
 @section('content')
     {{-- HEXAGON DASHBOARD V3: BEGIN --}}
@@ -20,21 +20,25 @@
             <div class="stat-label">Tổng đơn hàng</div>
             <div class="stat-value">{{ number_format($stats['total_orders']) }}</div>
             <div class="stat-note">Tất cả đơn đã tạo</div>
+            <a class="hx-dash-v3-stat-link" href="{{ route('admin.orders.index') }}">Xem tất cả đơn <span aria-hidden="true">→</span></a>
         </div>
         <div class="stat-card">
             <div class="stat-label">Đơn chờ xử lý</div>
             <div class="stat-value">{{ number_format($stats['pending_orders']) }}</div>
             <div class="stat-note">Trạng thái chờ xử lý</div>
+            <a class="hx-dash-v3-stat-link" href="{{ route('admin.orders.index', ['status' => 'pending_demo']) }}">Xem đơn chờ xử lý <span aria-hidden="true">→</span></a>
         </div>
         <div class="stat-card">
             <div class="stat-label">Đơn đã hoàn tất</div>
             <div class="stat-value">{{ number_format($stats['completed_orders']) }}</div>
             <div class="stat-note">Đã hoàn thành xử lý</div>
+            <a class="hx-dash-v3-stat-link" href="{{ route('admin.orders.index', ['status' => 'completed_demo']) }}">Xem đơn hoàn tất <span aria-hidden="true">→</span></a>
         </div>
         <div class="stat-card">
             <div class="stat-label">Khách đặt hàng</div>
             <div class="stat-value">{{ number_format($stats['unique_customers']) }}</div>
             <div class="stat-note">Email đặt hàng không trùng lặp</div>
+            <a class="hx-dash-v3-stat-link" href="{{ route('admin.customers.index') }}">Xem danh sách khách <span aria-hidden="true">→</span></a>
         </div>
     </section>
 

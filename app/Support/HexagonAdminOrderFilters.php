@@ -45,7 +45,10 @@ final class HexagonAdminOrderFilters
         }
 
         $status = self::scalar($request->query('status'));
-        if (in_array($status, self::STATUSES, true)) {
+        if ($status === 'action_required') {
+            // Bộ lọc nhanh từ Dashboard: hai trạng thái chưa hoàn tất.
+            $query->whereIn('status', ['pending_demo', 'processing_demo']);
+        } elseif (in_array($status, self::STATUSES, true)) {
             $query->where('status', $status);
         }
 

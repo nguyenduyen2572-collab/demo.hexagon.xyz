@@ -37,13 +37,12 @@ final class HexagonDashboardAnalytics
             ->where('created_at', '>=', $start)
             ->where('created_at', '<', $endExclusive)
             ->select('status')
-            ->selectRaw('COUNT(*) AS order_count, COALESCE(SUM(total_amount), 0) AS order_value')
+            ->selectRaw('COUNT(*) AS order_count')
             ->groupBy('status')
             ->get();
 
         $statusCounts = array_fill_keys(array_keys(self::STATUS_LABELS), 0);
         $totalOrders = 0;
-        $activeOrderValue = 0.0;
 
         foreach ($statusRows as $row) {
             $status = (string) $row->status;
@@ -54,10 +53,10 @@ final class HexagonDashboardAnalytics
             } else {
                 $statusCounts['other'] = ($statusCounts['other'] ?? 0) + $count;
             }
-            if ($status !== 'cancelled_demo') {
-                $activeOrderValue += (float) $row->order_value;
-            }
         }
+
+        // Đơn cần xử lý = các đơn hiện ở trạng thái chờ hoặc đang xử lý.
+        $actionRequiredOrders = $statusCounts['pending_demo'] + $statusCounts['processing_demo'];
 
         $statusBreakdown = [];
         foreach ($statusCounts as $key => $count) {
@@ -101,8 +100,10 @@ final class HexagonDashboardAnalytics
             'days' => $days,
             'start' => $start->format('d/m/Y'),
             'end' => $today->format('d/m/Y'),
+            'from_date' => $start->format('Y-m-d'),
+            'to_date' => $today->format('Y-m-d'),
             'total_orders' => $totalOrders,
-            'active_order_value' => $activeOrderValue,
+            'action_required_orders' => $actionRequiredOrders,
             'status_breakdown' => $statusBreakdown,
             'daily' => $daily,
         ];

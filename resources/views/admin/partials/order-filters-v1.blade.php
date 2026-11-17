@@ -12,6 +12,7 @@
             <label for="hx-order-status">Trạng thái</label>
             <select id="hx-order-status" name="status">
                 <option value="">Tất cả trạng thái</option>
+                <option value="action_required" @selected(request('status') === 'action_required')>Cần xử lý (chờ + đang xử lý)</option>
                 <option value="pending_demo" @selected(request('status') === 'pending_demo')>Chờ xử lý</option>
                 <option value="processing_demo" @selected(request('status') === 'processing_demo')>Đang xử lý</option>
                 <option value="completed_demo" @selected(request('status') === 'completed_demo')>Đã xử lý</option>

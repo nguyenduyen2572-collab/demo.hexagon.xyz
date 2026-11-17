@@ -55,6 +55,24 @@ final class AdminOrderFiltersTest extends HexagonIsolatedTestCase
             ->assertOk()->assertSee($included)->assertDontSee($excluded);
     }
 
+    public function test_action_required_filter_includes_only_open_orders(): void
+    {
+        $pending = $this->makeOrder('Cho xu ly', 'pending@example.com', 'pending_demo', '2026-11-10 09:00:00');
+        $processing = $this->makeOrder('Dang xu ly', 'processing@example.com', 'processing_demo', '2026-11-10 09:00:00');
+        $completed = $this->makeOrder('Da xong', 'completed@example.com', 'completed_demo', '2026-11-10 09:00:00');
+        $cancelled = $this->makeOrder('Da huy', 'cancelled@example.com', 'cancelled_demo', '2026-11-10 09:00:00');
+
+        $this->actingAs($this->admin(), 'admin')
+            ->get(route('admin.orders.index', [
+                'status' => 'action_required',
+                'from' => '2026-11-10',
+                'to' => '2026-11-10',
+            ]))
+            ->assertOk()->assertSee($pending)->assertSee($processing)
+            ->assertDontSee($completed)->assertDontSee($cancelled)
+            ->assertSee('Cần xử lý (chờ + đang xử lý)');
+    }
+
     public function test_admin_filters_by_inclusive_date_range(): void
     {
         $included = $this->makeOrder('Khach A', 'a@example.com', 'pending_demo', '2026-11-09 23:59:59');

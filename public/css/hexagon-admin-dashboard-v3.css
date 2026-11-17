@@ -61,3 +61,8 @@
     .hx-admin-pro .hx-ana-period {gap: 7px;}
     .hx-admin-pro .hx-dash-v3-all-orders {font-size: 11px;}
 }
+
+/* Lối tắt ngay trên từng chỉ số tổng hợp, không thay đổi bố cục 4 thẻ. */
+.hx-admin-pro .hx-dash-v3-stat-link{display:inline-flex;align-items:center;gap:6px;margin-top:12px;color:#2157b4;font-size:12px;font-weight:750;text-decoration:none}
+.hx-admin-pro .hx-dash-v3-stat-link:hover{text-decoration:underline}
+.hx-admin-pro .hx-dash-v3-stat-link:focus-visible{outline:3px solid #90b5f8;outline-offset:3px;border-radius:4px}

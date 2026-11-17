@@ -56,23 +56,46 @@ final class AdminDashboardAnalyticsTest extends HexagonIsolatedTestCase
             ->get(route('admin.dashboard', ['days' => 7]))
             ->assertOk()
             ->assertSee('Phân tích hoạt động')
-            ->assertSee('Giá trị đơn chưa hủy')
+            ->assertSee('Đơn cần xử lý trong kỳ')
+            ->assertDontSee('Giá trị đơn chưa hủy')
             ->assertSee('Số đơn theo ngày')
             ->assertSee('04/11/2026')
             ->assertSee('10/11/2026');
     }
 
-    public function test_status_summary_excludes_cancelled_value_but_counts_cancelled_orders(): void
+    public function test_action_required_counter_includes_only_pending_and_processing_orders(): void
     {
         $this->makeOrder('pending_demo', '2026-11-10 10:30:00', 260000);
-        $this->makeOrder('cancelled_demo', '2026-11-10 11:00:00', 900000);
+        $this->makeOrder('processing_demo', '2026-11-10 11:00:00', 900000);
+        $this->makeOrder('completed_demo', '2026-11-10 11:10:00', 500000);
+        $this->makeOrder('cancelled_demo', '2026-11-10 11:20:00', 600000);
         $summary = app(HexagonDashboardAnalytics::class)->forDays(7);
 
-        $this->assertSame(2, $summary['total_orders']);
-        $this->assertSame(260000.0, $summary['active_order_value']);
+        $this->assertSame(4, $summary['total_orders']);
+        $this->assertSame(2, $summary['action_required_orders']);
+        $this->assertArrayNotHasKey('active_order_value', $summary);
+        $this->assertSame('2026-11-04', $summary['from_date']);
+        $this->assertSame('2026-11-10', $summary['to_date']);
         $counts = array_column($summary['status_breakdown'], 'count', 'key');
         $this->assertSame(1, $counts['pending_demo']);
+        $this->assertSame(1, $counts['processing_demo']);
+        $this->assertSame(1, $counts['completed_demo']);
         $this->assertSame(1, $counts['cancelled_demo']);
+    }
+
+    public function test_dashboard_links_to_order_list_with_status_and_selected_dates(): void
+    {
+        $this->actingAs(User::factory()->create(['is_admin' => true]), 'admin')
+            ->get(route('admin.dashboard', ['days' => 7]))
+            ->assertOk()
+            ->assertSee(
+                e(route('admin.orders.index', [
+                    'status' => 'action_required',
+                    'from' => '2026-11-04',
+                    'to' => '2026-11-10',
+                ])),
+                false
+            );
     }
 
     public function test_orders_outside_period_do_not_appear_in_summary(): void
@@ -82,6 +105,7 @@ final class AdminDashboardAnalyticsTest extends HexagonIsolatedTestCase
 
         $summary = app(HexagonDashboardAnalytics::class)->forDays(7);
         $this->assertSame(1, $summary['total_orders']);
+        $this->assertSame(1, $summary['action_required_orders']);
         $this->assertSame(7, count($summary['daily']));
     }
 
@@ -98,5 +122,6 @@ final class AdminDashboardAnalyticsTest extends HexagonIsolatedTestCase
         $this->assertSame(0, $summary['total_orders']);
         $this->assertCount(14, $summary['daily']);
         $this->assertCount(4, $summary['status_breakdown']);
+        $this->assertSame(0, $summary['action_required_orders']);
     }
 }

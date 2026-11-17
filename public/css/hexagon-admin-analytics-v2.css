@@ -46,3 +46,9 @@
 .hx-ana-visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 @media(max-width:1120px){.hx-ana-grid{grid-template-columns:1fr}}
 @media(max-width:650px){.hx-ana{margin-top:24px}.hx-ana-heading h2{font-size:21px}.hx-ana-period{width:100%;flex-wrap:wrap}.hx-ana-period label{flex:1}.hx-ana-kpis{grid-template-columns:1fr}.hx-ana-panel{padding:16px}.hx-ana-bars{gap:3px}.hx-ana-bar-day{font-size:9px}}
+
+/* Dashboard V4: các KPI có đường dẫn tới danh sách lọc đúng kỳ. */
+.hx-ana-kpi-link{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;margin-top:10px;color:#1557cc;font-size:12px;font-weight:750;text-decoration:none!important}
+.hx-ana-kpi-link:hover,.hx-ana-status-name a:hover{text-decoration:underline!important}
+.hx-ana-kpi-link:focus-visible,.hx-ana-status-name a:focus-visible{outline:3px solid #90b5f8;outline-offset:3px;border-radius:3px}
+.hx-ana-status-name a{color:inherit;text-decoration:none!important}

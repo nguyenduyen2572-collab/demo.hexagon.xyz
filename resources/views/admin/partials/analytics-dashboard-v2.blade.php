@@ -1,12 +1,12 @@
 {{-- Nạp riêng CSS để không phụ thuộc @stack('styles') trong Layout Admin. --}}
-<link rel="stylesheet" href="{{ asset('css/hexagon-admin-analytics-v2.css') }}?v=2.1">
+<link rel="stylesheet" href="{{ asset('css/hexagon-admin-analytics-v2.css') }}?v=2.2">
 
 <section class="hx-ana" aria-labelledby="hx-ana-title">
     <header class="hx-ana-heading">
         <div>
             <span class="hx-ana-eyebrow">THỐNG KÊ ĐƠN HÀNG</span>
             <h2 id="hx-ana-title">Phân tích hoạt động</h2>
-            <p>Diễn biến số đơn và trạng thái xử lý được tổng hợp trực tiếp từ MySQL.</p>
+            <p>Thống kê theo ngày tạo đơn và trạng thái xử lý hiện tại.</p>
         </div>
         <form class="hx-ana-period" method="GET" action="{{ route('admin.dashboard') }}" aria-label="Chọn khoảng thống kê">
             <label for="hx-ana-days">Khoảng thời gian</label>
@@ -24,11 +24,13 @@
             <span>Đơn hàng trong kỳ</span>
             <strong>{{ number_format($hxAnalytics['total_orders'], 0, ',', '.') }}</strong>
             <small>{{ $hxAnalytics['start'] }} – {{ $hxAnalytics['end'] }}</small>
+            <a class="hx-ana-kpi-link" href="{{ route('admin.orders.index', ['from' => $hxAnalytics['from_date'], 'to' => $hxAnalytics['to_date']]) }}">Xem đơn trong kỳ <span aria-hidden="true">→</span></a>
         </article>
         <article>
-            <span>Giá trị đơn chưa hủy</span>
-            <strong>{{ number_format($hxAnalytics['active_order_value'], 0, ',', '.') }}<em>đ</em></strong>
-            <small>Giá trị các đơn chưa bị hủy</small>
+            <span>Đơn cần xử lý trong kỳ</span>
+            <strong>{{ number_format($hxAnalytics['action_required_orders'], 0, ',', '.') }}</strong>
+            <small>Gồm đơn chờ xử lý và đang xử lý</small>
+            <a class="hx-ana-kpi-link" href="{{ route('admin.orders.index', ['status' => 'action_required', 'from' => $hxAnalytics['from_date'], 'to' => $hxAnalytics['to_date']]) }}">Xem đơn cần xử lý <span aria-hidden="true">→</span></a>
         </article>
     </div>
 
@@ -71,7 +73,14 @@
                 @foreach($hxAnalytics['status_breakdown'] as $row)
                     <div class="hx-ana-status-row">
                         <div class="hx-ana-status-row-head">
-                            <span class="hx-ana-status-name"><i class="hx-ana-dot hx-ana-dot-{{ $row['key'] }}" aria-hidden="true"></i>{{ $row['label'] }}</span>
+                            <span class="hx-ana-status-name">
+                                <i class="hx-ana-dot hx-ana-dot-{{ $row['key'] }}" aria-hidden="true"></i>
+                                @if(in_array($row['key'], ['pending_demo', 'processing_demo', 'completed_demo', 'cancelled_demo'], true))
+                                    <a href="{{ route('admin.orders.index', ['status' => $row['key'], 'from' => $hxAnalytics['from_date'], 'to' => $hxAnalytics['to_date']]) }}">{{ $row['label'] }}</a>
+                                @else
+                                    {{ $row['label'] }}
+                                @endif
+                            </span>
                             <strong>{{ number_format($row['count'], 0, ',', '.') }} <small>({{ number_format($row['percent'], 1, ',', '.') }}%)</small></strong>
                         </div>
                         <div class="hx-ana-progress" role="progressbar" aria-label="{{ $row['label'] }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $row['percent'] }}">
@@ -80,7 +89,7 @@
                     </div>
                 @endforeach
             </div>
-            <a class="hx-ana-details-link" href="{{ route('admin.orders.index') }}">Mở danh sách đơn hàng <span aria-hidden="true">→</span></a>
+            <a class="hx-ana-details-link" href="{{ route('admin.orders.index', ['from' => $hxAnalytics['from_date'], 'to' => $hxAnalytics['to_date']]) }}">Xem đơn trong khoảng ngày <span aria-hidden="true">→</span></a>
         </section>
     </div>
 </section>
