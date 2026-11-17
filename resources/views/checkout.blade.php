@@ -18,14 +18,21 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700;800&amp;display=swap">
     <link rel="stylesheet" href="{{ asset('css/hexagon-font-source-sans-v1.css') }}?v=1">
     <!-- HEXAGON_FONT_SOURCE_SANS_V1_END -->
+    <link rel="stylesheet" href="{{ asset('css/hexagon-buyer-ux-v6.css') }}?v=6">
 </head>
-<body data-page-title="pageCheckout">
+<body class="hx-buy-v6 hx-buy-checkout" data-page-title="pageCheckout">
     @include('partials.hexagon-shop-header')
-    <main class="hx-main hx-container">
+    <main class="hx-main hx-container" id="mainContent">
+        <nav class="hx-buy-progress" aria-label="Các bước đặt hàng" data-i18n-aria="orderStepsAria">
+            <span class="is-done"><span class="hx-progress-num">✓</span><span data-i18n="stepFind">Tìm tên miền</span></span>
+            <a class="is-done" href="{{ route('cart.index') }}"><span class="hx-progress-num">✓</span><span data-i18n="stepCart">Giỏ hàng</span></a>
+            <span class="is-active" aria-current="step"><span class="hx-progress-num">3</span><span data-i18n="stepCheckout">Đặt hàng</span></span>
+        </nav>
         <a class="hx-back" href="{{ route('cart.index') }}" data-i18n="backCart">← Quay lại giỏ hàng</a>
-        <div class="hx-intro">
+        <div class="hx-intro hx-buy-intro">
+            <div><span class="hx-buy-eyebrow" data-i18n="checkoutEyebrow">BƯỚC 3 / 3</span>
             <h1 data-i18n="checkoutTitle">Thông tin đặt hàng</h1>
-            <p data-i18n="checkoutSubtitle">Điền thông tin liên hệ để tạo đơn hàng thử nghiệm.</p>
+            <p data-i18n="checkoutSubtitle">Điền thông tin liên hệ để lưu cùng đơn hàng của bạn.</p></div>
         </div>
         @if(session('error'))
             <div class="hx-alert" role="alert">{{ session('error') }}</div>
@@ -38,8 +45,9 @@
             </div>
         @endif
         <div class="hx-checkout-grid">
-            <section class="hx-card">
-                <h2 data-i18n="customerInfo">Thông tin khách hàng</h2>
+            <section class="hx-card hx-buy-form-card">
+                <h2 data-i18n="customerInfo">Thông tin liên hệ</h2>
+                <p class="hx-subtle hx-buy-form-hint" data-i18n="contactHint">Những trường có dấu * là bắt buộc.</p>
                 <form method="POST" action="{{ route('checkout.store') }}">
                     @csrf
                     <div class="hx-field">
@@ -56,16 +64,16 @@
                     </div>
                     <div class="hx-field">
                         <label for="customer_phone" data-i18n="phoneLabel">Số điện thoại *</label>
-                        <input id="customer_phone" name="customer_phone" type="tel" autocomplete="tel" maxlength="30"
+                        <input id="customer_phone" name="customer_phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30"
                                value="{{ old('customer_phone') }}"
                                placeholder="Nhập số điện thoại" data-i18n-placeholder="phonePlaceholder" required>
                     </div>
-                    <button class="hx-primary hx-primary-block" type="submit" data-i18n="submitOrder">Xác nhận đặt hàng</button>
+                    <button class="hx-primary hx-primary-block" type="submit" data-i18n="submitOrder">Gửi yêu cầu đặt hàng</button>
                 </form>
                 <p class="hx-subtle hx-checkout-note" data-i18n="checkoutDemo">Hệ thống chỉ tạo đơn demo, không xử lý thanh toán hay mua tên miền thật.</p>
             </section>
-            <aside class="hx-card">
-                <h2 data-i18n="summaryTitle">Đơn hàng của bạn</h2>
+            <aside class="hx-card hx-buy-summary" aria-labelledby="hxCheckoutSummaryTitle">
+                <h2 id="hxCheckoutSummaryTitle" data-i18n="summaryTitle">Tóm tắt đơn hàng</h2>
                 @foreach($items as $item)
                     <div class="hx-summary-row">
                         <div>

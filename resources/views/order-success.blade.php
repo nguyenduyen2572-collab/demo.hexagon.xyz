@@ -18,8 +18,9 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700;800&amp;display=swap">
     <link rel="stylesheet" href="{{ asset('css/hexagon-font-source-sans-v1.css') }}?v=1">
     <!-- HEXAGON_FONT_SOURCE_SANS_V1_END -->
+    <link rel="stylesheet" href="{{ asset('css/hexagon-buyer-ux-v6.css') }}?v=6">
 </head>
-<body data-page-title="pageSuccess">
+<body class="hx-buy-v6 hx-buy-success" data-page-title="pageSuccess">
     @include('partials.hexagon-shop-header')
     <main class="hx-main hx-container">
         <section class="hx-card hx-success-card">
@@ -55,6 +56,14 @@
                 </div>
             </div>
             <p class="hx-subtle hx-checkout-note" data-i18n="checkoutDemo">Hệ thống chỉ tạo đơn demo, không xử lý thanh toán hay mua tên miền thật.</p>
+            <div class="hx-buy-success-actions">
+                @auth
+                    @if(!auth()->user()->is_admin)
+                        <a class="hx-primary" href="{{ route('customer.account.orders.index') }}" data-i18n="myOrders">Đơn hàng của tôi</a>
+                    @endif
+                @endauth
+                <a class="hx-buy-text-link" href="{{ url('/') }}#domain-search" data-i18n="continueShopping">Tiếp tục tìm tên miền</a>
+            </div>
             
         </section>
     </main>
