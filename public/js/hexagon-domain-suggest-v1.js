@@ -1,4 +1,4 @@
-/* HEXAGON domain ideas powered by backend GoDaddy v3, without exposing PAT. */
+/* HEXAGON domain ideas – optimized typing debounce and independent rate limit. HXG_SUGGEST_FAST_V1 */
 (() => {
   'use strict';
   function init() {
@@ -21,22 +21,33 @@
     field.setAttribute('aria-autocomplete', 'list');
     field.setAttribute('aria-expanded', 'false');
 
-    const feedback = document.createElement('p');
-    feedback.className = 'hx-domain-cooldown';
-    feedback.setAttribute('role', 'status');
-    feedback.setAttribute('aria-live', 'polite');
-    feedback.hidden = true;
-    form.appendChild(feedback);
-
     let suggestions = [];
     let highlighted = -1;
     let nextAllowedAt = 0;
-    let countdownTimer = null;
     let debounceTimer = null;
     let activeRequest = null;
     let currentSearch = '';
     let generation = 0;
     let suppressOnce = false;
+    // Never persist suggestions across browser sessions; availability is not a promise.
+    const ideaCache = new Map();
+    const CACHE_MS = 5 * 60 * 1000;
+    const DEBOUNCE_MS = 320;
+    const MIN_INTERVAL_MS = 1150;
+    function keyOf(query) { return query.toLocaleLowerCase(); }
+    function getCached(query) {
+      const key = keyOf(query);
+      const entry = ideaCache.get(key);
+      if (!entry) return null;
+      if (entry.expires <= Date.now()) { ideaCache.delete(key); return null; }
+      return entry.items;
+    }
+    function cacheIdeas(query, items) {
+      const key = keyOf(query);
+      if (ideaCache.has(key)) ideaCache.delete(key);
+      ideaCache.set(key, { items, expires: Date.now() + CACHE_MS });
+      if (ideaCache.size > 30) ideaCache.delete(ideaCache.keys().next().value);
+    }
 
     const translations = {
       vi: {
@@ -150,21 +161,6 @@
       });
       field.setAttribute('aria-activedescendant', options[highlighted].id);
     }
-    function updateFeedback() {
-      const seconds = Math.ceil((nextAllowedAt - Date.now()) / 1000);
-      if (seconds <= 0) {
-        feedback.hidden = true;
-        if (countdownTimer !== null) clearInterval(countdownTimer);
-        countdownTimer = null;
-      } else {
-        feedback.textContent = words().cooldown(seconds);
-        feedback.hidden = false;
-      }
-    }
-    function showCooldown() {
-      updateFeedback();
-      if (countdownTimer === null) countdownTimer = setInterval(updateFeedback, 250);
-    }
     function schedule() {
       if (debounceTimer !== null) clearTimeout(debounceTimer);
       if (activeRequest !== null) { activeRequest.abort(); activeRequest = null; }
@@ -174,9 +170,11 @@
       currentSearch = q;
       suggestions = [];
       if (!eligible(q)) { hide(); return; }
+      const cached = getCached(q);
+      if (cached !== null) { render(cached); return; }
       showMessage(words().loading);
-      const wait = Math.max(450, nextAllowedAt - Date.now());
-      debounceTimer = setTimeout(() => runSuggestions(q, version), wait);
+      // Wait for typing to stop; the provider rate limit is enforced separately.
+      debounceTimer = setTimeout(() => runSuggestions(q, version), DEBOUNCE_MS);
     }
     async function runSuggestions(q, version) {
       if (version !== generation || cleanQuery(field.value) !== q) return;
@@ -187,7 +185,7 @@
       }
       const controller = new AbortController();
       activeRequest = controller;
-      nextAllowedAt = Date.now() + 3000;
+      nextAllowedAt = Date.now() + MIN_INTERVAL_MS;
       try {
         const response = await fetch(`/api/v1/domains/ideas?q=${encodeURIComponent(q)}`, {
           headers: { Accept: 'application/json' },
@@ -196,7 +194,7 @@
         const data = await response.json();
         if (version !== generation || cleanQuery(field.value) !== q) return;
         if (response.status === 429) {
-          const retry = Math.min(30, Math.max(1, Number(data.retry_after) || 3));
+          const retry = Math.min(30, Math.max(1, Number(data.retry_after) || 1));
           nextAllowedAt = Math.max(nextAllowedAt, Date.now() + retry * 1000);
           showMessage(words().loading);
           debounceTimer = setTimeout(() => runSuggestions(q, version), nextAllowedAt - Date.now() + 75);
@@ -206,7 +204,9 @@
           showMessage(data.message || words().error);
           return;
         }
-        render(Array.isArray(data.items) ? data.items : []);
+        const items = Array.isArray(data.items) ? data.items : [];
+        cacheIdeas(q, items);
+        render(items);
       } catch (error) {
         if (error.name !== 'AbortError' && version === generation) showMessage(words().error);
       } finally {
@@ -232,22 +232,15 @@
     window.addEventListener('resize', () => { if (!panel.hidden) position(); });
     document.getElementById('langSwitch')?.addEventListener('click', () => {
       if (!panel.hidden) render(suggestions);
-      if (!feedback.hidden) updateFeedback();
     });
 
-    // Shared 3-second interval with auto-suggestions. Existing form handler runs afterward.
-    form.addEventListener('submit', event => {
+    // Suggestions never delay the explicit domain check action.
+    // The existing 3-second check limiter remains enforced on its own API route.
+    form.addEventListener('submit', () => {
       hide();
+      generation += 1;
       if (debounceTimer !== null) clearTimeout(debounceTimer);
-      if (activeRequest) activeRequest.abort();
-      const domain = String(field.value || '').trim().toLowerCase();
-      if (!domain || !domain.includes('.') || domain.includes(' ') || domain.length > 190) return;
-      if (submitButton.disabled) return;
-      if (Date.now() < nextAllowedAt) {
-        event.preventDefault(); event.stopImmediatePropagation();
-        showCooldown(); return;
-      }
-      nextAllowedAt = Date.now() + 3000;
+      if (activeRequest !== null) { activeRequest.abort(); activeRequest = null; }
     }, true);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

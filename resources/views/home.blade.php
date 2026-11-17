@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{{ asset('css/hexagon-home-content-v6.css') }}?v=6">
     {{-- HEXAGON: gợi ý tên miền và giới hạn tìm kiếm 3 giây --}}
     <link rel="stylesheet" href="{{ asset('css/hexagon-domain-suggest-v1.css') }}?v=1">
-    <script src="{{ asset('js/hexagon-domain-suggest-v1.js') }}?v=1" defer></script>
+    <script src="{{ asset('js/hexagon-domain-suggest-v1.js') }}?v=2" defer></script>
     <link rel="stylesheet" href="{{ asset('css/hexagon-unified-ui-v1.css') }}?v=1">
     <link rel="stylesheet" href="{{ asset('css/hexagon-header-cta-v2.css') }}?v=2">
     <script src="{{ asset('js/hexagon-unified-ui-v1.js') }}?v=2" defer></script>

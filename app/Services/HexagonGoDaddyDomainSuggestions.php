@@ -29,7 +29,7 @@ final class HexagonGoDaddyDomainSuggestions
             throw new RuntimeException('Chưa cấu hình đuôi tên miền hợp lệ.', 503);
         }
 
-        $seconds = max(10, min(180, (int) config('hexagon_godaddy.cache_seconds', 60)));
+        $seconds = max(10, min(600, (int) config('hexagon_godaddy.cache_seconds', 300)));
         $cacheKey = 'hx:godaddy:ideas:v2:' . hash('sha256', mb_strtolower($query, 'UTF-8') . '|' . implode(',', $tlds));
 
         return Cache::remember($cacheKey, $seconds, function () use ($token, $query, $tlds): array {

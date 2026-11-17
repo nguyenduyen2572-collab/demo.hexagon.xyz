@@ -5,6 +5,6 @@ return [
     // NEVER commit this token; set GODADDY_PAT in your local .env.
     'pat' => env('GODADDY_PAT', ''),
     'tlds' => ['com', 'net'],
-    'cache_seconds' => 60,
+    'cache_seconds' => 300,
     'ca_bundle' => env('GODADDY_CA_BUNDLE', ''),
 ];
