@@ -25,6 +25,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/hexagon-admin-typography-customers-v1.css') }}?v=1">
+    <link rel="stylesheet" href="{{ asset('css/hexagon-saas-inquiries-admin-v3.css') }}?v=3">
 </head>
 <body class="hx-admin-v3 hx-admin-pro">
 <a class="hx-skip-link" href="#admin-main">Bỏ qua menu, đến nội dung chính</a>
@@ -69,15 +70,22 @@
                     <svg class="hx-icon"><use href="#hx-ico-saas"/></svg><span class="hx-nav-text">Dịch vụ SaaS</span><svg class="hx-icon hx-nav-arrow"><use href="#hx-ico-chevron"/></svg>
                 </a>
             </div>
+            @php($newSaasInquiryCount = \Illuminate\Support\Facades\DB::table('saas_inquiries')->where('status', 'new')->count())
             <div class="hx-nav-section"><span class="hx-nav-label">KHÁCH HÀNG</span>
                 <a class="nav-link {{ request()->routeIs('admin.customers.*') ? 'active' : '' }}" href="{{ route('admin.customers.index') }}" @if(request()->routeIs('admin.customers.*')) aria-current="page" @endif title="Khách hàng">
                     <svg class="hx-icon"><use href="#hx-ico-users"/></svg><span class="hx-nav-text">Khách hàng</span><svg class="hx-icon hx-nav-arrow"><use href="#hx-ico-chevron"/></svg>
                 </a>
+                <a class="nav-link {{ request()->routeIs('admin.saas-inquiries.*') ? 'active' : '' }}"
+                   href="{{ route('admin.saas-inquiries.index') }}"
+                   @if(request()->routeIs('admin.saas-inquiries.*')) aria-current="page" @endif
+                   title="Yêu cầu tư vấn SaaS">
+                    <span aria-hidden="true">✉</span>
+                    <span class="hx-nav-text">Yêu cầu tư vấn SaaS</span>
+                    @if($newSaasInquiryCount > 0)
+                        <span class="hx-saas-nav-count" aria-label="{{ $newSaasInquiryCount }} yêu cầu mới">{{ $newSaasInquiryCount > 99 ? '99+' : $newSaasInquiryCount }}</span>
+                    @endif
+                </a>
             </div>
-                    <a class="nav-link {{ request()->routeIs('admin.saas-inquiries.*') ? 'active' : '' }}"
-               href="{{ route('admin.saas-inquiries.index') }}" title="Yêu cầu tư vấn SaaS">
-                <span aria-hidden="true">✉</span><span class="hx-nav-text">Yêu cầu tư vấn SaaS</span>
-            </a>
         </nav>
         <div class="hx-sidebar-footer">
             <a class="hx-website-link" href="{{ url('/') }}" target="_blank" rel="noopener noreferrer"><svg class="hx-icon"><use href="#hx-ico-external"/></svg><span class="hx-nav-text">Xem trang bán hàng</span></a>

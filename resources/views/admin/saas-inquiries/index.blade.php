@@ -2,27 +2,100 @@
 @section('title', 'Yêu cầu tư vấn SaaS - HEXAGON')
 @section('topbar_title', 'Yêu cầu tư vấn SaaS')
 @section('content')
-<div class="hx-inquiry-admin">
-    <div class="hx-inquiry-admin-heading"><div><h1>Yêu cầu tư vấn SaaS</h1><p>Theo dõi khách hàng quan tâm tới các dịch vụ của HEXAGON.</p></div></div>
-    <div class="hx-inquiry-kpis">
-        <div><small>Tổng yêu cầu</small><strong>{{ $counts['all'] }}</strong></div>
-        <div><small>Mới tiếp nhận</small><strong>{{ $counts['new'] }}</strong></div>
-        <div><small>Đang tư vấn</small><strong>{{ $counts['contacted'] }}</strong></div>
-        <div><small>Đã hoàn tất</small><strong>{{ $counts['closed'] }}</strong></div>
+<div class="hx-inquiry-admin hx-inquiry-v3">
+    <div class="hx-inquiry-admin-heading">
+        <div>
+            <h1>Yêu cầu tư vấn SaaS</h1>
+            <p>Theo dõi yêu cầu mới, phân công tư vấn và lịch liên hệ với khách hàng.</p>
+        </div>
     </div>
-    <form method="GET" action="{{ route('admin.saas-inquiries.index') }}" class="hx-inquiry-filter">
-        <label><span>Tìm kiếm</span><input name="q" value="{{ request('q', '') }}" placeholder="Khách hàng, email, điện thoại, dịch vụ"></label>
-        <label><span>Trạng thái</span><select name="status"><option value="">Tất cả</option>@foreach($statuses as $key => $label)<option value="{{ $key }}" @selected(request('status') === $key)>{{ $label }}</option>@endforeach</select></label>
-        <button type="submit">Lọc yêu cầu</button>
+
+    <div class="hx-inquiry-kpis hx-inquiry-kpis-v3" aria-label="Tổng hợp yêu cầu tư vấn">
+        <a class="hx-inquiry-kpi" href="{{ route('admin.saas-inquiries.index') }}">
+            <small>Tổng yêu cầu</small><strong>{{ $counts['all'] }}</strong><span>Xem tất cả</span>
+        </a>
+        <a class="hx-inquiry-kpi" href="{{ route('admin.saas-inquiries.index', ['status' => 'new']) }}">
+            <small>Mới tiếp nhận</small><strong>{{ $counts['new'] }}</strong><span>Cần tiếp nhận</span>
+        </a>
+        <a class="hx-inquiry-kpi" href="{{ route('admin.saas-inquiries.index', ['status' => 'contacted']) }}">
+            <small>Đang tư vấn</small><strong>{{ $counts['contacted'] }}</strong><span>Đang theo dõi</span>
+        </a>
+        <a class="hx-inquiry-kpi" href="{{ route('admin.saas-inquiries.index', ['due' => 'overdue']) }}">
+            <small>Hẹn đã quá hạn</small><strong>{{ $counts['overdue'] }}</strong><span>Cần liên hệ</span>
+        </a>
+        <a class="hx-inquiry-kpi" href="{{ route('admin.saas-inquiries.index', ['status' => 'closed']) }}">
+            <small>Đã hoàn tất</small><strong>{{ $counts['closed'] }}</strong><span>Xem lịch sử</span>
+        </a>
+    </div>
+
+    <form method="GET" action="{{ route('admin.saas-inquiries.index') }}" class="hx-inquiry-filter hx-inquiry-filter-v3">
+        <label><span>Tìm kiếm</span>
+            <input type="search" name="q" value="{{ request('q', '') }}" maxlength="100" placeholder="Khách hàng, email, điện thoại, dịch vụ">
+        </label>
+        <label><span>Trạng thái</span>
+            <select name="status"><option value="">Tất cả</option>
+                @foreach($statuses as $key => $label)
+                    <option value="{{ $key }}" @selected(request('status') === $key)>{{ $label }}</option>
+                @endforeach
+            </select>
+        </label>
+        <label><span>Người phụ trách</span>
+            <select name="assigned">
+                <option value="">Tất cả</option>
+                <option value="mine" @selected(request('assigned') === 'mine')>Tôi phụ trách</option>
+                <option value="unassigned" @selected(request('assigned') === 'unassigned')>Chưa phân công</option>
+            </select>
+        </label>
+        <label><span>Lịch liên hệ</span>
+            <select name="due">
+                <option value="">Tất cả</option>
+                <option value="overdue" @selected(request('due') === 'overdue')>Đã quá hạn</option>
+                <option value="today" @selected(request('due') === 'today')>Hôm nay</option>
+            </select>
+        </label>
+        <button type="submit">Áp dụng bộ lọc</button>
         <a href="{{ route('admin.saas-inquiries.index') }}">Xóa lọc</a>
     </form>
-    <div class="hx-inquiry-table-wrap"><table class="hx-inquiry-table"><thead><tr><th>Khách hàng</th><th>Dịch vụ</th><th>Liên hệ</th><th>Trạng thái</th><th>Ngày gửi</th><th></th></tr></thead>
-        <tbody>@forelse($inquiries as $item)
-            <tr><td><strong>{{ $item->customer_name }}</strong></td><td>{{ $item->service_name }}</td><td>{{ $item->customer_email }}<br><small>{{ $item->customer_phone }}</small></td>
-                <td><span class="hx-inquiry-state state-{{ $item->status }}">{{ $statuses[$item->status] ?? $item->status }}</span></td>
-                <td>{{ \Illuminate\Support\Carbon::parse($item->created_at)->format('d/m/Y H:i') }}</td>
-                <td><a class="hx-inquiry-open" href="{{ route('admin.saas-inquiries.show', ['id' => $item->id]) }}">Xem chi tiết</a></td></tr>
-        @empty<tr><td colspan="6" class="hx-inquiry-empty">Chưa có yêu cầu phù hợp.</td></tr>@endforelse</tbody></table></div>
+
+    <div class="hx-inquiry-table-wrap">
+        <table class="hx-inquiry-table hx-inquiry-table-v3">
+            <thead><tr>
+                <th scope="col">Khách hàng</th><th scope="col">Dịch vụ</th>
+                <th scope="col">Trạng thái</th><th scope="col">Phụ trách</th>
+                <th scope="col">Hẹn liên hệ</th><th scope="col">Ngày gửi</th>
+                <th scope="col">Thao tác</th>
+            </tr></thead>
+            <tbody>
+            @forelse($inquiries as $item)
+                @php
+                    $followUp = $item->follow_up_at
+                        ? \Illuminate\Support\Carbon::parse($item->follow_up_at, 'UTC')->timezone('Asia/Ho_Chi_Minh')
+                        : null;
+                    $isOverdue = $followUp && $item->status !== 'closed' && \Illuminate\Support\Carbon::parse($item->follow_up_at, 'UTC')->isPast();
+                @endphp
+                <tr>
+                    <td><strong>{{ $item->customer_name }}</strong><small class="hx-inquiry-secondary">{{ $item->customer_email }}</small></td>
+                    <td>{{ $item->service_name }}</td>
+                    <td><span class="hx-inquiry-state state-{{ $item->status }}">{{ $statuses[$item->status] ?? $item->status }}</span></td>
+                    <td>{{ $item->assigned_name ?: 'Chưa phân công' }}</td>
+                    <td>
+                        @if($followUp)
+                            <time datetime="{{ $followUp->toIso8601String() }}">{{ $followUp->format('d/m/Y H:i') }}</time>
+                            @if($isOverdue)<span class="hx-inquiry-overdue">Quá hạn</span>@endif
+                        @else
+                            <span class="hx-inquiry-muted">Chưa có lịch</span>
+                        @endif
+                    </td>
+                    <td>{{ \Illuminate\Support\Carbon::parse($item->created_at)->format('d/m/Y H:i') }}</td>
+                    <td><a class="hx-inquiry-open" href="{{ route('admin.saas-inquiries.show', ['id' => $item->id]) }}">Xử lý yêu cầu</a></td>
+                </tr>
+            @empty
+                <tr><td colspan="7" class="hx-inquiry-empty">Chưa có yêu cầu phù hợp với bộ lọc.</td></tr>
+            @endforelse
+            </tbody>
+        </table>
+    </div>
     <div class="hx-inquiry-pagination">{{ $inquiries->links() }}</div>
+    <p class="hx-inquiry-help">Giờ hẹn hiển thị theo múi giờ Việt Nam (GMT+7). Số yêu cầu mới trên menu được cập nhật khi tải trang.</p>
 </div>
 @endsection
