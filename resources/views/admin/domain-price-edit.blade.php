@@ -12,8 +12,7 @@
 </a>
 
 <div class="page-heading">
-    <h1>Chỉnh sửa giá {{ $price->extension }}</h1>
-    <p>Cập nhật giá đăng ký và giá gia hạn.</p>
+    <h1>Chỉnh sửa giá của đuôi tên miền " {{ $price->extension }}"</h1>
 </div>
 
 @if($errors->any())
