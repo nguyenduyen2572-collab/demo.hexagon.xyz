@@ -1,0 +1,60 @@
+/* HEXAGON Admin V8 — tinh chinh nhe tren thiet ke hien co. */
+/* Chi ap dung cho Admin, khong thay doi bo cuc, menu, mau chu dao hay trang mua hang. */
+
+/* Nhip dieu va khoang trang: gon hon mot chut, giu nguyen cau truc. */
+body.hx-admin-pro .admin-main { padding-top:28px; }
+body.hx-admin-pro .page-heading { margin-bottom:19px; }
+body.hx-admin-pro .page-heading h1 { letter-spacing:-.55px; }
+body.hx-admin-pro .page-heading p { color:#62758e; }
+body.hx-admin-pro .panel-heading { padding:18px 22px; }
+body.hx-admin-pro .panel-heading h2 { line-height:1.35; }
+
+/* Vien va do noi nhe, khong doi mau/bo cuc the hien tai. */
+body.hx-admin-pro :is(.panel,.stat-card,.hxc-panel,.hx-ana-panel,.hx-order-filter,.hx-order-history) {
+  border-color:#e0e8f2;
+  box-shadow:0 4px 16px rgba(24,46,83,.035);
+}
+
+/* Bang du lieu: bot khoang trang thua, de doc khi nhieu dong. */
+body.hx-admin-pro .admin-table th { padding-top:12px; padding-bottom:12px; color:#596b84; }
+body.hx-admin-pro .admin-table td { padding-top:13px; padding-bottom:13px; color:#3d506b; line-height:1.5; }
+body.hx-admin-pro .admin-table tbody tr:hover,
+body.hx-admin-pro .admin-table tbody tr:focus-within { background-color:#f5f8fe; }
+body.hx-admin-pro .admin-table td :is(.text-link,strong) { overflow-wrap:anywhere; }
+body.hx-admin-pro .hxc-table tbody tr:hover,
+body.hx-admin-pro .hxc-table tbody tr:focus-within { background-color:#f5f8fe; }
+
+/* Bo loc va form: vien ro hon va focus nhe, khong thay doi kich thuoc/vi tri. */
+body.hx-admin-pro :is(.hx-order-filter__field,.hxv5-filters,.hxc-field,.price-field,.saas-v2-fields,.status-form)
+:is(input:not([type=checkbox]),select,textarea) {
+  border-color:#cdd9e9;
+  transition:border-color .16s ease,box-shadow .16s ease;
+}
+body.hx-admin-pro :is(.hx-order-filter__field,.hxv5-filters,.hxc-field,.price-field,.saas-v2-fields,.status-form)
+:is(input:not([type=checkbox]),select,textarea):focus {
+  border-color:#77a6eb;
+  box-shadow:0 0 0 3px rgba(47,111,216,.09);
+}
+
+/* Nhan manh thao tac san co, khong tao nut hay khu vuc moi. */
+body.hx-admin-pro :is(.hx-order-filter__submit,.hxv5-primary,.price-button,.edit-button,.hxc-btn,.saas-v2-primary,.btn-primary) {
+  transition:background-color .16s ease,border-color .16s ease,box-shadow .16s ease;
+}
+body.hx-admin-pro :is(.hx-order-filter__submit,.hxv5-primary,.price-button,.hxc-btn-primary,.saas-v2-primary,.status-form .btn-primary):hover {
+  box-shadow:0 3px 10px rgba(25,80,167,.13);
+}
+body.hx-admin-pro .hx-search-trigger { border-color:#dbe5f1; }
+body.hx-admin-pro .hx-search-trigger:hover { border-color:#a8c7f3; }
+body.hx-admin-pro .empty-cell { color:#687b95; padding-top:30px; padding-bottom:30px; }
+
+/* Dien thoai: chi sua khoang cach nhe, khong thay doi ket cau responsive cu. */
+@media (max-width:680px) {
+  body.hx-admin-pro .admin-main { padding-top:18px; }
+  body.hx-admin-pro .page-heading { margin-bottom:16px; }
+  body.hx-admin-pro .panel-heading { padding:16px 17px; }
+  body.hx-admin-pro .admin-table th,
+  body.hx-admin-pro .admin-table td { padding-top:12px; padding-bottom:12px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  body.hx-admin-pro :is(input,select,textarea,button,a) { transition:none; }
+}

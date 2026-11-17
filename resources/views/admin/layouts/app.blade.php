@@ -27,6 +27,8 @@
     <link rel="stylesheet" href="{{ asset('css/hexagon-admin-typography-customers-v1.css') }}?v=1">
     <link rel="stylesheet" href="{{ asset('css/hexagon-saas-inquiries-admin-v3.css') }}?v=3">
     <link rel="stylesheet" href="{{ asset('css/hexagon-admin-security-v4.css') }}?v=4">
+    <!-- HEXAGON_ADMIN_FINE_TUNE_V8 -->
+    <link rel="stylesheet" href="{{ asset('css/hexagon-admin-fine-tune-v8.css') }}?v=8">
 </head>
 <body class="hx-admin-v3 hx-admin-pro">
 <a class="hx-skip-link" href="#admin-main">Bỏ qua menu, đến nội dung chính</a>
