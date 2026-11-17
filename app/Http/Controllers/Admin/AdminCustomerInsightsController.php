@@ -14,6 +14,7 @@ use Illuminate\Validation\Rule;
  * may point to this controller. Guest orders are deliberately not matched by email.
  */
 // HEXAGON-CUSTOMERS-FILTER-CLEAN-V1: verification remains in customer auth, not admin insights.
+// HEXAGON-CUSTOMERS-COMPACT-CONTROLLER-V2: no order-count filter or money summary.
 final class AdminCustomerInsightsController extends Controller
 {
     private const PAGE_SIZE = 15;
@@ -21,7 +22,7 @@ final class AdminCustomerInsightsController extends Controller
     private const ORDER_STATUSES = [
         'pending_demo' => 'Chờ xử lý',
         'processing_demo' => 'Đang xử lý',
-        'completed_demo' => 'Đã xử lý',
+        'completed_demo' => 'Hoàn tất',
         'cancelled_demo' => 'Đã hủy',
     ];
 
@@ -29,12 +30,10 @@ final class AdminCustomerInsightsController extends Controller
     {
         $filters = $request->validate([
             'q' => ['nullable', 'string', 'max:120'],
-            'orders' => ['nullable', Rule::in(['all', 'yes', 'no'])],
-            'sort' => ['nullable', Rule::in(['latest', 'oldest', 'orders', 'value'])],
+            'sort' => ['nullable', Rule::in(['latest', 'oldest', 'orders'])],
         ]);
 
         $filters['q'] = trim((string) ($filters['q'] ?? ''));
-        $filters['orders'] = $filters['orders'] ?? 'all';
         $filters['sort'] = $filters['sort'] ?? 'latest';
 
         $customers = DB::table('users as u')
@@ -45,12 +44,6 @@ final class AdminCustomerInsightsController extends Controller
                     ->selectRaw('COUNT(*)')
                     ->whereColumn('o.user_id', 'u.id'),
                 'orders_count'
-            )
-            ->selectSub(
-                DB::table('orders as o')
-                    ->selectRaw('COALESCE(SUM(CASE WHEN o.status <> ? THEN o.total_amount ELSE 0 END), 0)', ['cancelled_demo'])
-                    ->whereColumn('o.user_id', 'u.id'),
-                'orders_value'
             )
             ->selectSub(
                 DB::table('orders as o')
@@ -68,26 +61,12 @@ final class AdminCustomerInsightsController extends Controller
             });
         }
 
-        if ($filters['orders'] !== 'all') {
-            $exists = fn ($query) => $query->selectRaw('1')
-                ->from('orders as linked_orders')
-                ->whereColumn('linked_orders.user_id', 'u.id');
-            if ($filters['orders'] === 'yes') {
-                $customers->whereExists($exists);
-            } else {
-                $customers->whereNotExists($exists);
-            }
-        }
-
         switch ($filters['sort']) {
             case 'oldest':
                 $customers->orderBy('u.created_at')->orderBy('u.id');
                 break;
             case 'orders':
                 $customers->orderByDesc('orders_count')->orderByDesc('u.id');
-                break;
-            case 'value':
-                $customers->orderByDesc('orders_value')->orderByDesc('u.id');
                 break;
             default:
                 $customers->orderByDesc('u.created_at')->orderByDesc('u.id');
@@ -96,16 +75,7 @@ final class AdminCustomerInsightsController extends Controller
 
         $customers = $customers->paginate(self::PAGE_SIZE)->withQueryString();
 
-        $overview = [
-            'all' => DB::table('users')->where('is_admin', false)->count(),
-            'ordered' => DB::table('users as u')
-                ->where('u.is_admin', false)
-                ->whereExists(fn ($query) => $query->selectRaw('1')
-                    ->from('orders as o')->whereColumn('o.user_id', 'u.id'))
-                ->count(),
-        ];
-
-        return view('admin.customer-insights.index', compact('customers', 'filters', 'overview'));
+        return view('admin.customer-insights.index', compact('customers', 'filters'));
     }
 
     public function show(string $id)
@@ -122,7 +92,7 @@ final class AdminCustomerInsightsController extends Controller
         $ordersBase = DB::table('orders')->where('user_id', $customer->id);
         $summary = [
             'count' => (clone $ordersBase)->count(),
-            'amount' => (clone $ordersBase)->where('status', '<>', 'cancelled_demo')->sum('total_amount'),
+            'needs_action' => (clone $ordersBase)->whereIn('status', ['pending_demo', 'processing_demo'])->count(),
             'completed' => (clone $ordersBase)->where('status', 'completed_demo')->count(),
             'cancelled' => (clone $ordersBase)->where('status', 'cancelled_demo')->count(),
         ];

@@ -1,0 +1,39 @@
+/* HEXAGON Customers compact V2 — scoped, never changes other Admin pages */
+body.hx-admin-pro .hxc-compact-v2 .hxc-page-heading {margin-bottom:18px}
+body.hx-admin-pro .hxc-compact-v2 .hxc-panel {margin-bottom:16px}
+body.hx-admin-pro .hxc-compact-v2 .hxc-panel-head {padding:19px 22px 13px}
+body.hx-admin-pro .hxc-compact-v2 .hxc-panel-head h2 {font-size:18px;letter-spacing:0}
+body.hx-admin-pro .hxc-compact-v2 .hxc-eyebrow {letter-spacing:.06em}
+body.hx-admin-pro .hxc-compact-v2 .hxc-form {display:grid;grid-template-columns:minmax(220px,1.8fr) minmax(175px,.7fr) auto;align-items:end;gap:12px;padding:8px 22px 20px}
+body.hx-admin-pro .hxc-compact-v2 .hxc-search {grid-column:auto}
+body.hx-admin-pro .hxc-compact-v2 .hxc-actions {grid-column:auto;flex-wrap:nowrap;align-self:end;margin:0}
+body.hx-admin-pro .hxc-compact-v2 .hxc-field input,
+body.hx-admin-pro .hxc-compact-v2 .hxc-field select {height:42px}
+body.hx-admin-pro .hxc-compact-v2 .hxc-btn {white-space:nowrap;min-height:42px;box-shadow:none}
+body.hx-admin-pro .hxc-compact-v2 .hxc-detail-stats {grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:8px 0 18px}
+body.hx-admin-pro .hxc-compact-v2 .hxc-stat {padding:15px 18px;border-radius:14px;box-shadow:none}
+body.hx-admin-pro .hxc-compact-v2 .hxc-stat strong {font-size:26px;line-height:1.12;margin:7px 0 2px}
+body.hx-admin-pro .hxc-compact-v2 .hxc-stat small {font-size:11px;color:#6c7d94}
+body.hx-admin-pro .hxc-compact-v2 .hxc-table {min-width:580px}
+body.hx-admin-pro .hxc-compact-v2 .hxc-table th {font-size:11px;text-transform:none;letter-spacing:0}
+body.hx-admin-pro .hxc-compact-v2 .hxc-table th,
+body.hx-admin-pro .hxc-compact-v2 .hxc-table td {padding-top:13px;padding-bottom:13px}
+body.hx-admin-pro .hxc-compact-v2 .hxc-detail-link {color:#195dbb}
+@media(max-width:1150px){
+  body.hx-admin-pro .hxc-compact-v2 .hxc-form{grid-template-columns:minmax(0,1fr) minmax(175px,.55fr)}
+  body.hx-admin-pro .hxc-compact-v2 .hxc-actions {grid-column:1/-1}
+  body.hx-admin-pro .hxc-compact-v2 .hxc-detail-stats {grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:690px){
+  body.hx-admin-pro .hxc-compact-v2 .hxc-form{grid-template-columns:1fr;padding:8px 16px 17px}
+  body.hx-admin-pro .hxc-compact-v2 .hxc-search,
+  body.hx-admin-pro .hxc-compact-v2 .hxc-actions{grid-column:1}
+  body.hx-admin-pro .hxc-compact-v2 .hxc-panel-head{padding:16px}
+  body.hx-admin-pro .hxc-compact-v2 .hxc-table{min-width:540px}
+}
+
+/* Statuses are color-coded consistently in the customer order list. */
+body.hx-admin-pro .hxc-compact-v2 .hxc-status-pending{background:#fff3dc;border-color:#f9dfaa;color:#97601a}
+body.hx-admin-pro .hxc-compact-v2 .hxc-status-processing{background:#eaf2ff;border-color:#c8dcff;color:#2859af}
+body.hx-admin-pro .hxc-compact-v2 .hxc-status-completed{background:#e5f7ee;border-color:#bce7d0;color:#12764b}
+body.hx-admin-pro .hxc-compact-v2 .hxc-status-cancelled{background:#fff0f1;border-color:#facbd0;color:#ba3445}

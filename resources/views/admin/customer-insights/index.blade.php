@@ -5,53 +5,43 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/hexagon-admin-customers-v2.css') }}?v=2">
+<link rel="stylesheet" href="{{ asset('css/hexagon-admin-customers-compact-v2.css') }}?v=1">
 @endpush
 
 @section('content')
-<section class="hxc-page" aria-labelledby="hxc-title">
+<section class="hxc-page hxc-compact-v2" aria-labelledby="hxc-title">
+    {{-- HEXAGON-CUSTOMERS-COMPACT-V2 --}}
     {{-- HEXAGON-CUSTOMERS-CLEAN-V1 --}}
-    <header class="hxc-page-heading"><div><h1 id="hxc-title">Khách hàng</h1><p>Quản lý tài khoản, tra cứu và theo dõi đơn hàng.</p></div></header>
-
-    <div class="hxc-stats hxc-overview-stats" aria-label="Thống kê khách hàng">
-        <div class="hxc-stat"><span>Tài khoản khách hàng</span><strong>{{ number_format($overview['all'], 0, ',', '.') }}</strong><small>Không bao gồm tài khoản Admin</small></div>
-        <div class="hxc-stat"><span>Khách có đơn liên kết</span><strong>{{ number_format($overview['ordered'], 0, ',', '.') }}</strong><small>Số tài khoản đã phát sinh đơn hàng</small></div>
-    </div>
+    <header class="hxc-page-heading"><div><h1 id="hxc-title">Khách hàng</h1><p>Tra cứu tài khoản và xem đơn hàng của từng khách.</p></div></header>
 
     <section class="hxc-panel" aria-labelledby="hxc-filter-title">
-        <div class="hxc-panel-head"><div><span class="hxc-eyebrow">TÌM KIẾM THÔNG MINH</span><h2 id="hxc-filter-title">Bộ lọc khách hàng</h2></div><span class="hxc-count">{{ number_format($customers->total(), 0, ',', '.') }} kết quả</span></div>
+        <div class="hxc-panel-head"><div><span class="hxc-eyebrow">TRA CỨU</span><h2 id="hxc-filter-title">Tìm khách hàng</h2></div></div>
         <form class="hxc-form" method="GET" action="{{ route('admin.customers.index') }}">
             <label class="hxc-field hxc-search"><span>Họ tên hoặc email</span><input type="search" name="q" value="{{ $filters['q'] }}" placeholder="Nhập thông tin khách hàng" maxlength="120" autocomplete="off"></label>
-            <label class="hxc-field"><span>Đơn hàng</span><select name="orders">
-                <option value="all" @selected($filters['orders'] === 'all')>Tất cả</option>
-                <option value="yes" @selected($filters['orders'] === 'yes')>Đã đặt hàng</option>
-                <option value="no" @selected($filters['orders'] === 'no')>Chưa đặt hàng</option>
-            </select></label>
             <label class="hxc-field"><span>Sắp xếp</span><select name="sort">
                 <option value="latest" @selected($filters['sort'] === 'latest')>Mới đăng ký</option>
                 <option value="oldest" @selected($filters['sort'] === 'oldest')>Đăng ký lâu nhất</option>
                 <option value="orders" @selected($filters['sort'] === 'orders')>Nhiều đơn nhất</option>
-                <option value="value" @selected($filters['sort'] === 'value')>Giá trị đơn cao nhất</option>
             </select></label>
-            <div class="hxc-actions"><button type="submit" class="hxc-btn hxc-btn-primary">Áp dụng bộ lọc</button><a class="hxc-btn hxc-btn-light" href="{{ route('admin.customers.index') }}">Đặt lại</a></div>
+            <div class="hxc-actions"><button type="submit" class="hxc-btn hxc-btn-primary">Tìm kiếm</button><a class="hxc-btn hxc-btn-light" href="{{ route('admin.customers.index') }}">Đặt lại</a></div>
         </form>
     </section>
 
     <section class="hxc-panel" aria-labelledby="hxc-table-title">
-        <div class="hxc-panel-head"><div><span class="hxc-eyebrow">DANH SÁCH TÀI KHOẢN</span><h2 id="hxc-table-title">Khách hàng đã đăng ký</h2></div><span class="hxc-count">Trang {{ $customers->currentPage() }} / {{ $customers->lastPage() }}</span></div>
+        <div class="hxc-panel-head"><div><span class="hxc-eyebrow">DANH SÁCH</span><h2 id="hxc-table-title">Khách hàng</h2></div><span class="hxc-count">{{ number_format($customers->total(), 0, ',', '.') }} khách hàng</span></div>
         <div class="hxc-table-wrap">
             <table class="hxc-table">
-                <thead><tr><th>Khách hàng</th><th>Đơn hàng</th><th>Giá trị đơn chưa hủy</th><th>Ngày đăng ký</th><th></th></tr></thead>
+                <thead><tr><th>Khách hàng</th><th>Số đơn</th><th>Ngày đăng ký</th><th>Thao tác</th></tr></thead>
                 <tbody>
                 @forelse($customers as $customer)
                     <tr>
                         <td><div class="hxc-identity"><span class="hxc-avatar" aria-hidden="true">{{ mb_strtoupper(mb_substr(trim((string) $customer->name), 0, 1)) ?: 'K' }}</span><div><strong>{{ $customer->name }}</strong><small>{{ $customer->email }}</small></div></div></td>
                         <td><strong>{{ number_format((int) $customer->orders_count, 0, ',', '.') }}</strong></td>
-                        <td><strong class="hxc-value">{{ number_format((float) $customer->orders_value, 0, ',', '.') }}đ</strong></td>
                         <td>{{ \Illuminate\Support\Carbon::parse($customer->created_at)->format('d/m/Y') }}</td>
                         <td><a class="hxc-detail-link" href="{{ route('admin.customers.show', ['id' => $customer->id]) }}" aria-label="Xem chi tiết {{ $customer->name }}">Chi tiết →</a></td>
                     </tr>
                 @empty
-                    <tr><td colspan="5" class="hxc-empty">Không tìm thấy khách hàng phù hợp. Hãy thử điều chỉnh bộ lọc.</td></tr>
+                    <tr><td colspan="4" class="hxc-empty">Không tìm thấy khách hàng phù hợp. Hãy thử điều chỉnh bộ lọc.</td></tr>
                 @endforelse
                 </tbody>
             </table>

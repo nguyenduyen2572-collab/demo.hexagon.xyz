@@ -75,7 +75,8 @@ final class AdminCustomerInsightsTest extends HexagonIsolatedTestCase
             ->assertDontSee('Xác minh email')->assertDontSee('Đã xác minh');
     }
 
-    public function test_order_filter_and_totals_exclude_cancelled_amount(): void
+    // HEXAGON-CUSTOMERS-COMPACT-TEST-V2: display is simplified, order detail remains accessible.
+    public function test_customer_list_shows_order_count_without_order_filter_or_money(): void
     {
         $active = $this->customer('Minh Has Orders', 'hasorders@example.com');
         $this->customer('Mai No Orders', 'noorders@example.com');
@@ -84,8 +85,32 @@ final class AdminCustomerInsightsTest extends HexagonIsolatedTestCase
 
         $this->actingAs($this->admin(), 'admin')
             ->get(route('admin.customers.index', ['orders' => 'yes']))
-            ->assertOk()->assertSee('Minh Has Orders')->assertDontSee('Mai No Orders')
-            ->assertSee('260.000');
+            ->assertOk()
+            ->assertSee('Minh Has Orders')
+            ->assertSee('Mai No Orders')
+            ->assertSee('Số đơn')
+            ->assertDontSee('Giá trị đơn chưa hủy')
+            ->assertDontSee('Khách có đơn liên kết')
+            ->assertDontSee('name="orders"', false);
+    }
+
+    public function test_customer_detail_displays_clear_status_counts_without_money_summary(): void
+    {
+        $customer = $this->customer('Lan Account', 'lan@example.com');
+        $this->order($customer->id, $customer->email, 'pending_demo');
+        $this->order($customer->id, $customer->email, 'processing_demo');
+        $this->order($customer->id, $customer->email, 'completed_demo');
+        $this->order($customer->id, $customer->email, 'cancelled_demo');
+
+        $this->actingAs($this->admin(), 'admin')
+            ->get(route('admin.customers.show', ['id' => $customer->id]))
+            ->assertOk()
+            ->assertSee('Tổng đơn hàng')
+            ->assertSee('Cần xử lý')
+            ->assertSee('Hoàn tất')
+            ->assertSee('Đã hủy')
+            ->assertDontSee('Giá trị đơn chưa hủy')
+            ->assertSee('Tổng tiền');
     }
 
     public function test_guest_orders_are_not_attached_by_matching_email(): void
