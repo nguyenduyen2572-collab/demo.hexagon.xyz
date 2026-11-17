@@ -31,10 +31,12 @@ final class AdminCustomerInsightsController extends Controller
         $filters = $request->validate([
             'q' => ['nullable', 'string', 'max:120'],
             'sort' => ['nullable', Rule::in(['latest', 'oldest', 'orders'])],
+            'activity' => ['nullable', Rule::in(['all', 'needs_action', 'no_orders'])],
         ]);
 
         $filters['q'] = trim((string) ($filters['q'] ?? ''));
         $filters['sort'] = $filters['sort'] ?? 'latest';
+        $filters['activity'] = $filters['activity'] ?? 'all';
 
         $customers = DB::table('users as u')
             ->where('u.is_admin', false)
@@ -50,6 +52,13 @@ final class AdminCustomerInsightsController extends Controller
                     ->selectRaw('MAX(o.created_at)')
                     ->whereColumn('o.user_id', 'u.id'),
                 'last_order_at'
+            )
+            ->selectSub(
+                DB::table('orders as o')
+                    ->selectRaw('COUNT(*)')
+                    ->whereColumn('o.user_id', 'u.id')
+                    ->whereIn('o.status', ['pending_demo', 'processing_demo']),
+                'needs_action_count'
             );
 
         if ($filters['q'] !== '') {
@@ -58,6 +67,19 @@ final class AdminCustomerInsightsController extends Controller
             $customers->where(function ($query) use ($term): void {
                 $query->where('u.name', 'like', $term)
                     ->orWhere('u.email', 'like', $term);
+            });
+        }
+
+        if ($filters['activity'] === 'needs_action') {
+            $customers->whereExists(function ($query): void {
+                $query->selectRaw('1')->from('orders as o')
+                    ->whereColumn('o.user_id', 'u.id')
+                    ->whereIn('o.status', ['pending_demo', 'processing_demo']);
+            });
+        } elseif ($filters['activity'] === 'no_orders') {
+            $customers->whereNotExists(function ($query): void {
+                $query->selectRaw('1')->from('orders as o')
+                    ->whereColumn('o.user_id', 'u.id');
             });
         }
 
@@ -78,7 +100,7 @@ final class AdminCustomerInsightsController extends Controller
         return view('admin.customer-insights.index', compact('customers', 'filters'));
     }
 
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
         abort_unless(ctype_digit($id), 404);
 
@@ -89,6 +111,11 @@ final class AdminCustomerInsightsController extends Controller
 
         abort_if($customer === null, 404);
 
+        $filters = $request->validate([
+            'status' => ['nullable', Rule::in(['all', 'needs_action', 'pending_demo', 'processing_demo', 'completed_demo', 'cancelled_demo'])],
+        ]);
+        $filters['status'] = $filters['status'] ?? 'all';
+
         $ordersBase = DB::table('orders')->where('user_id', $customer->id);
         $summary = [
             'count' => (clone $ordersBase)->count(),
@@ -97,9 +124,16 @@ final class AdminCustomerInsightsController extends Controller
             'cancelled' => (clone $ordersBase)->where('status', 'cancelled_demo')->count(),
         ];
 
-        $orders = $ordersBase->orderByDesc('created_at')->orderByDesc('id')->paginate(10);
+        if ($filters['status'] === 'needs_action') {
+            $ordersBase->whereIn('status', ['pending_demo', 'processing_demo']);
+        } elseif ($filters['status'] !== 'all') {
+            $ordersBase->where('status', $filters['status']);
+        }
+
+        $orders = $ordersBase->orderByDesc('created_at')->orderByDesc('id')
+            ->paginate(10)->withQueryString();
         $statusLabels = self::ORDER_STATUSES;
 
-        return view('admin.customer-insights.show', compact('customer', 'summary', 'orders', 'statusLabels'));
+        return view('admin.customer-insights.show', compact('customer', 'summary', 'orders', 'statusLabels', 'filters'));
     }
 }

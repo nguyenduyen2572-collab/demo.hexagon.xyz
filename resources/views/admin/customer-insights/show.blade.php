@@ -6,6 +6,7 @@
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/hexagon-admin-customers-v2.css') }}?v=2">
 <link rel="stylesheet" href="{{ asset('css/hexagon-admin-customers-compact-v2.css') }}?v=1">
+<link rel="stylesheet" href="{{ asset('css/hexagon-admin-pricing-customers-v5.css') }}?v=5">
 @endpush
 
 @section('content')
@@ -17,7 +18,7 @@
 
     <div class="hxc-stats hxc-detail-stats" aria-label="Tổng quan đơn hàng">
         <div class="hxc-stat"><span>Tổng đơn hàng</span><strong>{{ number_format($summary['count'], 0, ',', '.') }}</strong></div>
-        <div class="hxc-stat"><span>Cần xử lý</span><strong>{{ number_format($summary['needs_action'], 0, ',', '.') }}</strong><small>Chờ xử lý hoặc đang xử lý</small></div>
+        <div class="hxc-stat"><a class="hxv5-link-stat" href="{{ route('admin.customers.show', ['id' => $customer->id, 'status' => 'needs_action']) }}"><span>Cần xử lý</span><strong>{{ number_format($summary['needs_action'], 0, ',', '.') }}</strong><small>Chờ xử lý hoặc đang xử lý</small></a></div>
         <div class="hxc-stat"><span>Hoàn tất</span><strong>{{ number_format($summary['completed'], 0, ',', '.') }}</strong></div>
         <div class="hxc-stat"><span>Đã hủy</span><strong>{{ number_format($summary['cancelled'], 0, ',', '.') }}</strong></div>
     </div>
@@ -35,6 +36,17 @@
 
     <section class="hxc-panel" aria-labelledby="hxc-orders-title">
         <div class="hxc-panel-head"><div><span class="hxc-eyebrow">ĐƠN HÀNG</span><h2 id="hxc-orders-title">Danh sách đơn hàng</h2></div><span class="hxc-count">{{ number_format($orders->total(), 0, ',', '.') }} đơn</span></div>
+        <form class="hxv5-filter-inline" method="GET" action="{{ route('admin.customers.show', ['id' => $customer->id]) }}" aria-label="Lọc đơn hàng khách hàng">
+            <label class="hxc-field"><span>Trạng thái đơn hàng</span><select name="status">
+                <option value="all" @selected($filters['status'] === 'all')>Tất cả đơn</option>
+                <option value="needs_action" @selected($filters['status'] === 'needs_action')>Cần xử lý</option>
+                @foreach($statusLabels as $value => $label)
+                    <option value="{{ $value }}" @selected($filters['status'] === $value)>{{ $label }}</option>
+                @endforeach
+            </select></label>
+            <button class="hxc-btn hxc-btn-primary" type="submit">Lọc đơn</button>
+            @if($filters['status'] !== 'all')<a class="hxc-btn hxc-btn-light" href="{{ route('admin.customers.show', ['id' => $customer->id]) }}">Đặt lại</a>@endif
+        </form>
         <div class="hxc-table-wrap">
             <table class="hxc-table">
                 <thead><tr><th>Đơn hàng</th><th>Ngày đặt</th><th>Trạng thái</th><th>Tổng tiền</th><th></th></tr></thead>
@@ -48,7 +60,7 @@
                         <td><a class="hxc-detail-link" href="{{ route('admin.orders.show', ['id' => $order->id]) }}">Xem chi tiết →</a></td>
                     </tr>
                 @empty
-                    <tr><td class="hxc-empty" colspan="5">Tài khoản này chưa có đơn hàng nào được liên kết.</td></tr>
+                    <tr><td class="hxc-empty" colspan="5">{{ $filters['status'] === 'all' ? 'Tài khoản này chưa có đơn hàng nào được liên kết.' : 'Không có đơn hàng nào phù hợp với trạng thái đã lọc.' }}</td></tr>
                 @endforelse
                 </tbody>
             </table>

@@ -1,0 +1,45 @@
+/* HEXAGON Admin V5: giới hạn CSS trong bảng giá và trang khách hàng. */
+.hx-admin-pro .hxv5-pricing .panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hx-admin-pro .hxv5-pricing .price-form{grid-template-columns:repeat(3,minmax(0,1fr));padding:6px 24px 22px}
+.hx-admin-pro .hxv5-pricing .price-form>.price-button{grid-column:1/-1}
+.hx-admin-pro .hxv5-pricing .hx-price-actions{flex-wrap:nowrap}
+.hx-admin-pro .hxv5-pricing .hx-price-actions form{white-space:nowrap}
+.hx-admin-pro .hxv5-filters{display:grid;grid-template-columns:minmax(185px,1.5fr) minmax(145px,.85fr) minmax(170px,1fr) auto;align-items:end;gap:12px;padding:0 22px 22px}
+.hx-admin-pro .hxv5-filters label{min-width:0;display:flex;flex-direction:column;gap:7px;color:#405574;font-size:12px;font-weight:700}
+.hx-admin-pro .hxv5-filters input,.hx-admin-pro .hxv5-filters select{height:42px;width:100%;min-width:0;border:1px solid #cbd8ea;background:#fff;border-radius:10px;padding:0 11px;font:inherit;font-size:13px;color:#172f52}
+.hx-admin-pro .hxv5-filters :is(input,select):focus-visible{outline:2px solid #8ebfff;outline-offset:2px}
+.hx-admin-pro .hxv5-filter-actions{display:flex;align-items:center;gap:9px}
+.hx-admin-pro .hxv5-primary,.hx-admin-pro .hxv5-reset{min-height:42px;display:inline-flex;align-items:center;justify-content:center;padding:0 15px;border-radius:10px;font-size:13px;font-weight:750;white-space:nowrap;text-decoration:none}
+.hx-admin-pro .hxv5-primary{border:0;background:#195ec9;color:white;cursor:pointer}
+.hx-admin-pro .hxv5-primary:hover{background:#114ba8}
+.hx-admin-pro .hxv5-reset{border:1px solid #d7e3f2;background:#f1f5fb;color:#38597d}
+.hx-admin-pro .hxv5-pagination{padding:16px 22px;overflow-x:auto;border-top:1px solid #e8eef6}
+.hx-admin-pro .hxv5-pricing .price-edit-form{padding:0 24px 24px}
+.hx-admin-pro .hxv5-audit{max-width:850px;margin-top:20px}
+.hx-admin-pro .hxv5-note{font-size:12px;line-height:1.6;color:#64748b;margin:0;padding:0 24px 14px}
+.hx-admin-pro .hxv5-audit-list{padding:0 24px 22px}
+.hx-admin-pro .hxv5-audit-item{padding:15px 0;border-top:1px solid #e7edf6}
+.hx-admin-pro .hxv5-audit-meta{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px 12px;color:#1e3353}
+.hx-admin-pro .hxv5-audit-meta strong{font-size:13px}
+.hx-admin-pro .hxv5-audit-meta span{font-size:12px;color:#64748b}
+.hx-admin-pro .hxv5-audit-item ul{margin:9px 0 0;padding-left:20px;font-size:13px;line-height:1.75;color:#405776}
+.hx-admin-pro .hxv5-no-history{padding:8px 0;color:#64748b;font-size:13px}
+.hx-admin-pro .hxc-compact-v2.hxv5-customer-list .hxc-form{grid-template-columns:minmax(180px,1.5fr) minmax(145px,.9fr) minmax(160px,.9fr) auto}
+.hx-admin-pro .hxc-compact-v2 .hxv5-need-count{font-weight:800;text-decoration:none;color:#1b5dc0}
+.hx-admin-pro .hxc-compact-v2 .hxv5-need-count:hover{text-decoration:underline}
+.hx-admin-pro .hxc-compact-v2 .hxv5-muted-count{color:#94a3b8}
+.hx-admin-pro .hxc-compact-v2 .hxv5-filter-inline{display:flex;align-items:end;gap:12px;flex-wrap:wrap;padding:0 22px 20px}
+.hx-admin-pro .hxc-compact-v2 .hxv5-filter-inline .hxc-field{width:min(310px,100%)}
+.hx-admin-pro .hxc-compact-v2 .hxv5-filter-inline .hxc-btn{min-height:42px}
+.hx-admin-pro .hxc-compact-v2 .hxv5-link-stat{text-decoration:none;display:block;color:inherit}
+.hx-admin-pro .hxc-compact-v2 .hxv5-link-stat:hover strong{text-decoration:underline}
+@media(max-width:1200px){
+  .hx-admin-pro .hxv5-filters,.hx-admin-pro .hxc-compact-v2.hxv5-customer-list .hxc-form{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hx-admin-pro .hxv5-filter-actions,.hx-admin-pro .hxc-compact-v2.hxv5-customer-list .hxc-actions{grid-column:1/-1}
+}
+@media(max-width:760px){
+  .hx-admin-pro .hxv5-pricing .price-form,.hx-admin-pro .hxv5-filters,.hx-admin-pro .hxc-compact-v2.hxv5-customer-list .hxc-form{grid-template-columns:1fr}
+  .hx-admin-pro .hxv5-filters{padding:0 16px 18px}
+  .hx-admin-pro .hxv5-audit-list,.hx-admin-pro .hxv5-note{padding-left:16px;padding-right:16px}
+  .hx-admin-pro .hxv5-pricing .hx-price-actions{flex-wrap:wrap}
+}
