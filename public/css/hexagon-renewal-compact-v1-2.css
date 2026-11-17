@@ -1,0 +1,101 @@
+/* HEXAGON — Gia han ten mien V1.2: chi tinh chinh giao dien.
+   Du lieu renewal_price va renewal_period_months duoc giu nguyen. */
+.hx-admin-pro .price-field.hx-renewal-combined-field,
+.price-field.hx-renewal-combined-field {
+    min-width: 0;
+}
+
+/* Input gia rong, select ky han gon. Khong con chia 50/50. */
+.hx-admin-pro .price-field .hx-renewal-combined,
+.price-field .hx-renewal-combined {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 116px;
+    width: 100%;
+    min-width: 0;
+    height: 45px;
+    border: 1px solid #d1deef;
+    border-radius: 11px;
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 1px 1px rgba(15, 36, 69, .025);
+    transition: border-color .16s ease, box-shadow .16s ease;
+}
+.hx-admin-pro .price-field .hx-renewal-combined:focus-within,
+.price-field .hx-renewal-combined:focus-within {
+    border-color: #3879e9;
+    box-shadow: 0 0 0 3px rgba(56, 121, 233, .10);
+}
+.hx-admin-pro .price-field .hx-renewal-combined input[name="renewal_price"],
+.price-field .hx-renewal-combined input[name="renewal_price"] {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: 43px;
+    min-height: 43px;
+    margin: 0;
+    padding: 0 12px 0 14px;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    outline: 0 !important;
+    background: #fff;
+    color: #172a48;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: normal;
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+/* An mui ten tang/giam cua number input, khong thay doi type hay validation. */
+.price-field .hx-renewal-combined input[name="renewal_price"]::-webkit-inner-spin-button,
+.price-field .hx-renewal-combined input[name="renewal_price"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.hx-admin-pro .price-field .hx-renewal-combined select.hx-renewal-period-select,
+.price-field .hx-renewal-combined select.hx-renewal-period-select {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: 43px;
+    min-height: 43px;
+    margin: 0;
+    padding: 0 30px 0 12px;
+    border: 0 !important;
+    border-left: 1px solid #e3eaf4 !important;
+    border-radius: 0 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+    background-color: #f7f9fd;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' stroke='%23546d8f' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-size: 14px 14px;
+    background-repeat: no-repeat;
+    background-position: right 11px center;
+    color: #243955;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+.price-field .hx-renewal-combined select.hx-renewal-period-select:focus-visible {
+    outline: 0 !important; /* focus hien qua vien ngoai cua nhom */
+}
+@media (max-width: 480px) {
+    .hx-admin-pro .price-field .hx-renewal-combined,
+    .price-field .hx-renewal-combined {
+        grid-template-columns: minmax(0, 1fr) 106px;
+    }
+    .hx-admin-pro .price-field .hx-renewal-combined select.hx-renewal-period-select,
+    .price-field .hx-renewal-combined select.hx-renewal-period-select {
+        padding-left: 9px;
+        padding-right: 24px;
+        background-position: right 7px center;
+        font-size: 12px;
+    }
+}

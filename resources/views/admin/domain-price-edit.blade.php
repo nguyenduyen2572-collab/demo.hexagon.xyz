@@ -57,19 +57,29 @@
                    required>
         </div>
 
-        <div class="price-field">
+        <!-- HX_RENEWAL_PERIOD_V1_1_GROUP -->
+        <div class="price-field hx-renewal-combined-field">
             <label for="renewal_price">
                 Giá gia hạn (VNĐ)
             </label>
-
-            <input type="number"
-                   id="renewal_price"
-                   name="renewal_price"
-                   min="0"
-                   max="1000000000"
-                   step="1"
-                   value="{{ old('renewal_price', $price->renewal_price) }}"
-                   required>
+            <div class="hx-renewal-combined" role="group" aria-label="Giá gia hạn và thời hạn gia hạn">
+                <input type="number"
+                    id="renewal_price"
+                    name="renewal_price"
+                    min="0"
+                    max="1000000000"
+                    step="1"
+                    value="{{ old('renewal_price', $price->renewal_price) }}"
+                    required>
+                <select aria-label="Thời hạn gia hạn" id="renewal_period_months"
+                    class="hx-renewal-period-select"
+                    name="renewal_period_months"
+                    required>
+                    @foreach([1, 3, 6, 12, 24] as $month)
+                        <option value="{{ $month }}" @selected((int) old('renewal_period_months', $price->renewal_period_months ?? 12) === $month)>{{ $month }} tháng</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
 
         <button type="submit" class="price-button">

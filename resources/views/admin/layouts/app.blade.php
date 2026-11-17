@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="{{ asset('css/hexagon-font-source-sans-v1.css') }}?v=1">
     <!-- HEXAGON_FONT_SOURCE_SANS_V1_END -->
     <link rel="stylesheet" href="{{ asset('css/hexagon-saas-inquiries-v1.css') }}?v=1">
+    <link rel="stylesheet" href="{{ asset('css/hexagon-renewal-compact-v1-2.css') }}?v=1">
 </head>
 <body class="hx-admin-v3 hx-admin-pro">
 <a class="hx-skip-link" href="#admin-main">Bỏ qua menu, đến nội dung chính</a>
@@ -88,7 +89,6 @@
             </div>
             <div class="hx-topbar-right">
                 <button type="button" class="hx-search-trigger" data-search-open title="Tìm nhanh (Ctrl + K)"><svg class="hx-icon"><use href="#hx-ico-search"/></svg><span>Tìm chức năng...</span><kbd>Ctrl K</kbd></button>
-                <a class="hx-topbar-site" href="{{ url('/') }}" target="_blank" rel="noopener noreferrer">Xem website <svg class="hx-icon"><use href="#hx-ico-external"/></svg></a>
                 <details class="hx-admin-account"><summary aria-label="Tài khoản quản trị"><span class="hx-admin-avatar">{{ mb_strtoupper(mb_substr(trim((string) (auth('admin')->user()?->name ?? 'A')), 0, 1)) }}</span><span class="hx-admin-account-label"><strong>{{ auth('admin')->user()?->name ?? 'Quản trị viên' }}</strong><small>Quản trị viên</small></span><svg class="hx-icon hx-account-chevron"><use href="#hx-ico-chevron"/></svg></summary><div class="hx-account-dropdown"><div class="hx-account-name">{{ auth('admin')->user()?->email ?? 'Tài khoản quản trị' }}</div><form method="POST" action="{{ route('admin.logout') }}">@csrf<button type="submit"><svg class="hx-icon"><use href="#hx-ico-logout"/></svg> Đăng xuất</button></form></div></details>
             </div>
         </header>

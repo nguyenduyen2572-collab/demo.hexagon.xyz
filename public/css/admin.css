@@ -418,3 +418,98 @@ a { color:inherit; }
     }
 }
 
+/* HX_RENEWAL_PERIOD_V1_CSS */
+.price-field .hx-renewal-period-select {
+    display: block;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: #fff;
+    color: #172c49;
+    font: inherit;
+    font-size: 15px;
+    cursor: pointer;
+}
+.price-field .hx-renewal-period-select:focus-visible {
+    outline: 2px solid #93c5fd;
+    outline-offset: 1px;
+    border-color: #1465d9;
+}
+.price-field .hx-renewal-period-help {
+    display: block;
+    margin-top: 7px;
+    color: #71839b;
+    font-size: 12px;
+    line-height: 1.5;
+}
+.hx-renewal-period-cell {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border: 1px solid #cfe0ff;
+    border-radius: 8px;
+    background: #eff6ff;
+    color: #1e56aa;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+@media (min-width: 1400px) {
+    .price-panel .price-form {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+/* HX_RENEWAL_PERIOD_V1_1_CSS */
+/* Giá gia hạn và thời hạn nằm trong CÙNG MỘT khung, mỗi phần chiếm một nửa. */
+.price-field.hx-renewal-combined-field {
+    min-width: 0;
+}
+.price-field .hx-renewal-combined {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-width: 0;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+.price-field .hx-renewal-combined:focus-within {
+    border-color: #3174e8;
+    box-shadow: 0 0 0 3px rgba(49, 116, 232, .14);
+}
+.price-field .hx-renewal-combined input,
+.price-field .hx-renewal-combined select.hx-renewal-period-select {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 50px;
+    height: 100%;
+    margin: 0;
+    border: 0 !important;
+    border-radius: 0 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+    font: inherit;
+    font-size: 14px;
+    color: #172c49;
+}
+.price-field .hx-renewal-combined input {
+    padding: 12px 10px 12px 14px;
+    background: #fff;
+}
+.price-field .hx-renewal-combined select.hx-renewal-period-select {
+    padding: 12px 28px 12px 12px;
+    border-left: 1px solid #d8e2f0 !important;
+    background-color: #f8fafc;
+    cursor: pointer;
+}
+/* V1 dành riêng một cột cho tháng; V1.1 trả form thêm về ba cột. */
+@media (min-width: 1400px) {
+    .price-panel .price-form {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}

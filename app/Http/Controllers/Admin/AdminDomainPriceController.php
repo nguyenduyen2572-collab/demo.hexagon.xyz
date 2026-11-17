@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
+// HX_RENEWAL_PERIOD_V1_CONTROLLER
 class AdminDomainPriceController extends Controller
 {
     // Danh sách bảng giá
@@ -44,6 +45,7 @@ class AdminDomainPriceController extends Controller
             'renewal_price' => [
                 'required', 'integer', 'min:0', 'max:1000000000',
             ],
+            'renewal_period_months' => ['required', 'integer', 'in:1,3,6,12,24'],
         ]);
 
         DB::table('domain_prices')->insert([
@@ -52,6 +54,7 @@ class AdminDomainPriceController extends Controller
                 (int) $validated['registration_price'],
             'renewal_price' =>
                 (int) $validated['renewal_price'],
+            'renewal_period_months' => (int) $validated['renewal_period_months'],
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -91,6 +94,7 @@ class AdminDomainPriceController extends Controller
             'renewal_price' => [
                 'required', 'integer', 'min:0', 'max:1000000000',
             ],
+            'renewal_period_months' => ['required', 'integer', 'in:1,3,6,12,24'],
         ]);
 
         DB::table('domain_prices')
@@ -100,6 +104,7 @@ class AdminDomainPriceController extends Controller
                     (int) $validated['registration_price'],
                 'renewal_price' =>
                     (int) $validated['renewal_price'],
+                'renewal_period_months' => (int) $validated['renewal_period_months'],
                 'updated_at' => now(),
             ]);
 

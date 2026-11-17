@@ -68,18 +68,29 @@
                    required>
         </div>
 
-        <div class="price-field">
+        <!-- HX_RENEWAL_PERIOD_V1_1_GROUP -->
+        <div class="price-field hx-renewal-combined-field">
             <label for="renewal_price">
                 Giá gia hạn (VNĐ)
             </label>
-            <input id="renewal_price"
-                   type="number"
-                   name="renewal_price"
-                   min="0"
-                   max="1000000000"
-                   step="1"
-                   value="{{ old('renewal_price') }}"
-                   required>
+            <div class="hx-renewal-combined" role="group" aria-label="Giá gia hạn và thời hạn gia hạn">
+                <input id="renewal_price"
+                    type="number"
+                    name="renewal_price"
+                    min="0"
+                    max="1000000000"
+                    step="1"
+                    value="{{ old('renewal_price') }}"
+                    required>
+                <select aria-label="Thời hạn gia hạn" id="renewal_period_months"
+                    class="hx-renewal-period-select"
+                    name="renewal_period_months"
+                    required>
+                    @foreach([1, 3, 6, 12, 24] as $month)
+                        <option value="{{ $month }}" @selected((int) old('renewal_period_months', 12) === $month)>{{ $month }} tháng</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
 
         <button class="price-button" type="submit">
@@ -106,6 +117,8 @@
                     <th>Đuôi tên miền</th>
                     <th>Giá đăng ký</th>
                     <th>Giá gia hạn</th>
+                    <!-- HX_RENEWAL_PERIOD_V1_TABLE -->
+                    <th>Thời hạn gia hạn</th>
                     <th>Cập nhật</th>
                     <th>Trạng thái</th>
                     <th>Thao tác</th>
@@ -129,6 +142,8 @@
                             {{ number_format($price->renewal_price, 0, ',', '.') }}đ
                         </td>
 
+                        <td><span class="hx-renewal-period-cell">{{ (int) ($price->renewal_period_months ?? 12) }} tháng</span></td>
+
                         <td>{{ \Illuminate\Support\Carbon::parse($price->updated_at)->format('d/m/Y') }}</td>
                         
                         <td>
@@ -147,7 +162,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="empty-cell">
+                        <td colspan="8" class="empty-cell">
                             Chưa có bảng giá tên miền.
                         </td>
                     </tr>
