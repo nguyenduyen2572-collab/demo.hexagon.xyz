@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Support\HexagonOrderCode;
+use App\Services\HexagonDomainAvailability;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -40,7 +41,7 @@ class OrderController extends Controller
     }
 
     // Xử lý và lưu đơn hàng vào MySQL
-    public function store(Request $request)
+    public function store(Request $request, HexagonDomainAvailability $availability)
     {
         // HEXAGON: checkout customer only (guest blocked by auth middleware).
         abort_if((bool) $request->user()?->is_admin, 403);
@@ -92,19 +93,6 @@ class OrderController extends Controller
                 );
             }
 
-            // Kiểm tra lại trạng thái tên miền
-            $status = DB::table('mock_domain_statuses')
-                ->where('domain', $domain)
-                ->first();
-
-            if (!$status || !(bool) $status->is_available) {
-                return redirect()->route('cart.index')
-                    ->with(
-                        'error',
-                        "Tên miền {$domain} không khả dụng trong dữ liệu demo."
-                    );
-            }
-
             // Xác định giá theo đuôi dài nhất
             $price = $prices->first(
                 fn ($row) => str_ends_with(
@@ -127,6 +115,17 @@ class OrderController extends Controller
             "Tên miền {$domain} đang tạm ngừng kinh doanh."
         );
 }
+
+            // Không tạo đơn từ dữ liệu khả dụng cũ hoặc dữ liệu trình duyệt.
+            try {
+                $status = $availability->check($domain);
+            } catch (\RuntimeException $e) {
+                return redirect()->route('cart.index')->with('error', $e->getMessage());
+            }
+            if (!$status['available']) {
+                return redirect()->route('cart.index')
+                    ->with('error', "Tên miền {$domain} đã được đăng ký hoặc không khả dụng.");
+            }
 
             $amount = (int) $price->registration_price;
 

@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\HexagonDomainAvailability;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DomainController extends Controller
 {
-    public function check(Request $request)
+    public function check(Request $request, HexagonDomainAvailability $availability)
     {
         // 1. Kiểm tra dữ liệu đầu vào
         $validated = $request->validate([
@@ -52,17 +53,15 @@ class DomainController extends Controller
     ], 422);
 }
 
-        // 3. Kiểm tra dữ liệu tên miền giả lập
-        $status = DB::table('mock_domain_statuses')
-            ->where('domain', $domain)
-            ->first();
-
-        if (!$status) {
+        // 3. Tra cứu trực tiếp qua GoDaddy nếu đã cấu hình PAT.
+        try {
+            $status = $availability->check($domain);
+        } catch (\RuntimeException $e) {
+            $code = in_array($e->getCode(), [404, 422, 502, 503], true) ? $e->getCode() : 503;
             return response()->json([
                 'success' => false,
-                'message' => 'Chưa có dữ liệu mẫu cho tên miền này',
-                'is_mock' => true,
-            ], 404);
+                'message' => $e->getMessage(),
+            ], $code, ['Cache-Control' => 'no-store']);
         }
 
         // 4. Trả kết quả JSON
@@ -71,12 +70,14 @@ class DomainController extends Controller
             'data' => [
                 'domain' => $domain,
                 'extension' => $price->extension,
-                'available' => (bool) $status->is_available,
+                'available' => $status['available'],
                 'registration_price' => $price->registration_price,
                 'renewal_price' => $price->renewal_price,
                 'renewal_period_months' => (int) ($price->renewal_period_months ?? 12),
                 'currency' => 'VND',
-                'is_mock' => true,
+                'is_mock' => $status['is_mock'],
+                'source' => $status['source'],
+                'definitive' => $status['definitive'],
             ],
         ]);
     }

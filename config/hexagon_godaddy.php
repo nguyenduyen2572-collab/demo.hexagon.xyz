@@ -7,4 +7,6 @@ return [
     'tlds' => ['com', 'net'],
     'cache_seconds' => 300,
     'ca_bundle' => env('GODADDY_CA_BUNDLE', ''),
+    // auto: GoDaddy khi có PAT, mock khi không; godaddy/mock có thể cấu hình tường minh.
+    'availability_source' => env('HEXAGON_DOMAIN_AVAILABILITY_SOURCE', 'auto'),
 ];

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\HexagonDomainAvailability;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -21,7 +22,7 @@ class CartController extends Controller
     }
 
     // Thêm tên miền vào giỏ hàng
-    public function store(Request $request)
+    public function store(Request $request, HexagonDomainAvailability $availability)
     {
         $validated = $request->validate([
             'domain' => ['required', 'string', 'max:190'],
@@ -37,18 +38,6 @@ class CartController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Tên miền không hợp lệ',
-            ], 422);
-        }
-
-        // Kiểm tra lại trạng thái tại Backend
-        $status = DB::table('mock_domain_statuses')
-            ->where('domain', $domain)
-            ->first();
-
-        if (!$status || !$status->is_available) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Tên miền không khả dụng trong dữ liệu demo',
             ], 422);
         }
 
@@ -72,6 +61,17 @@ class CartController extends Controller
             'message' => 'Đuôi tên miền này đã tạm ngừng kinh doanh.',
         ], 422);
     }
+
+        // Kiểm tra lại từ nhà cung cấp, không tin dữ liệu do trình duyệt gửi.
+        try {
+            $status = $availability->check($domain);
+        } catch (\RuntimeException $e) {
+            $code = in_array($e->getCode(), [404, 422, 502, 503], true) ? $e->getCode() : 503;
+            return response()->json(['success' => false, 'message' => $e->getMessage()], $code);
+        }
+        if (!$status['available']) {
+            return response()->json(['success' => false, 'message' => 'Tên miền này đã được đăng ký hoặc không khả dụng.'], 422);
+        }
 
         $cart = $request->session()->get('hexagon_cart', []);
 
