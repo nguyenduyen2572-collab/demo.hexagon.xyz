@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!select) return;
   const sync = function () {
     document.querySelectorAll('[data-v9-permission]').forEach(function (checkbox) {
-      const disable = select.value === 'staff' && checkbox.value !== 'saas';
+      const disable = select.value === 'staff' && !['saas','inquiries'].includes(checkbox.value);
       if (disable) checkbox.checked = false;
       checkbox.disabled = disable;
       checkbox.closest('label').style.opacity = disable ? '0.45' : '1';
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <label>Trạng thái <select name="admin_enabled"><option value="1" @selected((string) old('admin_enabled',(int)$employee->admin_enabled)==='1')>Hoạt động</option><option value="0" @selected((string) old('admin_enabled',(int)$employee->admin_enabled)==='0')>Tạm khóa</option></select></label>
             <div class="hx-team-span"><strong>Quyền theo mảng</strong><div class="hx-team-checks">
                 @foreach($capabilities as $key=>$name)<label><input type="checkbox" name="permissions[]" value="{{ $key }}" data-v9-permission="{{ $key }}" @checked(in_array($key, old('permissions',$granted), true))> {{ $name }}</label>@endforeach
-            </div><p class="hx-team-hint">Quản lý có thể được cấp nhiều mảng. Nhân viên chỉ được dùng Dịch vụ SaaS ở V9.0.</p></div>
+            </div><p class="hx-team-hint">Quản lý có thể được cấp nhiều mảng. Nhân viên chỉ được cấp quyền Dịch vụ SaaS hoặc Yêu cầu tư vấn SaaS; tư vấn chỉ xử lý việc được giao.</p></div>
             <div class="hx-team-span"><button class="hx-team-submit" type="submit">Lưu quyền nhân sự</button></div>
         </form>
     </section>

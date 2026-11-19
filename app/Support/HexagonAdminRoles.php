@@ -42,9 +42,9 @@ final class HexagonAdminRoles
         if ($user === null || ! (bool) $user->is_admin || $user->admin_enabled === false) return false;
         if (self::role($user) === 'super_admin') return true;
         if (! in_array($capability, self::capabilities($user), true)) return false;
-        // Nhân viên chỉ được chỉnh nội dung SaaS ở V9.0. Các nghiệp vụ
-        // có dữ liệu gán theo nhân viên sẽ được mở trong V9.2/V9.3.
-        return self::role($user) === 'manager' || $capability === 'saas';
+        // Nhân viên tư vấn được vào danh sách yêu cầu, nhưng Controller
+        // chỉ trả dữ liệu đã phân công cho chính họ (V9.1).
+        return self::role($user) === 'manager' || in_array($capability, ['saas', 'inquiries'], true);
     }
 
     public static function displayRole(?User $user): string

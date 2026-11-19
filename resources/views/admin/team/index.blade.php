@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!select) return;
   const sync = function () {
     document.querySelectorAll('[data-v9-permission]').forEach(function (checkbox) {
-      const disable = select.value === 'staff' && checkbox.value !== 'saas';
+      const disable = select.value === 'staff' && !['saas','inquiries'].includes(checkbox.value);
       if (disable) checkbox.checked = false;
       checkbox.disabled = disable;
       checkbox.closest('label').style.opacity = disable ? '0.45' : '1';
@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function () {
     @if($errors->any())<div class="alert alert-danger" role="alert">{{ $errors->first() }}</div>@endif
     <section class="panel">
         <h2>Thêm tài khoản nhân sự</h2>
-        <p class="hx-team-warning">Chỉ Super Admin được tạo tài khoản. Nhân viên thường chỉ được cấp quyền chỉnh nội dung SaaS trong V9.0; quyền nhận việc tư vấn và đơn hàng sẽ được mở sau khi hoàn thiện phạm vi dữ liệu được giao.</p>
         <form method="POST" action="{{ route('admin.team.store') }}" class="hx-team-form" autocomplete="off">
             @csrf
             <label>Họ tên <input name="name" value="{{ old('name') }}" required maxlength="150"></label>
@@ -37,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <label>Vai trò <select name="role" id="v9-role-select" required><option value="staff" @selected(old('role')==='staff')>Nhân viên</option><option value="manager" @selected(old('role')==='manager')>Quản lý bộ phận</option></select></label>
             <div class="hx-team-span"><strong>Quyền đề xuất</strong><div class="hx-team-checks">
                 @foreach($capabilities as $key => $name)<label><input type="checkbox" name="permissions[]" value="{{ $key }}" data-v9-permission="{{ $key }}" @checked(in_array($key, old('permissions', []), true))> {{ $name }}</label>@endforeach
-            </div><p class="hx-team-hint">Phân quyền được kiểm tra phía máy chủ. Với nhân viên, V9.0 chỉ kích hoạt quyền Dịch vụ SaaS dù có gửi thêm quyền khác.</p></div>
+            </div></div>
             <div class="hx-team-span"><button class="hx-team-submit" type="submit">Tạo tài khoản</button></div>
         </form>
     </section>

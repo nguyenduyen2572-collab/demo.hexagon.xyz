@@ -84,11 +84,11 @@ final class AdminTeamController extends Controller
 
     private function permissionsForRole(string $role, array $requested): array
     {
-        $allowed = $role === 'staff' ? ['saas'] : array_keys(HexagonAdminRoles::CAPABILITIES);
+        $allowed = $role === 'staff' ? ['saas', 'inquiries'] : array_keys(HexagonAdminRoles::CAPABILITIES);
         // Không cấp quyền ngoài phạm vi, kể cả khi gửi POST thủ công.
         if (array_diff($requested, $allowed) !== []) {
             throw ValidationException::withMessages([
-                'permissions' => 'Nhân viên ở V9.0 chỉ có thể được cấp quyền Dịch vụ SaaS.',
+                'permissions' => 'Nhân viên chỉ được cấp quyền Dịch vụ SaaS hoặc Yêu cầu tư vấn SaaS.',
             ]);
         }
         return array_values(array_unique($requested));

@@ -79,7 +79,16 @@
                 </a>
                 @endif
             </div>
-            @php($newSaasInquiryCount = \Illuminate\Support\Facades\DB::table('saas_inquiries')->where('status', 'new')->count())
+            @php
+                $newSaasInquiryCount = 0;
+                if (\App\Support\HexagonAdminRoles::can(auth('admin')->user(), 'inquiries')) {
+                    $newSaasCountQuery = \Illuminate\Support\Facades\DB::table('saas_inquiries')->where('status', 'new');
+                    if (\App\Support\HexagonAdminRoles::role(auth('admin')->user()) === 'staff') {
+                        $newSaasCountQuery->where('assigned_admin_id', auth('admin')->id());
+                    }
+                    $newSaasInquiryCount = $newSaasCountQuery->count();
+                }
+            @endphp
             <div class="hx-nav-section"><span class="hx-nav-label">KHÁCH HÀNG</span>
                 @if(\App\Support\HexagonAdminRoles::can(auth('admin')->user(), 'customers'))
                 <a class="nav-link {{ request()->routeIs('admin.customers.*') ? 'active' : '' }}" href="{{ route('admin.customers.index') }}" @if(request()->routeIs('admin.customers.*')) aria-current="page" @endif title="Khách hàng">

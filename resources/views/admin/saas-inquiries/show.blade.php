@@ -47,6 +47,9 @@
 
         <section class="hx-inquiry-detail-card">
             <h2>Xử lý yêu cầu</h2>
+            @if($isStaff)
+                <p class="hx-inquiry-hint">Bạn đang xử lý yêu cầu được phân công. Chỉ quản lý hoặc Super Admin có quyền chuyển người phụ trách.</p>
+            @endif
             @php
                 $detailDueUtc = $inquiry->follow_up_at ? \Illuminate\Support\Carbon::parse($inquiry->follow_up_at, 'UTC') : null;
                 $detailOverdue = $detailDueUtc && $inquiry->status !== 'closed' && $detailDueUtc->lt(\Illuminate\Support\Carbon::now('UTC'));
@@ -64,6 +67,7 @@
                         @endforeach
                     </select>
                 </label>
+                @unless($isStaff)
                 <label>Người phụ trách
                     <select name="assigned_admin_id">
                         <option value="">Chưa phân công</option>
@@ -71,8 +75,11 @@
                             <option value="{{ $admin->id }}" @selected((string) old('assigned_admin_id', $inquiry->assigned_admin_id) === (string) $admin->id)>{{ $admin->name }} ({{ $admin->email }})</option>
                         @endforeach
                     </select>
-                    <small class="hx-inquiry-hint">Chọn tài khoản Admin để giao yêu cầu. Nhấn “Lưu và ghi lịch sử” để hoàn tất phân công; tên người phụ trách sẽ hiển thị trong danh sách.</small>
+                    <small class="hx-inquiry-hint">Chỉ các tài khoản có quyền tư vấn đang hoạt động mới được nhận việc.</small>
                 </label>
+                @else
+                <p><strong>Người phụ trách:</strong> {{ $inquiry->assigned_name ?: 'Chưa phân công' }}</p>
+                @endunless
                 <label>Lịch liên hệ tiếp theo <span class="hx-inquiry-optional">(giờ Việt Nam)</span>
                     @php
                         $scheduledValue = $inquiry->follow_up_at

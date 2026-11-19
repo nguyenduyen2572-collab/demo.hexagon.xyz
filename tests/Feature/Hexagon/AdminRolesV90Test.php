@@ -49,7 +49,7 @@ final class AdminRolesV90Test extends HexagonIsolatedTestCase
 
     public function test_staff_is_restricted_to_saas_area(): void
     {
-        $staff=$this->admin('staff',['saas','orders','inquiries']);
+        $staff=$this->admin('staff',['saas','orders']);
         $this->actingAs($staff,'admin')->get(route('admin.dashboard'))->assertOk()
             ->assertSee('Không gian làm việc');
         $this->get(route('admin.orders.index'))->assertForbidden();

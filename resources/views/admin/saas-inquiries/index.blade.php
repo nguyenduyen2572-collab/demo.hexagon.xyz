@@ -9,13 +9,13 @@
     <div class="hx-inquiry-admin-heading">
         <div>
             <h1>Yêu cầu tư vấn SaaS</h1>
-            <p>Theo dõi yêu cầu mới, phân công tư vấn và lịch liên hệ với khách hàng.</p>
+            <p>{{ $isStaff ? 'Theo dõi và xử lý yêu cầu tư vấn được giao cho bạn.' : 'Theo dõi yêu cầu mới, phân công tư vấn và lịch liên hệ với khách hàng.' }}</p>
         </div>
     </div>
 
     <div class="hx-inquiry-kpis hx-inquiry-kpis-v3" aria-label="Tổng hợp yêu cầu tư vấn">
         <a class="hx-inquiry-kpi" href="{{ route('admin.saas-inquiries.index') }}">
-            <small>Tổng yêu cầu</small><strong>{{ $counts['all'] }}</strong>
+            <small>{{ $isStaff ? 'Yêu cầu được giao' : 'Tổng yêu cầu' }}</small><strong>{{ $counts['all'] }}</strong>
         </a>
         <a class="hx-inquiry-kpi" href="{{ route('admin.saas-inquiries.index', ['status' => 'new']) }}">
             <small>Mới tiếp nhận</small><strong>{{ $counts['new'] }}</strong>
@@ -42,6 +42,7 @@
                 @endforeach
             </select>
         </label>
+        @unless($isStaff)
         <label><span>Người phụ trách</span>
             <select name="assigned">
                 <option value="">Tất cả</option>
@@ -52,6 +53,7 @@
                 @endforeach
             </select>
         </label>
+        @endunless
         <label><span>Lịch liên hệ</span>
             <select name="due">
                 <option value="">Tất cả</option>

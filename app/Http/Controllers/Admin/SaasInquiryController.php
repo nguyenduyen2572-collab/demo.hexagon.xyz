@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Support\HexagonAdminRoles;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,10 +26,11 @@ final class SaasInquiryController extends Controller
 
     public function index(Request $request): View
     {
-        // Chỉ tài khoản có quyền Admin mới được nhận và lọc yêu cầu theo người phụ trách.
-        $admins = DB::table('users')->where('is_admin', true)
-            ->orderBy('name')->orderBy('id')->get(['id', 'name']);
-        $assignedOptions = array_merge(
+        $employee = $request->user('admin');
+        $isStaff = HexagonAdminRoles::role($employee) === 'staff';
+        // Chỉ người đã được cấp quyền tư vấn và đang hoạt động mới được nhận việc.
+        $admins = $this->eligibleAssignees();
+        $assignedOptions = $isStaff ? ['mine'] : array_merge(
             ['mine', 'unassigned'],
             $admins->pluck('id')->map(static fn ($id): string => (string) $id)->all()
         );
@@ -42,6 +45,10 @@ final class SaasInquiryController extends Controller
         $query = DB::table('saas_inquiries')
             ->leftJoin('users as assigned_user', 'assigned_user.id', '=', 'saas_inquiries.assigned_admin_id')
             ->select('saas_inquiries.*', 'assigned_user.name as assigned_name');
+
+        if ($isStaff) {
+            $query->where('saas_inquiries.assigned_admin_id', $employee->id);
+        }
 
         if (! empty($filters['status'])) {
             $query->where('saas_inquiries.status', $filters['status']);
@@ -97,14 +104,20 @@ final class SaasInquiryController extends Controller
                 ->orderBy('saas_inquiries.follow_up_at');
         }
 
+        // Bộ thống kê phải cùng phạm vi với bảng danh sách, không làm lộ tổng công ty.
+        $scoped = DB::table('saas_inquiries');
+        if ($isStaff) {
+            $scoped->where('assigned_admin_id', $employee->id);
+        }
         return view('admin.saas-inquiries.index', [
-            'inquiries' => $query->orderByDesc('saas_inquiries.id')->paginate(15)->withQueryString(),
+            'isStaff' => $isStaff,
+            'inquiries'  => $query->orderByDesc('saas_inquiries.id')->paginate(15)->withQueryString(),
             'counts' => [
-                'all' => DB::table('saas_inquiries')->count(),
-                'new' => DB::table('saas_inquiries')->where('status', 'new')->count(),
-                'contacted' => DB::table('saas_inquiries')->where('status', 'contacted')->count(),
-                'closed' => DB::table('saas_inquiries')->where('status', 'closed')->count(),
-                'overdue' => DB::table('saas_inquiries')->where('status', '!=', 'closed')
+                'all' => (clone $scoped)->count(),
+                'new' => (clone $scoped)->where('status', 'new')->count(),
+                'contacted' => (clone $scoped)->where('status', 'contacted')->count(),
+                'closed' => (clone $scoped)->where('status', 'closed')->count(),
+                'overdue' => (clone $scoped)->where('status', '!=', 'closed')
                     ->whereNotNull('follow_up_at')->where('follow_up_at', '<', $now->format('Y-m-d H:i:s'))->count(),
             ],
             'statuses' => self::STATUSES,
@@ -119,14 +132,18 @@ final class SaasInquiryController extends Controller
             ->select('saas_inquiries.*', 'assigned_user.name as assigned_name')
             ->where('saas_inquiries.id', $id)->first();
         abort_if($inquiry === null, 404);
+        $employee = $request->user('admin');
+        $isStaff = HexagonAdminRoles::role($employee) === 'staff';
+        // Không phân biệt yêu cầu không tồn tại và yêu cầu thuộc nhân viên khác.
+        abort_if($isStaff && (int) $inquiry->assigned_admin_id !== (int) $employee->id, 404);
 
         return view('admin.saas-inquiries.show', [
+            'isStaff' => $isStaff,
             'inquiry' => $inquiry,
             'returnFilters' => $this->safeListFilters($request),
             'backToList' => route('admin.saas-inquiries.index', $this->safeListFilters($request)),
             'statuses' => self::STATUSES,
-            'admins' => DB::table('users')->where('is_admin', true)
-                ->orderBy('name')->get(['id', 'name', 'email']),
+            'admins' => $isStaff ? collect() : $this->eligibleAssignees(),
             'activities' => DB::table('saas_inquiry_activities')
                 ->where('saas_inquiry_id', $id)
                 ->orderByDesc('id')->paginate(10, ['*'], 'activity_page'),
@@ -135,19 +152,26 @@ final class SaasInquiryController extends Controller
 
     public function update(Request $request, int $id): RedirectResponse
     {
+        $employee = $request->user('admin');
+        $isStaff = HexagonAdminRoles::role($employee) === 'staff';
+        if ($isStaff && $request->exists('assigned_admin_id')) {
+            abort(403, 'Nhân viên không có quyền phân công yêu cầu.');
+        }
+        $eligibleIds = $isStaff ? [] : $this->eligibleAssignees()->pluck('id')->all();
         $data = $request->validate([
             'status' => ['required', Rule::in(array_keys(self::STATUSES))],
             'admin_note' => ['nullable', 'string', 'max:2000'],
-            'assigned_admin_id' => ['nullable', 'integer', Rule::exists('users', 'id')->where('is_admin', true)],
+            'assigned_admin_id' => ['nullable', 'integer', Rule::in($eligibleIds)],
             'follow_up_at' => ['nullable', 'date_format:Y-m-d\\TH:i'],
         ], [
             'assigned_admin_id.exists' => 'Người phụ trách phải là tài khoản Admin hợp lệ.',
             'follow_up_at.date_format' => 'Thời gian hẹn không đúng định dạng.',
         ]);
 
-        $changed = DB::transaction(function () use ($data, $id): bool {
+        $changed = DB::transaction(function () use ($data, $id, $isStaff, $employee): bool {
             $current = DB::table('saas_inquiries')->where('id', $id)->lockForUpdate()->first();
             abort_if($current === null, 404);
+            abort_if($isStaff && (int) $current->assigned_admin_id !== (int) $employee->id, 404);
 
             $newStatus = $data['status'];
             $newAssignee = array_key_exists('assigned_admin_id', $data)
@@ -223,10 +247,11 @@ final class SaasInquiryController extends Controller
      */
     private function safeListFilters(Request $request): array
     {
+        $isStaff = HexagonAdminRoles::role($request->user('admin')) === 'staff';
         $query = $request->query();
         $safe = [];
         foreach (['status' => array_keys(self::STATUSES),
-                  'assigned' => ['mine', 'unassigned'],
+                  'assigned' => $isStaff ? ['mine'] : ['mine', 'unassigned'],
                   'due' => ['overdue', 'today', 'next7'],
                   'sort' => ['priority', 'next', 'newest']] as $key => $allowed) {
             if (isset($query[$key]) && is_string($query[$key]) && in_array($query[$key], $allowed, true)) {
@@ -235,8 +260,8 @@ final class SaasInquiryController extends Controller
         }
         // Giữ ID người phụ trách hợp lệ khi quay lại danh sách; bỏ qua ID bị giả mạo.
         $assigned = $query['assigned'] ?? null;
-        if (is_string($assigned) && preg_match('/^[1-9][0-9]{0,17}$/D', $assigned)
-            && DB::table('users')->where('is_admin', true)->where('id', $assigned)->exists()) {
+        if (! $isStaff && is_string($assigned) && preg_match('/^[1-9][0-9]{0,17}$/D', $assigned)
+            && $this->eligibleAssignees()->contains('id', (int) $assigned)) {
             $safe['assigned'] = $assigned;
         }
         if (isset($query['q']) && is_string($query['q'])) {
@@ -250,5 +275,11 @@ final class SaasInquiryController extends Controller
             $safe['page'] = (int) $query['page'];
         }
         return $safe;
+    }
+    /** @return \Illuminate\Support\Collection<int, User> */
+    private function eligibleAssignees(): \Illuminate\Support\Collection
+    {
+        return User::query()->where('is_admin', true)->orderBy('name')->orderBy('id')->get()
+            ->filter(static fn (User $user): bool => HexagonAdminRoles::can($user, 'inquiries'))->values();
     }
 }
