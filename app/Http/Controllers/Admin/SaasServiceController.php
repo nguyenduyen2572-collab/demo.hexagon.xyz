@@ -16,10 +16,30 @@ use RuntimeException;
 
 class SaasServiceController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $services = DB::table('saas_services')->orderBy('sort_order')->orderByDesc('id')->paginate(15);
-        return view('admin.saas.index', compact('services'));
+        $search = $request->query('q');
+        $search = is_string($search) ? mb_substr(trim($search), 0, 100) : '';
+        $status = $request->query('status');
+        $status = in_array($status, ['active', 'hidden'], true) ? $status : '';
+
+        $query = DB::table('saas_services');
+        if ($search !== '') {
+            // ESCAPE trong LIKE: %, _ và \ phải được tìm như ký tự thông thường.
+            $term = addcslashes($search, '%_\\');
+            $query->where(function ($builder) use ($term) {
+                $builder->where('name_vi', 'like', '%'.$term.'%')
+                    ->orWhere('slug', 'like', '%'.$term.'%');
+            });
+        }
+        if ($status === 'active') {
+            $query->where('is_active', true);
+        } elseif ($status === 'hidden') {
+            $query->where('is_active', false);
+        }
+        $services = $query->orderBy('sort_order')->orderByDesc('id')->paginate(15)->withQueryString();
+
+        return view('admin.saas.index', compact('services', 'search', 'status'));
     }
 
     public function create(): View
@@ -51,17 +71,36 @@ class SaasServiceController extends Controller
         $payload = $this->translateChangedFields($payload, $service, $translator);
         $payload['updated_at'] = now();
         DB::table('saas_services')->where('id', $id)->update($payload);
-        return redirect()->route('admin.saas.index')->with('success', 'Đã cập nhật dịch vụ SaaS.');
+        return redirect()->route('admin.saas.index', $this->listQueryParameters($request))->with('success', 'Đã cập nhật dịch vụ SaaS.');
     }
 
-    public function toggle(int $id): RedirectResponse
+    public function toggle(Request $request, int $id): RedirectResponse
     {
         $service = DB::table('saas_services')->find($id);
         abort_if($service === null, 404);
         DB::table('saas_services')->where('id', $id)->update([
             'is_active' => ! (bool) $service->is_active, 'updated_at' => now(),
         ]);
-        return redirect()->route('admin.saas.index')->with('success', 'Đã thay đổi trạng thái hiển thị.');
+        return redirect()->route('admin.saas.index', $this->listQueryParameters($request))
+            ->with('success', 'Đã thay đổi trạng thái hiển thị.');
+    }
+
+    /** Chỉ mang theo tham số lọc an toàn, không nhận URL chuyển hướng từ client. */
+    private function listQueryParameters(Request $request): array
+    {
+        $parameters = [];
+        $search = $request->query('q');
+        if (is_string($search)) {
+            $search = mb_substr(trim($search), 0, 100);
+            if ($search !== '') $parameters['q'] = $search;
+        }
+        $status = $request->query('status');
+        if (in_array($status, ['active', 'hidden'], true)) $parameters['status'] = $status;
+        $page = $request->query('page');
+        if (is_string($page) && ctype_digit($page) && (int) $page >= 1 && (int) $page <= 1000000) {
+            $parameters['page'] = (int) $page;
+        }
+        return $parameters;
     }
 
     /** Dịch xem trước trên Admin, chỉ gọi qua POST có CSRF và quyền Admin. */

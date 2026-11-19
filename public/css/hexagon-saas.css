@@ -135,3 +135,80 @@
         width:100%;
     }
 }
+
+
+/* HEXAGON_ADMIN_SAAS_FILTER_V8_2 — Chỉ áp dụng khu vực danh sách Admin SaaS. */
+.hx-admin-pro .saas-admin-filters {
+    display:flex;
+    align-items:end;
+    flex-wrap:wrap;
+    gap:12px;
+    margin:18px 0 9px;
+    padding:15px 17px;
+    background:#fff;
+    border:1px solid #dce7f3;
+    border-radius:14px;
+}
+.hx-admin-pro .saas-admin-filter-field {
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    flex:1 1 220px;
+    min-width:180px;
+    font-size:12px;
+    font-weight:700;
+    color:#465b78;
+}
+.hx-admin-pro .saas-admin-filter-status { flex:0 1 200px; }
+.hx-admin-pro .saas-admin-filter-field input,
+.hx-admin-pro .saas-admin-filter-field select {
+    width:100%;
+    min-height:39px;
+    border:1px solid #cbd8e9;
+    border-radius:9px;
+    background:#fff;
+    color:#1d3553;
+    padding:9px 12px;
+    font:inherit;
+    font-size:13px;
+    font-weight:500;
+}
+.hx-admin-pro .saas-admin-filter-field :is(input,select):focus-visible {
+    outline:3px solid #bfdbfe;
+    border-color:#60a5fa;
+    outline-offset:1px;
+}
+.hx-admin-pro .saas-admin-filter-submit {
+    min-height:39px;
+    padding:9px 16px;
+    border:1px solid #2563d7;
+    background:#2563d7;
+    color:#fff;
+    border-radius:9px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+}
+.hx-admin-pro .saas-admin-filter-submit:hover { background:#1d4ed8; }
+.hx-admin-pro .saas-admin-filter-reset {
+    display:inline-flex;
+    min-height:39px;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    color:#4b6585;
+    padding:8px 10px;
+    font-size:13px;
+    font-weight:650;
+}
+.hx-admin-pro .saas-admin-filter-reset:hover { color:#1d4ed8; }
+.hx-admin-pro .saas-admin-result-count {
+    margin:0 0 13px;
+    color:#667991;
+    font-size:12px;
+}
+@media(max-width:620px) {
+    .hx-admin-pro .saas-admin-filter-field,
+    .hx-admin-pro .saas-admin-filter-status { flex:1 1 100%; }
+    .hx-admin-pro .saas-admin-filter-submit { flex:1 1 100%; }
+}

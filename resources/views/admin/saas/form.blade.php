@@ -14,7 +14,7 @@
             <h1>{{ $service ? 'Chỉnh sửa dịch vụ' : 'Thêm dịch vụ mới' }}</h1>
             <p>Chỉ cần nhập thông tin tiếng Việt. Hệ thống tự tạo đường dẫn và bản dịch tiếng Anh.</p>
         </div>
-        <a class="saas-v2-back" href="{{ route('admin.saas.index') }}">← Danh sách dịch vụ</a>
+        <a class="saas-v2-back" href="{{ route('admin.saas.index', request()->only(['q', 'status', 'page'])) }}">← Danh sách dịch vụ</a>
     </div>
 
     @if($errors->any())
@@ -25,7 +25,7 @@
     @endif
 
     <section class="panel saas-admin-form saas-v2-panel">
-        <form id="saas-admin-editor" action="{{ $service ? route('admin.saas.update', $service->id) : route('admin.saas.store') }}"
+        <form id="saas-admin-editor" action="{{ $service ? route('admin.saas.update', array_merge(['id' => $service->id], request()->only(['q', 'status', 'page']))) : route('admin.saas.store') }}"
             data-translate-url="{{ route('admin.saas.translate-preview') }}" method="POST">
             @csrf
             @if($service) @method('PATCH') @endif
@@ -104,7 +104,7 @@
             </div>
             <div class="saas-form-actions saas-v2-actions">
                 <button type="submit" class="saas-v2-primary">{{ $service ? 'Lưu thay đổi' : 'Thêm dịch vụ' }}</button>
-                <a href="{{ route('admin.saas.index') }}" class="saas-v2-cancel">Hủy</a>
+                <a href="{{ route('admin.saas.index', request()->only(['q', 'status', 'page'])) }}" class="saas-v2-cancel">Hủy</a>
             </div>
         </form>
     </section>
