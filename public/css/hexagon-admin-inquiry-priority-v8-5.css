@@ -1,0 +1,8 @@
+/* HEXAGON V8.5: tinh chỉnh rất nhẹ, chỉ trong quản lý yêu cầu tư vấn SaaS. */
+.hx-inquiry-v3 .hx-inquiry-v85-count{margin:6px 0 12px;color:#64748b;font-size:12px;line-height:1.6}
+.hx-inquiry-v3 .hx-inquiry-v85-count strong{color:#233e64}
+.hx-inquiry-v3 .hx-inquiry-v85-overdue-row td:first-child{box-shadow:inset 3px 0 #e4a0a7}
+.hx-inquiry-v3 .hx-inquiry-v85-soon{display:block;margin-top:5px;color:#935813;font-size:12px;font-weight:650}
+.hx-inquiry-v3 .hx-inquiry-v85-detail-notice{margin:0 0 16px;padding:11px 13px;border:1px solid #f2d4ad;border-radius:10px;background:#fff9ef;color:#805219;font-size:13px;line-height:1.6}
+.hx-inquiry-v3 .hx-inquiry-secondary a{color:#526d8f;overflow-wrap:anywhere;text-decoration:none}
+.hx-inquiry-v3 .hx-inquiry-secondary a:hover,.hx-inquiry-v3 .hx-inquiry-secondary a:focus-visible{text-decoration:underline;color:#225ca8}

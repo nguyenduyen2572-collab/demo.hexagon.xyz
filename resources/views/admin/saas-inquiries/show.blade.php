@@ -1,11 +1,14 @@
 @extends('admin.layouts.app')
 @section('title', 'Chi tiết tư vấn SaaS - HEXAGON')
 @section('topbar_title', 'Chi tiết yêu cầu tư vấn')
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/hexagon-admin-inquiry-priority-v8-5.css') }}?v=1">
+@endpush
 @section('content')
 <div class="hx-inquiry-admin hx-inquiry-v3">
     <div class="hx-inquiry-admin-heading">
         <div>
-            <a class="hx-inquiry-back hx-inquiry-back-v3" href="{{ route('admin.saas-inquiries.index') }}">← Quay lại danh sách</a>
+            <a class="hx-inquiry-back hx-inquiry-back-v3" href="{{ $backToList }}">← Quay lại danh sách</a>
             <h1>Yêu cầu tư vấn #{{ $inquiry->id }}</h1>
             <p>Được gửi lúc {{ \Illuminate\Support\Carbon::parse($inquiry->created_at)->format('d/m/Y H:i') }}</p>
         </div>
@@ -44,7 +47,14 @@
 
         <section class="hx-inquiry-detail-card">
             <h2>Xử lý yêu cầu</h2>
-            <form action="{{ route('admin.saas-inquiries.update', ['id' => $inquiry->id]) }}" method="POST">
+            @php
+                $detailDueUtc = $inquiry->follow_up_at ? \Illuminate\Support\Carbon::parse($inquiry->follow_up_at, 'UTC') : null;
+                $detailOverdue = $detailDueUtc && $inquiry->status !== 'closed' && $detailDueUtc->lt(\Illuminate\Support\Carbon::now('UTC'));
+            @endphp
+            @if($detailOverdue)
+                <p class="hx-inquiry-v85-detail-notice" role="status">Lịch liên hệ đã quá hạn. Vui lòng liên hệ khách hoặc cập nhật lịch hẹn mới.</p>
+            @endif
+            <form action="{{ route('admin.saas-inquiries.update', ['id' => $inquiry->id] + $returnFilters) }}" method="POST">
                 @csrf
                 @method('PATCH')
                 <label>Trạng thái

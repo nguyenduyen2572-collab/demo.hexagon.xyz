@@ -28,7 +28,8 @@ final class SaasInquiryController extends Controller
             'status' => ['nullable', Rule::in(array_keys(self::STATUSES))],
             'q' => ['nullable', 'string', 'max:100'],
             'assigned' => ['nullable', Rule::in(['mine', 'unassigned'])],
-            'due' => ['nullable', Rule::in(['overdue', 'today'])],
+            'due' => ['nullable', Rule::in(['overdue', 'today', 'next7'])],
+            'sort' => ['nullable', Rule::in(['priority', 'next', 'newest'])],
         ]);
 
         $query = DB::table('saas_inquiries')
@@ -61,15 +62,34 @@ final class SaasInquiryController extends Controller
                 ->whereNotNull('saas_inquiries.follow_up_at');
             if ($filters['due'] === 'overdue') {
                 $query->where('saas_inquiries.follow_up_at', '<', $now->format('Y-m-d H:i:s'));
-            } else {
+            } elseif ($filters['due'] === 'today') {
                 $query->where('saas_inquiries.follow_up_at', '>=', $todayStart->format('Y-m-d H:i:s'))
                     ->where('saas_inquiries.follow_up_at', '<', $tomorrowStart->format('Y-m-d H:i:s'));
+            } else {
+                $query->where('saas_inquiries.follow_up_at', '>=', $now->format('Y-m-d H:i:s'))
+                    ->where('saas_inquiries.follow_up_at', '<', $now->copy()->addDays(7)->format('Y-m-d H:i:s'));
             }
         }
 
+        // Ưu tiên lịch quá hạn, yêu cầu mới, lịch sắp tới; hoặc sắp xếp theo lựa chọn Admin.
+        $sort = $filters['sort'] ?? 'priority';
+        if ($sort === 'newest') {
+            $query->orderByDesc('saas_inquiries.created_at');
+        } elseif ($sort === 'next') {
+            $query->orderByRaw("CASE WHEN saas_inquiries.status != 'closed' AND saas_inquiries.follow_up_at IS NOT NULL THEN 0 ELSE 1 END")
+                ->orderBy('saas_inquiries.follow_up_at');
+        } else {
+            $query->orderByRaw("CASE
+                WHEN saas_inquiries.status != 'closed' AND saas_inquiries.follow_up_at IS NOT NULL AND saas_inquiries.follow_up_at < ? THEN 0
+                WHEN saas_inquiries.status = 'new' THEN 1
+                WHEN saas_inquiries.status != 'closed' AND saas_inquiries.follow_up_at IS NOT NULL THEN 2
+                WHEN saas_inquiries.status = 'contacted' THEN 3
+                ELSE 4 END", [$now->format('Y-m-d H:i:s')])
+                ->orderBy('saas_inquiries.follow_up_at');
+        }
+
         return view('admin.saas-inquiries.index', [
-            'inquiries' => $query->orderByDesc('saas_inquiries.created_at')
-                ->orderByDesc('saas_inquiries.id')->paginate(15)->withQueryString(),
+            'inquiries' => $query->orderByDesc('saas_inquiries.id')->paginate(15)->withQueryString(),
             'counts' => [
                 'all' => DB::table('saas_inquiries')->count(),
                 'new' => DB::table('saas_inquiries')->where('status', 'new')->count(),
@@ -82,7 +102,7 @@ final class SaasInquiryController extends Controller
         ]);
     }
 
-    public function show(int $id): View
+    public function show(Request $request, int $id): View
     {
         $inquiry = DB::table('saas_inquiries')
             ->leftJoin('users as assigned_user', 'assigned_user.id', '=', 'saas_inquiries.assigned_admin_id')
@@ -92,6 +112,8 @@ final class SaasInquiryController extends Controller
 
         return view('admin.saas-inquiries.show', [
             'inquiry' => $inquiry,
+            'returnFilters' => $this->safeListFilters($request),
+            'backToList' => route('admin.saas-inquiries.index', $this->safeListFilters($request)),
             'statuses' => self::STATUSES,
             'admins' => DB::table('users')->where('is_admin', true)
                 ->orderBy('name')->get(['id', 'name', 'email']),
@@ -180,9 +202,37 @@ final class SaasInquiryController extends Controller
             return true;
         });
 
-        return redirect()->route('admin.saas-inquiries.show', ['id' => $id])
+        return redirect()->route('admin.saas-inquiries.show', ['id' => $id] + $this->safeListFilters($request))
             ->with($changed ? 'success' : 'info', $changed
                 ? 'Đã cập nhật yêu cầu tư vấn và lưu lịch sử xử lý.'
                 : 'Không có thay đổi mới để lưu.');
+    }
+    /**
+     * Chỉ giữ tham số danh sách đã biết; không nhận URL chuyển hướng từ người dùng.
+     * Được dùng ở trang chi tiết và sau khi cập nhật để tránh mất bộ lọc.
+     */
+    private function safeListFilters(Request $request): array
+    {
+        $query = $request->query();
+        $safe = [];
+        foreach (['status' => array_keys(self::STATUSES),
+                  'assigned' => ['mine', 'unassigned'],
+                  'due' => ['overdue', 'today', 'next7'],
+                  'sort' => ['priority', 'next', 'newest']] as $key => $allowed) {
+            if (isset($query[$key]) && is_string($query[$key]) && in_array($query[$key], $allowed, true)) {
+                $safe[$key] = $query[$key];
+            }
+        }
+        if (isset($query['q']) && is_string($query['q'])) {
+            $search = trim($query['q']);
+            if ($search !== '' && mb_strlen($search) <= 100) {
+                $safe['q'] = $search;
+            }
+        }
+        if (isset($query['page']) && is_string($query['page'])
+            && preg_match('/^[1-9][0-9]{0,5}$/D', $query['page'])) {
+            $safe['page'] = (int) $query['page'];
+        }
+        return $safe;
     }
 }
