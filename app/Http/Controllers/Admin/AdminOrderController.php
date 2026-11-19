@@ -111,7 +111,10 @@ class AdminOrderController extends Controller
         }
 
         return redirect()
-            ->route('admin.orders.show', ['id' => $id])
+            ->route('admin.orders.show', array_merge(
+                ['id' => $id],
+                \App\Support\HexagonAdminOrderNavigation::filters($request)
+            ))
             ->with('success', 'Cập nhật trạng thái thành công!');
     }
 }

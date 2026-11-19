@@ -5,18 +5,24 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/hexagon-admin-order-detail-v2.css') }}?v=1">
+    <link rel="stylesheet" href="{{ asset('css/hexagon-admin-order-quick-v8-4.css') }}?v=1">
 @endpush
 @push('scripts')
     <script src="{{ asset('js/hexagon-admin-order-detail-v2.js') }}?v=1" defer></script>
+    <script src="{{ asset('js/hexagon-admin-order-quick-v8-4.js') }}?v=1" defer></script>
 @endpush
 
 @section('content')
 <div class="hx-order-v2">
-    <a class="back-button" href="{{ route('admin.orders.index') }}">← Quay lại danh sách đơn hàng</a>
+    <a class="back-button" href="{{ route('admin.orders.index', \App\Support\HexagonAdminOrderNavigation::filters(request())) }}">← Quay lại danh sách đơn hàng</a>
 
     <div class="page-heading hx-order-v2__heading">
         <div>
-            <h1>Đơn hàng {{ \App\Support\HexagonOrderCode::forOrder($order) }}</h1>
+            <div class="hx-order-v84__title-row">
+                <h1>Đơn hàng {{ \App\Support\HexagonOrderCode::forOrder($order) }}</h1>
+                <button type="button" class="hx-order-v84__copy" data-hx-order-copy="{{ \App\Support\HexagonOrderCode::forOrder($order) }}" aria-label="Sao chép mã đơn hàng">Sao chép mã</button>
+                <span class="hx-order-v84__copy-status" data-hx-order-copy-status role="status" aria-live="polite"></span>
+            </div>
             <p>Được tạo lúc {{ \Illuminate\Support\Carbon::parse($order->created_at)->format('d/m/Y H:i') }}</p>
         </div>
         <x-admin.status :status="$order->status" />
@@ -69,7 +75,7 @@
 
                 @if(count($nextStatuses) > 0)
                     <form method="POST"
-                          action="{{ route('admin.orders.update-status', ['id' => $order->id]) }}"
+                          action="{{ route('admin.orders.update-status', array_merge(['id' => $order->id], \App\Support\HexagonAdminOrderNavigation::filters(request()))) }}"
                           class="status-form"
                           data-hx-order-status-form>
                         @csrf
