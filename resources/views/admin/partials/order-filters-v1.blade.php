@@ -19,6 +19,19 @@
                 <option value="cancelled_demo" @selected(request('status') === 'cancelled_demo')>Đã hủy</option>
             </select>
         </div>
+        @unless($isStaff)
+        <div class="hx-order-filter__field">
+            <label for="hx-order-assigned">Người phụ trách</label>
+            <select id="hx-order-assigned" name="assigned">
+                <option value="">Tất cả</option>
+                <option value="mine" @selected(request('assigned') === 'mine')>Tôi phụ trách</option>
+                <option value="unassigned" @selected(request('assigned') === 'unassigned')>Chưa phân công</option>
+                @foreach($assignees as $person)
+                    <option value="{{ $person->id }}" @selected(is_string(request('assigned')) && request('assigned') === (string) $person->id)>{{ $person->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        @endunless
         <div class="hx-order-filter__field">
             <label for="hx-order-from">Từ ngày</label>
             <input id="hx-order-from" name="from" type="date"

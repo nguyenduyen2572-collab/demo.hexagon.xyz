@@ -199,6 +199,11 @@ Route::middleware([\App\Http\Middleware\EnsureAdminSession::class, EnsureAdmin::
             AdminOrderController::class,
             'updateStatus'
         ])->whereNumber('id')->name('orders.update-status')->middleware(\App\Http\Middleware\AuditOrderStatusTransition::class);
+
+        // V9.2: chỉ quản lý / Super Admin được phân công đơn hàng.
+        Route::patch('/orders/{id}/assign', [
+            AdminOrderController::class, 'assign'
+        ])->whereNumber('id')->name('orders.assign');
         
         // Danh sách giá tên miền
         Route::get('/domain-prices', [

@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!select) return;
   const sync = function () {
     document.querySelectorAll('[data-v9-permission]').forEach(function (checkbox) {
-      const disable = select.value === 'staff' && !['saas','inquiries'].includes(checkbox.value);
+      const disable = select.value === 'staff' && !['saas','inquiries','orders'].includes(checkbox.value);
       if (disable) checkbox.checked = false;
       checkbox.disabled = disable;
       checkbox.closest('label').style.opacity = disable ? '0.45' : '1';

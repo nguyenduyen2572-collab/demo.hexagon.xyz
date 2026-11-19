@@ -6,6 +6,7 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/hexagon-admin-order-detail-v2.css') }}?v=1">
     <link rel="stylesheet" href="{{ asset('css/hexagon-admin-order-quick-v8-4.css') }}?v=1">
+    <link rel="stylesheet" href="{{ asset('css/hexagon-admin-assignment-v9-2.css') }}?v=1">
 @endpush
 @push('scripts')
     <script src="{{ asset('js/hexagon-admin-order-detail-v2.js') }}?v=1" defer></script>
@@ -30,6 +31,10 @@
 
     @if(session('success'))
         <div class="alert alert-success" role="status">{{ session('success') }}</div>
+    @endif
+
+    @if(session('info'))
+        <div class="alert" role="status">{{ session('info') }}</div>
     @endif
 
     @if($errors->any())
@@ -69,6 +74,34 @@
         </div>
 
         <div class="hx-order-v2__column">
+            <section class="panel detail-panel hx-order-assignment-panel">
+                <h2>Người phụ trách</h2>
+                <p class="hx-order-assignment-current">{{ $assignedName ?? 'Chưa phân công' }}</p>
+                @if($canAssign && !in_array($order->status, ['completed_demo', 'cancelled_demo'], true))
+                    <form method="POST" action="{{ route('admin.orders.assign', array_merge(['id' => $order->id], \App\Support\HexagonAdminOrderNavigation::filters(request()))) }}">
+                        @csrf @method('PATCH')
+                        <label for="hx-order-employee">Chọn nhân viên xử lý</label>
+                        <select id="hx-order-employee" name="assigned_admin_id">
+                            <option value="">Chưa phân công</option>
+                            @foreach($assignees as $person)
+                                <option value="{{ $person->id }}" @selected((int) $order->assigned_admin_id === (int) $person->id)>{{ $person->name }}</option>
+                            @endforeach
+                        </select>
+                        <button type="submit" class="btn btn-primary">Lưu phân công</button>
+                    </form>
+                @endif
+                @if($assignmentHistory->isNotEmpty())
+                    <details class="hx-order-assignment-history">
+                        <summary>Lịch sử phân công ({{ $assignmentHistory->count() }} gần nhất)</summary>
+                        @foreach($assignmentHistory as $entry)
+                            <p><strong>{{ $entry->actor_name ?? 'Tài khoản cũ' }}</strong>:
+                               {{ $entry->previous_name ?? 'Chưa phân công' }} → {{ $entry->next_name ?? 'Chưa phân công' }}
+                               <small>{{ \Illuminate\Support\Carbon::parse($entry->created_at)->format('d/m/Y H:i') }}</small>
+                            </p>
+                        @endforeach
+                    </details>
+                @endif
+            </section>
             <section class="panel detail-panel status-panel">
                 <h2>Trạng thái đơn hàng</h2>
                 <x-admin.status :status="$order->status" />

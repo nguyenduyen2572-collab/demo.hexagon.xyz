@@ -1,0 +1,11 @@
+/* V9.2: chỉ thêm thông tin phân công, giữ nguyên giao diện Admin trước V7. */
+.hx-order-assignee {display:block;margin-top:5px;color:#71829c;font-size:11px;font-weight:500;line-height:1.5}
+.hx-order-assignment-panel .hx-order-assignment-current {margin:8px 0 14px;font-size:14px;font-weight:750;color:#1f3d65}
+.hx-order-assignment-panel form {display:flex;flex-direction:column;gap:9px}
+.hx-order-assignment-panel label {font-size:12px;font-weight:700;color:#344865}
+.hx-order-assignment-panel select {width:100%;min-height:39px;border:1px solid #d1deee;border-radius:9px;padding:8px 10px;background:#fff;color:#183454}
+.hx-order-assignment-panel button {align-self:flex-start;margin-top:4px}
+.hx-order-assignment-history {margin-top:16px;padding-top:12px;border-top:1px solid #e5ebf4;color:#425678}
+.hx-order-assignment-history summary {font-size:12px;cursor:pointer;font-weight:700}
+.hx-order-assignment-history p {font-size:12px;line-height:1.6;margin:10px 0}
+.hx-order-assignment-history small {display:block;color:#7586a1}

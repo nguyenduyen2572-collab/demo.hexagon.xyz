@@ -34,7 +34,7 @@ final class AdminRolesV90Test extends HexagonIsolatedTestCase
         $this->actingAs($super,'admin')->post(route('admin.team.store'),[
             'name'=>'Không hợp lệ', 'email'=>'invalid.staff@hexagon.test',
             'password'=>'StrongPassword!123', 'password_confirmation'=>'StrongPassword!123',
-            'role'=>'staff', 'permissions'=>['orders'],
+            'role'=>'staff', 'permissions'=>['pricing'],
         ])->assertSessionHasErrors('permissions');
         $this->assertDatabaseMissing('users',['email'=>'invalid.staff@hexagon.test']);
     }
@@ -47,12 +47,12 @@ final class AdminRolesV90Test extends HexagonIsolatedTestCase
         $this->get(route('admin.orders.index'))->assertOk();
     }
 
-    public function test_staff_is_restricted_to_saas_area(): void
+    public function test_staff_only_sees_granted_modules_and_not_global_dashboard(): void
     {
         $staff=$this->admin('staff',['saas','orders']);
         $this->actingAs($staff,'admin')->get(route('admin.dashboard'))->assertOk()
             ->assertSee('Không gian làm việc');
-        $this->get(route('admin.orders.index'))->assertForbidden();
+        $this->get(route('admin.orders.index'))->assertOk();
         $this->get(route('admin.saas-inquiries.index'))->assertForbidden();
         $this->get(route('admin.saas.index'))->assertOk();
     }

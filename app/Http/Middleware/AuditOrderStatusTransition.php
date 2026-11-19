@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Middleware;
 
 use App\Support\HexagonOrderStatus;
+use App\Support\HexagonAdminRoles;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -37,10 +38,12 @@ class AuditOrderStatusTransition
 
         return DB::transaction(function () use ($request, $next, $validated, $id): Response {
             // MySQL/InnoDB lock tránh hai Admin đổi trạng thái đồng thời.
-            $order = DB::table('orders')
-                ->where('id', $id)
-                ->lockForUpdate()
-                ->first(['id', 'status']);
+            $query = DB::table('orders')->where('id', $id);
+            $admin = $request->user('admin');
+            if (HexagonAdminRoles::role($admin) === 'staff') {
+                $query->where('assigned_admin_id', $admin->id);
+            }
+            $order = $query->lockForUpdate()->first(['id', 'status']);
 
             abort_if($order === null, 404);
 

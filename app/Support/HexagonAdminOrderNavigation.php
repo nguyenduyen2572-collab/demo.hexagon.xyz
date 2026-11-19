@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
  */
 final class HexagonAdminOrderNavigation
 {
-    private const STATUSES = ['pending_demo', 'processing_demo', 'completed_demo', 'cancelled_demo'];
+    private const STATUSES = ['pending_demo', 'processing_demo', 'completed_demo', 'cancelled_demo', 'action_required'];
 
     public static function filters(Request $request): array
     {
@@ -30,6 +30,14 @@ final class HexagonAdminOrderNavigation
         $status = $request->query('status');
         if (is_string($status) && in_array($status, self::STATUSES, true)) {
             $query['status'] = $status;
+        }
+
+        $assigned = $request->query('assigned');
+        if (is_string($assigned) && (
+            in_array($assigned, ['mine', 'unassigned'], true)
+            || preg_match('/^[1-9][0-9]{0,8}$/D', $assigned)
+        )) {
+            $query['assigned'] = $assigned;
         }
 
         foreach (['from', 'to'] as $name) {
