@@ -4,7 +4,7 @@
 @section('topbar_title', 'Quản lý dịch vụ SaaS')
 
 @section('content')
-    <link rel="stylesheet" href="{{ asset('css/hexagon-saas.css') }}?v=1">
+    <link rel="stylesheet" href="{{ asset('css/hexagon-saas.css') }}?v=2">
     <div class="page-heading saas-admin-head">
         <div>
             <h1>Danh mục dịch vụ SaaS</h1>
@@ -38,10 +38,10 @@
                             <td><span class="saas-admin-status {{ $service->is_active ? 'is-on' : 'is-off' }}">{{ $service->is_active ? 'Đang hiển thị' : 'Đang ẩn' }}</span></td>
                             <td>
                                 <div class="saas-admin-actions">
-                                    <a class="text-link" href="{{ route('admin.saas.edit', $service->id) }}">Chỉnh sửa</a>
+                                    <a class="saas-admin-action-button is-edit" href="{{ route('admin.saas.edit', $service->id) }}">Chỉnh sửa</a>
                                     <form method="POST" action="{{ route('admin.saas.toggle', $service->id) }}">
                                         @csrf @method('PATCH')
-                                        <button class="saas-admin-toggle" type="submit">{{ $service->is_active ? 'Ẩn' : 'Hiển thị' }}</button>
+                                        <button class="saas-admin-action-button {{ $service->is_active ? 'is-hide' : 'is-show' }}" type="submit">{{ $service->is_active ? 'Ẩn' : 'Hiển thị' }}</button>
                                     </form>
                                 </div>
                             </td>
