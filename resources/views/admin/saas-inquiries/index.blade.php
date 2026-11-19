@@ -12,19 +12,19 @@
 
     <div class="hx-inquiry-kpis hx-inquiry-kpis-v3" aria-label="Tổng hợp yêu cầu tư vấn">
         <a class="hx-inquiry-kpi" href="{{ route('admin.saas-inquiries.index') }}">
-            <small>Tổng yêu cầu</small><strong>{{ $counts['all'] }}</strong><span>Xem tất cả</span>
+            <small>Tổng yêu cầu</small><strong>{{ $counts['all'] }}</strong>
         </a>
         <a class="hx-inquiry-kpi" href="{{ route('admin.saas-inquiries.index', ['status' => 'new']) }}">
-            <small>Mới tiếp nhận</small><strong>{{ $counts['new'] }}</strong><span>Cần tiếp nhận</span>
+            <small>Mới tiếp nhận</small><strong>{{ $counts['new'] }}</strong>
         </a>
         <a class="hx-inquiry-kpi" href="{{ route('admin.saas-inquiries.index', ['status' => 'contacted']) }}">
-            <small>Đang tư vấn</small><strong>{{ $counts['contacted'] }}</strong><span>Đang theo dõi</span>
+            <small>Đang tư vấn</small><strong>{{ $counts['contacted'] }}</strong>
         </a>
         <a class="hx-inquiry-kpi" href="{{ route('admin.saas-inquiries.index', ['due' => 'overdue']) }}">
-            <small>Hẹn đã quá hạn</small><strong>{{ $counts['overdue'] }}</strong><span>Cần liên hệ</span>
+            <small>Hẹn đã quá hạn</small><strong>{{ $counts['overdue'] }}</strong>
         </a>
         <a class="hx-inquiry-kpi" href="{{ route('admin.saas-inquiries.index', ['status' => 'closed']) }}">
-            <small>Đã hoàn tất</small><strong>{{ $counts['closed'] }}</strong><span>Xem lịch sử</span>
+            <small>Đã hoàn tất</small><strong>{{ $counts['closed'] }}</strong>
         </a>
     </div>
 
