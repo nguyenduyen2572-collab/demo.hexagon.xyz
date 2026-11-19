@@ -1,0 +1,12 @@
+/* V9.0: Chỉ dùng trong màn hình quản lý nhân sự, không tác động Admin cũ. */
+.hx-team-v9{max-width:1080px;margin:auto}.hx-team-v9 .panel{padding:22px;margin-bottom:22px}
+.hx-team-v9 h2{font-size:17px;margin:0 0 17px}.hx-team-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.hx-team-form label{font-weight:700;font-size:13px;display:flex;flex-direction:column;gap:7px;color:#324665}
+.hx-team-form input:not([type=checkbox]),.hx-team-form select{border:1px solid #cbd5e1;border-radius:9px;padding:10px 12px;min-height:42px;max-width:100%;font:inherit;background:white}
+.hx-team-form :is(input,select):focus-visible{outline:3px solid #bfdbfe;border-color:#2563eb}
+.hx-team-span{grid-column:1/-1}.hx-team-checks{display:flex;gap:14px;flex-wrap:wrap;margin:9px 0}
+.hx-team-checks label{display:inline-flex;flex-direction:row;align-items:center;gap:6px;font-weight:500}
+.hx-team-submit{border:0;border-radius:10px;background:#2563d7;color:white;padding:11px 20px;font-weight:700;cursor:pointer}
+.hx-team-warning{padding:11px 15px;border-radius:9px;background:#fff7ed;color:#9a3412;margin:0 0 15px}
+.hx-team-hint{font-size:12px;color:#64748b}.hx-team-v9 .admin-table td{vertical-align:middle}
+@media(max-width:660px){.hx-team-form{grid-template-columns:1fr}.hx-team-v9 .panel{padding:15px}}

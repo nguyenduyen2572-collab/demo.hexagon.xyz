@@ -63,21 +63,30 @@
                 </a>
             </div>
             <div class="hx-nav-section"><span class="hx-nav-label">KINH DOANH</span>
+                @if(\App\Support\HexagonAdminRoles::can(auth('admin')->user(), 'orders'))
                 <a class="nav-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}" href="{{ route('admin.orders.index') }}" @if(request()->routeIs('admin.orders.*')) aria-current="page" @endif title="Đơn hàng">
                     <svg class="hx-icon"><use href="#hx-ico-orders"/></svg><span class="hx-nav-text">Đơn hàng</span><svg class="hx-icon hx-nav-arrow"><use href="#hx-ico-chevron"/></svg>
                 </a>
+                @endif
+                @if(\App\Support\HexagonAdminRoles::can(auth('admin')->user(), 'pricing'))
                 <a class="nav-link {{ request()->routeIs('admin.domain-prices.*') ? 'active' : '' }}" href="{{ route('admin.domain-prices.index') }}" @if(request()->routeIs('admin.domain-prices.*')) aria-current="page" @endif title="Bảng giá tên miền">
                     <svg class="hx-icon"><use href="#hx-ico-domain"/></svg><span class="hx-nav-text">Bảng giá tên miền</span><svg class="hx-icon hx-nav-arrow"><use href="#hx-ico-chevron"/></svg>
                 </a>
+                @endif
+                @if(\App\Support\HexagonAdminRoles::can(auth('admin')->user(), 'saas'))
                 <a class="nav-link {{ request()->routeIs('admin.saas.*') ? 'active' : '' }}" href="{{ route('admin.saas.index') }}" @if(request()->routeIs('admin.saas.*')) aria-current="page" @endif title="Dịch vụ SaaS">
                     <svg class="hx-icon"><use href="#hx-ico-saas"/></svg><span class="hx-nav-text">Dịch vụ SaaS</span><svg class="hx-icon hx-nav-arrow"><use href="#hx-ico-chevron"/></svg>
                 </a>
+                @endif
             </div>
             @php($newSaasInquiryCount = \Illuminate\Support\Facades\DB::table('saas_inquiries')->where('status', 'new')->count())
             <div class="hx-nav-section"><span class="hx-nav-label">KHÁCH HÀNG</span>
+                @if(\App\Support\HexagonAdminRoles::can(auth('admin')->user(), 'customers'))
                 <a class="nav-link {{ request()->routeIs('admin.customers.*') ? 'active' : '' }}" href="{{ route('admin.customers.index') }}" @if(request()->routeIs('admin.customers.*')) aria-current="page" @endif title="Khách hàng">
                     <svg class="hx-icon"><use href="#hx-ico-users"/></svg><span class="hx-nav-text">Khách hàng</span><svg class="hx-icon hx-nav-arrow"><use href="#hx-ico-chevron"/></svg>
                 </a>
+                @endif
+                @if(\App\Support\HexagonAdminRoles::can(auth('admin')->user(), 'inquiries'))
                 <a class="nav-link {{ request()->routeIs('admin.saas-inquiries.*') ? 'active' : '' }}"
                    href="{{ route('admin.saas-inquiries.index') }}"
                    @if(request()->routeIs('admin.saas-inquiries.*')) aria-current="page" @endif
@@ -88,6 +97,12 @@
                         <span class="hx-saas-nav-count" aria-label="{{ $newSaasInquiryCount }} yêu cầu mới">{{ $newSaasInquiryCount > 99 ? '99+' : $newSaasInquiryCount }}</span>
                     @endif
                 </a>
+                @endif
+                @if(\App\Support\HexagonAdminRoles::role(auth('admin')->user()) === 'super_admin')
+                <a class="nav-link {{ request()->routeIs('admin.team.*') ? 'active' : '' }}" href="{{ route('admin.team.index') }}" title="Quản lý nhân sự">
+                    <svg class="hx-icon"><use href="#hx-ico-users"/></svg><span class="hx-nav-text">Quản lý nhân sự</span>
+                </a>
+                @endif
             </div>
         </nav>
         <div class="hx-sidebar-footer">
@@ -105,7 +120,7 @@
             </div>
             <div class="hx-topbar-right">
                 <button type="button" class="hx-search-trigger" data-search-open title="Tìm nhanh (Ctrl + K)"><svg class="hx-icon"><use href="#hx-ico-search"/></svg><span>Tìm chức năng...</span><kbd>Ctrl K</kbd></button>
-                <details class="hx-admin-account"><summary aria-label="Tài khoản quản trị"><span class="hx-admin-avatar">{{ mb_strtoupper(mb_substr(trim((string) (auth('admin')->user()?->name ?? 'A')), 0, 1)) }}</span><span class="hx-admin-account-label"><strong>{{ auth('admin')->user()?->name ?? 'Quản trị viên' }}</strong><small>Quản trị viên</small></span><svg class="hx-icon hx-account-chevron"><use href="#hx-ico-chevron"/></svg></summary><div class="hx-account-dropdown"><div class="hx-account-name">{{ auth('admin')->user()?->email ?? 'Tài khoản quản trị' }}</div><a class="hx-admin-security-link" href="{{ route('admin.security.password.edit') }}">Đổi mật khẩu</a><form method="POST" action="{{ route('admin.logout') }}">@csrf<button type="submit"><svg class="hx-icon"><use href="#hx-ico-logout"/></svg> Đăng xuất</button></form></div></details>
+                <details class="hx-admin-account"><summary aria-label="Tài khoản quản trị"><span class="hx-admin-avatar">{{ mb_strtoupper(mb_substr(trim((string) (auth('admin')->user()?->name ?? 'A')), 0, 1)) }}</span><span class="hx-admin-account-label"><strong>{{ auth('admin')->user()?->name ?? 'Quản trị viên' }}</strong><small>{{ \App\Support\HexagonAdminRoles::displayRole(auth('admin')->user()) }}</small></span><svg class="hx-icon hx-account-chevron"><use href="#hx-ico-chevron"/></svg></summary><div class="hx-account-dropdown"><div class="hx-account-name">{{ auth('admin')->user()?->email ?? 'Tài khoản quản trị' }}</div><a class="hx-admin-security-link" href="{{ route('admin.security.password.edit') }}">Đổi mật khẩu</a><form method="POST" action="{{ route('admin.logout') }}">@csrf<button type="submit"><svg class="hx-icon"><use href="#hx-ico-logout"/></svg> Đăng xuất</button></form></div></details>
             </div>
         </header>
         <main class="admin-main" id="admin-main" tabindex="-1">@yield('content')</main>
@@ -116,12 +131,12 @@
     <div class="hx-quick-search-box" role="dialog" aria-modal="true" aria-labelledby="hx-quick-title">
         <div class="hx-quick-header"><svg class="hx-icon"><use href="#hx-ico-search"/></svg><label class="hx-visually-hidden" for="hx-quick-input" id="hx-quick-title">Tìm chức năng quản trị</label><input id="hx-quick-input" type="search" placeholder="Tìm đơn hàng, khách hàng, bảng giá..." autocomplete="off"><button type="button" class="hx-icon-button" data-search-close aria-label="Đóng tìm kiếm"><svg class="hx-icon"><use href="#hx-ico-close"/></svg></button></div>
         <div class="hx-quick-results" data-search-results>
-            <a href="{{ route('admin.saas-inquiries.index') }}" data-search-item data-keywords="tư vấn saas yêu cầu liên hệ"><span aria-hidden="true">✉</span><span>Yêu cầu tư vấn SaaS</span><small>Đi tới</small></a>
+            @if(\App\Support\HexagonAdminRoles::can(auth('admin')->user(), 'inquiries'))<a href="{{ route('admin.saas-inquiries.index') }}" data-search-item data-keywords="tư vấn saas yêu cầu liên hệ"><span aria-hidden="true">✉</span><span>Yêu cầu tư vấn SaaS</span><small>Đi tới</small></a>@endif
             <a href="{{ route('admin.dashboard') }}" data-search-item data-keywords="dashboard tổng quan thống kê"><svg class="hx-icon"><use href="#hx-ico-grid"/></svg><span>Bảng điều khiển</span><small>Đi tới</small></a>
-            <a href="{{ route('admin.orders.index') }}" data-search-item data-keywords="đơn hàng đặt hàng xử lý"><svg class="hx-icon"><use href="#hx-ico-orders"/></svg><span>Đơn hàng</span><small>Đi tới</small></a>
-            <a href="{{ route('admin.domain-prices.index') }}" data-search-item data-keywords="bảng giá tên miền thêm sửa đuôi"><svg class="hx-icon"><use href="#hx-ico-domain"/></svg><span>Bảng giá tên miền</span><small>Đi tới</small></a>
-            <a href="{{ route('admin.saas.index') }}" data-search-item data-keywords="dịch vụ saas sản phẩm phần mềm"><svg class="hx-icon"><use href="#hx-ico-saas"/></svg><span>Dịch vụ SaaS</span><small>Đi tới</small></a>
-            <a href="{{ route('admin.customers.index') }}" data-search-item data-keywords="khách hàng tài khoản người dùng"><svg class="hx-icon"><use href="#hx-ico-users"/></svg><span>Khách hàng</span><small>Đi tới</small></a>
+            @if(\App\Support\HexagonAdminRoles::can(auth('admin')->user(), 'orders'))<a href="{{ route('admin.orders.index') }}" data-search-item data-keywords="đơn hàng đặt hàng xử lý"><svg class="hx-icon"><use href="#hx-ico-orders"/></svg><span>Đơn hàng</span><small>Đi tới</small></a>@endif
+            @if(\App\Support\HexagonAdminRoles::can(auth('admin')->user(), 'pricing'))<a href="{{ route('admin.domain-prices.index') }}" data-search-item data-keywords="bảng giá tên miền thêm sửa đuôi"><svg class="hx-icon"><use href="#hx-ico-domain"/></svg><span>Bảng giá tên miền</span><small>Đi tới</small></a>@endif
+            @if(\App\Support\HexagonAdminRoles::can(auth('admin')->user(), 'saas'))<a href="{{ route('admin.saas.index') }}" data-search-item data-keywords="dịch vụ saas sản phẩm phần mềm"><svg class="hx-icon"><use href="#hx-ico-saas"/></svg><span>Dịch vụ SaaS</span><small>Đi tới</small></a>@endif
+            @if(\App\Support\HexagonAdminRoles::can(auth('admin')->user(), 'customers'))<a href="{{ route('admin.customers.index') }}" data-search-item data-keywords="khách hàng tài khoản người dùng"><svg class="hx-icon"><use href="#hx-ico-users"/></svg><span>Khách hàng</span><small>Đi tới</small></a>@endif
         </div>
         <div class="hx-quick-footer">Nhấn <kbd>Esc</kbd> để đóng · <kbd>Enter</kbd> để mở kết quả đầu tiên</div>
     </div>

@@ -171,7 +171,7 @@ Route::post('/admin/login', [
 
 // Chỉ tài khoản đã đăng nhập và có quyền Admin
 
-Route::middleware([\App\Http\Middleware\EnsureAdminSession::class, EnsureAdmin::class])
+Route::middleware([\App\Http\Middleware\EnsureAdminSession::class, EnsureAdmin::class, \App\Http\Middleware\EnsureAdminRoleAccess::class])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -247,6 +247,12 @@ Route::middleware([\App\Http\Middleware\EnsureAdminSession::class, EnsureAdmin::
         Route::patch('/security/password', [
             \App\Http\Controllers\Admin\AdminSecurityController::class, 'updatePassword'
         ])->middleware('throttle:5,1')->name('security.password.update');
+
+        // Nhân sự / phân quyền: chỉ Super Admin được truy cập theo middleware.
+        Route::get('/team', [\App\Http\Controllers\Admin\AdminTeamController::class, 'index'])->name('team.index');
+        Route::post('/team', [\App\Http\Controllers\Admin\AdminTeamController::class, 'store'])->middleware('throttle:10,1')->name('team.store');
+        Route::get('/team/{id}/edit', [\App\Http\Controllers\Admin\AdminTeamController::class, 'edit'])->whereNumber('id')->name('team.edit');
+        Route::patch('/team/{id}', [\App\Http\Controllers\Admin\AdminTeamController::class, 'update'])->whereNumber('id')->name('team.update');
 
         // Đăng xuất Admin
         Route::post('/logout', [

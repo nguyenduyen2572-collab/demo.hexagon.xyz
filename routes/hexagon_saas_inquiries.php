@@ -15,7 +15,7 @@ Route::post('/saas/{slug}/inquiries', [SaasInquiryController::class, 'store'])
 
 Route::prefix('admin/saas-inquiries')
     ->name('admin.saas-inquiries.')
-    ->middleware([EnsureAdminSession::class, EnsureAdmin::class])
+    ->middleware([EnsureAdminSession::class, EnsureAdmin::class, \App\Http\Middleware\EnsureAdminRoleAccess::class])
     ->group(function (): void {
         Route::get('/', [AdminSaasInquiryController::class, 'index'])->name('index');
         Route::get('/{id}', [AdminSaasInquiryController::class, 'show'])->whereNumber('id')->name('show');
