@@ -47,6 +47,9 @@
                 <option value="">Tất cả</option>
                 <option value="mine" @selected(request('assigned') === 'mine')>Tôi phụ trách</option>
                 <option value="unassigned" @selected(request('assigned') === 'unassigned')>Chưa phân công</option>
+                @foreach($admins as $admin)
+                    <option value="{{ $admin->id }}" @selected((string) request('assigned', '') === (string) $admin->id)>{{ $admin->name }}</option>
+                @endforeach
             </select>
         </label>
         <label><span>Lịch liên hệ</span>
@@ -55,13 +58,6 @@
                 <option value="overdue" @selected(request('due') === 'overdue')>Đã quá hạn</option>
                 <option value="today" @selected(request('due') === 'today')>Hôm nay</option>
                 <option value="next7" @selected(request('due') === 'next7')>Trong 7 ngày tới</option>
-            </select>
-        </label>
-        <label><span>Sắp xếp</span>
-            <select name="sort">
-                <option value="priority" @selected(request('sort', 'priority') === 'priority')>Việc cần ưu tiên</option>
-                <option value="next" @selected(request('sort') === 'next')>Lịch hẹn gần nhất</option>
-                <option value="newest" @selected(request('sort') === 'newest')>Mới gửi gần đây</option>
             </select>
         </label>
         <button type="submit">Áp dụng bộ lọc</button>

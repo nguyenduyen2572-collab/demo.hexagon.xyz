@@ -71,6 +71,7 @@
                             <option value="{{ $admin->id }}" @selected((string) old('assigned_admin_id', $inquiry->assigned_admin_id) === (string) $admin->id)>{{ $admin->name }} ({{ $admin->email }})</option>
                         @endforeach
                     </select>
+                    <small class="hx-inquiry-hint">Chọn tài khoản Admin để giao yêu cầu. Nhấn “Lưu và ghi lịch sử” để hoàn tất phân công; tên người phụ trách sẽ hiển thị trong danh sách.</small>
                 </label>
                 <label>Lịch liên hệ tiếp theo <span class="hx-inquiry-optional">(giờ Việt Nam)</span>
                     @php

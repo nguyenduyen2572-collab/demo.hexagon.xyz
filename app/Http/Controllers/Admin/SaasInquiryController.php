@@ -24,10 +24,17 @@ final class SaasInquiryController extends Controller
 
     public function index(Request $request): View
     {
+        // Chỉ tài khoản có quyền Admin mới được nhận và lọc yêu cầu theo người phụ trách.
+        $admins = DB::table('users')->where('is_admin', true)
+            ->orderBy('name')->orderBy('id')->get(['id', 'name']);
+        $assignedOptions = array_merge(
+            ['mine', 'unassigned'],
+            $admins->pluck('id')->map(static fn ($id): string => (string) $id)->all()
+        );
         $filters = $request->validate([
             'status' => ['nullable', Rule::in(array_keys(self::STATUSES))],
             'q' => ['nullable', 'string', 'max:100'],
-            'assigned' => ['nullable', Rule::in(['mine', 'unassigned'])],
+            'assigned' => ['nullable', Rule::in($assignedOptions)],
             'due' => ['nullable', Rule::in(['overdue', 'today', 'next7'])],
             'sort' => ['nullable', Rule::in(['priority', 'next', 'newest'])],
         ]);
@@ -52,6 +59,8 @@ final class SaasInquiryController extends Controller
             $query->where('saas_inquiries.assigned_admin_id', auth('admin')->id());
         } elseif (($filters['assigned'] ?? null) === 'unassigned') {
             $query->whereNull('saas_inquiries.assigned_admin_id');
+        } elseif (isset($filters['assigned']) && ctype_digit((string) $filters['assigned'])) {
+            $query->where('saas_inquiries.assigned_admin_id', (int) $filters['assigned']);
         }
 
         $now = Carbon::now('UTC');
@@ -99,6 +108,7 @@ final class SaasInquiryController extends Controller
                     ->whereNotNull('follow_up_at')->where('follow_up_at', '<', $now->format('Y-m-d H:i:s'))->count(),
             ],
             'statuses' => self::STATUSES,
+            'admins' => $admins,
         ]);
     }
 
@@ -222,6 +232,12 @@ final class SaasInquiryController extends Controller
             if (isset($query[$key]) && is_string($query[$key]) && in_array($query[$key], $allowed, true)) {
                 $safe[$key] = $query[$key];
             }
+        }
+        // Giữ ID người phụ trách hợp lệ khi quay lại danh sách; bỏ qua ID bị giả mạo.
+        $assigned = $query['assigned'] ?? null;
+        if (is_string($assigned) && preg_match('/^[1-9][0-9]{0,17}$/D', $assigned)
+            && DB::table('users')->where('is_admin', true)->where('id', $assigned)->exists()) {
+            $safe['assigned'] = $assigned;
         }
         if (isset($query['q']) && is_string($query['q'])) {
             $search = trim($query['q']);
