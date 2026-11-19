@@ -50,3 +50,31 @@
 .hx-admin-pro .saas-v2-actions :is(a,button):focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
 @media(max-width:760px){.hx-admin-pro .saas-v2-panel{padding:22px 18px}.hx-admin-pro .saas-v2-switches{grid-template-columns:1fr}.hx-admin-pro .saas-v2-heading{align-items:flex-start}.hx-admin-pro .saas-v2-heading h1{font-size:23px}}
 @media(max-width:550px){.hx-admin-pro .saas-v2-fields{grid-template-columns:1fr}.hx-admin-pro .saas-v2-panel{padding:18px 15px}.hx-admin-pro .saas-v2-actions .saas-v2-primary,.hx-admin-pro .saas-v2-actions .saas-v2-cancel{flex:1}}
+
+
+/* HEXAGON Admin SaaS V8.3: tinh chỉnh nhỏ, không đổi bố cục biểu mẫu hiện tại. */
+.hx-admin-pro .saas-v83-warning { background:#fffbeb; border:1px solid #fde68a; color:#92400e; border-radius:10px; padding:12px 15px; }
+.hx-admin-pro .saas-v83-translation-modes {
+    display:flex; gap:16px; flex-wrap:wrap; align-items:center;
+    margin:3px 0 0; padding:14px 0 5px; border:0; border-top:1px solid #e1e9f3;
+}
+.hx-admin-pro .saas-v83-translation-modes legend { font-size:12px; font-weight:750; color:#304561; padding-top:13px; }
+.hx-admin-pro .saas-v83-translation-modes label { display:inline-flex; align-items:center; gap:7px; cursor:pointer; font-size:12px; color:#344967; }
+.hx-admin-pro .saas-v83-translation-modes input { accent-color:#2563d7; }
+.hx-admin-pro .saas-v83-manual-fields { display:grid; gap:13px; padding:12px 0 4px; }
+.hx-admin-pro .saas-v83-manual-fields[hidden] { display:none!important; }
+.hx-admin-pro .saas-v83-manual-fields label { display:grid; gap:7px; color:#304561; font-size:12px; font-weight:750; }
+.hx-admin-pro .saas-v83-manual-fields :is(input,textarea) {
+    width:100%; min-width:0; border:1px solid #d4dfed; background:#fff; border-radius:9px;
+    padding:10px 12px; color:#203552; font:inherit; font-weight:450; resize:vertical;
+}
+.hx-admin-pro .saas-v83-manual-fields :is(input,textarea):focus-visible { outline:3px solid rgba(37,99,235,.14); border-color:#7da9f3; }
+.hx-admin-pro .saas-v83-manual-fields .saas-v2-input-error { color:#b91c1c; font-size:11px; }
+.hx-admin-pro .saas-v83-draft-option {
+    display:flex; align-items:flex-start; gap:10px; margin-top:21px; padding:12px 14px;
+    border:1px solid #e1e9f3; border-radius:10px; background:#f8faff; cursor:pointer;
+}
+.hx-admin-pro .saas-v83-draft-option>input { margin-top:2px; width:17px; height:17px; flex:0 0 17px; accent-color:#2563d7; cursor:pointer; }
+.hx-admin-pro .saas-v83-draft-option span { display:grid; gap:4px; }
+.hx-admin-pro .saas-v83-draft-option strong { font-size:12px; color:#304561; }
+.hx-admin-pro .saas-v83-draft-option small { font-size:11px; font-weight:400; color:#70839e; line-height:1.55; }

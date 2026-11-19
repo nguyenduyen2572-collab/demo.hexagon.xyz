@@ -16,6 +16,9 @@
     @if(session('success'))
         <div class="alert alert-success" role="status">{{ session('success') }}</div>
     @endif
+    @if(session('warning'))
+        <div class="alert saas-v83-warning" role="status">{{ session('warning') }}</div>
+    @endif
 
     <form class="saas-admin-filters" action="{{ route('admin.saas.index') }}" method="GET" role="search">
         <label class="saas-admin-filter-field" for="saas-filter-search">

@@ -50,10 +50,13 @@ class SaasServiceController extends Controller
     public function store(Request $request, SaasEnglishTranslator $translator): RedirectResponse
     {
         $payload = $this->validatedPayload($request);
-        $payload = $this->translateChangedFields($payload, null, $translator);
+        [$payload, $isDraft] = $this->resolveEnglishFields($payload, null, $translator, $request);
         $now = now();
         DB::table('saas_services')->insert($payload + ['created_at' => $now, 'updated_at' => $now]);
-        return redirect()->route('admin.saas.index')->with('success', 'Đã thêm dịch vụ SaaS.');
+        return redirect()->route('admin.saas.index')->with(
+            $isDraft ? 'warning' : 'success',
+            $isDraft ? $this->draftSavedMessage() : 'Đã thêm dịch vụ SaaS.'
+        );
     }
 
     public function edit(int $id): View
@@ -68,16 +71,23 @@ class SaasServiceController extends Controller
         $service = DB::table('saas_services')->find($id);
         abort_if($service === null, 404);
         $payload = $this->validatedPayload($request, $id);
-        $payload = $this->translateChangedFields($payload, $service, $translator);
+        [$payload, $isDraft] = $this->resolveEnglishFields($payload, $service, $translator, $request);
         $payload['updated_at'] = now();
         DB::table('saas_services')->where('id', $id)->update($payload);
-        return redirect()->route('admin.saas.index', $this->listQueryParameters($request))->with('success', 'Đã cập nhật dịch vụ SaaS.');
+        return redirect()->route('admin.saas.index', $this->listQueryParameters($request))->with(
+            $isDraft ? 'warning' : 'success',
+            $isDraft ? $this->draftSavedMessage() : 'Đã cập nhật dịch vụ SaaS.'
+        );
     }
 
     public function toggle(Request $request, int $id): RedirectResponse
     {
         $service = DB::table('saas_services')->find($id);
         abort_if($service === null, 404);
+        if (! $service->is_active && ! $this->hasCompleteEnglishFields($service)) {
+            return redirect()->route('admin.saas.index', $this->listQueryParameters($request))
+                ->with('warning', 'Chưa thể hiển thị dịch vụ vì thiếu bản dịch tiếng Anh. Hãy chỉnh sửa dịch vụ để dịch lại hoặc nhập bản dịch thủ công.');
+        }
         DB::table('saas_services')->where('id', $id)->update([
             'is_active' => ! (bool) $service->is_active, 'updated_at' => now(),
         ]);
@@ -147,6 +157,8 @@ class SaasServiceController extends Controller
             'sort_order' => ['required', 'integer', 'min:0', 'max:1000000'],
             'is_active' => ['sometimes', 'boolean'],
             'is_featured' => ['sometimes', 'boolean'],
+            'translation_mode' => ['nullable', Rule::in(['auto', 'manual'])],
+            'save_as_draft_on_translation_failure' => ['nullable', 'boolean'],
         ], [
             'price_monthly.integer' => 'Giá tháng phải là số nguyên VND. Nhập 199000 hoặc 199.000, không nhập số thập phân.',
             'price_monthly.min' => 'Giá tháng không được âm.',
@@ -156,35 +168,98 @@ class SaasServiceController extends Controller
         ]);
         $payload['is_active'] = $request->boolean('is_active');
         $payload['is_featured'] = $request->boolean('is_featured');
-        // Không nhận name_en/summary_en/description_en từ form để tránh sửa trái ý qua hidden field.
+        // Các tùy chọn hỗ trợ lưu chỉ dùng cho Controller, không ghi vào database.
+        unset($payload['translation_mode'], $payload['save_as_draft_on_translation_failure']);
+        // Chỉ nhận dữ liệu EN khi Admin chủ động chọn chế độ nhập thủ công.
         return $payload;
     }
 
-    private function translateChangedFields(array $payload, ?object $original, SaasEnglishTranslator $translator): array
-    {
-        foreach (['name_vi' => 'name_en', 'summary_vi' => 'summary_en', 'description_vi' => 'description_en'] as $source => $target) {
-            $vi = trim((string) ($payload[$source] ?? ''));
-            $oldVi = trim((string) ($original?->{$source} ?? ''));
-            $oldEn = trim((string) ($original?->{$target} ?? ''));
+    /**
+     * @return array{0: array<string, mixed>, 1: bool} [payload, saved-as-hidden-draft]
+     */
+    private function resolveEnglishFields(
+        array $payload,
+        ?object $original,
+        SaasEnglishTranslator $translator,
+        Request $request
+    ): array {
+        $fields = [
+            'name_vi' => ['name_en', 150],
+            'summary_vi' => ['summary_en', 500],
+            'description_vi' => ['description_en', 10000],
+        ];
+
+        if ($request->input('translation_mode', 'auto') === 'manual') {
+            $translations = $request->validate([
+                'name_en' => ['required', 'string', 'max:150'],
+                'summary_en' => [trim((string) ($payload['summary_vi'] ?? '')) === '' ? 'nullable' : 'required', 'string', 'max:500'],
+                'description_en' => [trim((string) ($payload['description_vi'] ?? '')) === '' ? 'nullable' : 'required', 'string', 'max:10000'],
+            ], [
+                'name_en.required' => 'Hãy nhập tên tiếng Anh để lưu bản dịch thủ công.',
+                'summary_en.required' => 'Hãy nhập mô tả ngắn tiếng Anh hoặc xóa mô tả ngắn tiếng Việt.',
+                'description_en.required' => 'Hãy nhập giới thiệu chi tiết tiếng Anh hoặc xóa nội dung tiếng Việt tương ứng.',
+            ]);
+            foreach ($fields as $vi => [$en]) {
+                $payload[$en] = trim((string) ($payload[$vi] ?? '')) === ''
+                    ? null : trim((string) ($translations[$en] ?? ''));
+            }
+            // Admin đã chủ động nhập đầy đủ bản dịch, không cần gọi API.
+            return [$payload, false];
+        }
+
+        $allowDraft = $request->boolean('save_as_draft_on_translation_failure');
+        $translationFailed = false;
+        foreach ($fields as $viKey => [$enKey, $max]) {
+            $vi = trim((string) ($payload[$viKey] ?? ''));
+            $oldVi = trim((string) ($original?->{$viKey} ?? ''));
+            $oldEn = trim((string) ($original?->{$enKey} ?? ''));
+
             if ($vi === '') {
-                $payload[$target] = null;
+                $payload[$enKey] = null;
             } elseif ($original !== null && $vi === $oldVi && $oldEn !== '') {
-                $payload[$target] = $original->{$target};
+                $payload[$enKey] = $original->{$enKey};
+            } elseif ($translationFailed) {
+                // Sau một lỗi dịch, giữ những bản dịch cũ còn hợp lệ và để trống phần thay đổi.
+                $payload[$enKey] = null;
             } else {
                 try {
                     $translated = $translator->translate($vi);
-                    $max = $target === 'name_en' ? 150 : ($target === 'summary_en' ? 500 : 10000);
-                    if ($translated === null || mb_strlen($translated, 'UTF-8') > $max) {
-                        throw new RuntimeException('Bản dịch quá dài hoặc không hợp lệ. Hãy rút gọn nội dung tiếng Việt.');
+                    if (! is_string($translated) || trim($translated) === '' || mb_strlen($translated, 'UTF-8') > $max) {
+                        throw new RuntimeException('Bản dịch không hợp lệ hoặc vượt giới hạn.');
                     }
-                    $payload[$target] = $translated;
+                    $payload[$enKey] = $translated;
                 } catch (RuntimeException|\Illuminate\Http\Client\ConnectionException $e) {
-                    throw ValidationException::withMessages([
-                        $source => 'Không thể dịch tự động sang tiếng Anh: '.$e->getMessage().' Hãy thử lại trước khi lưu.',
-                    ]);
+                    if (! $allowDraft) {
+                        throw ValidationException::withMessages([
+                            $viKey => 'Dịch tiếng Anh tạm thời không thành công. Hãy thử lại, chọn lưu nháp khi dịch lỗi hoặc nhập bản dịch thủ công.',
+                        ]);
+                    }
+                    $translationFailed = true;
+                    $payload[$enKey] = null;
                 }
             }
         }
-        return $payload;
+
+        if ($translationFailed) {
+            // Không cho công khai dữ liệu thiếu bản dịch (kể cả sửa dịch vụ đang bán).
+            $payload['is_active'] = false;
+        }
+        return [$payload, $translationFailed];
     }
+
+    private function hasCompleteEnglishFields(object $service): bool
+    {
+        foreach (['name_vi' => 'name_en', 'summary_vi' => 'summary_en', 'description_vi' => 'description_en'] as $vi => $en) {
+            if (trim((string) ($service->{$vi} ?? '')) !== '' && trim((string) ($service->{$en} ?? '')) === '') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private function draftSavedMessage(): string
+    {
+        return 'Đã lưu bản nháp ở trạng thái ẩn vì dịch tiếng Anh gặp lỗi. Mở Chỉnh sửa để dịch lại hoặc nhập bản dịch thủ công trước khi hiển thị.';
+    }
+
 }

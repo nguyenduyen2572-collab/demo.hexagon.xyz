@@ -5,14 +5,14 @@
 
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/hexagon-saas.css') }}?v=1">
-    <link rel="stylesheet" href="{{ asset('css/hexagon-saas-admin-v2.css') }}?v=2">
-    <script src="{{ asset('js/hexagon-saas-admin-v2.js') }}?v=3" defer></script>
+    <link rel="stylesheet" href="{{ asset('css/hexagon-saas-admin-v2.css') }}?v=3">
+    <script src="{{ asset('js/hexagon-saas-admin-v2.js') }}?v=4" defer></script>
 
     <div class="page-heading saas-v2-heading">
         <div>
             <span class="saas-v2-kicker">DỊCH VỤ / QUẢN LÝ NỘI DUNG</span>
             <h1>{{ $service ? 'Chỉnh sửa dịch vụ' : 'Thêm dịch vụ mới' }}</h1>
-            <p>Chỉ cần nhập thông tin tiếng Việt. Hệ thống tự tạo đường dẫn và bản dịch tiếng Anh.</p>
+            <p>Nhập thông tin tiếng Việt; bạn có thể dùng bản dịch tự động hoặc nhập tiếng Anh thủ công.</p>
         </div>
         <a class="saas-v2-back" href="{{ route('admin.saas.index', request()->only(['q', 'status', 'page'])) }}">← Danh sách dịch vụ</a>
     </div>
@@ -73,9 +73,9 @@
                 </label>
             </div>
 
-            <details class="saas-v2-translation" id="saas-english-preview">
+            <details class="saas-v2-translation" id="saas-english-preview" @if(old('translation_mode') === 'manual' || $errors->has('name_en') || $errors->has('summary_en') || $errors->has('description_en')) open @endif>
                 <summary>
-                    <span><strong>Xem bản dịch tiếng Anh</strong><small>Được tự động cập nhật sau khi nhập nội dung tiếng Việt</small></span>
+                    <span><strong>Bản dịch tiếng Anh</strong><small>Xem bản dịch tự động hoặc tự nhập khi cần</small></span>
                     <span class="saas-v2-summary-chevron" aria-hidden="true">⌄</span>
                 </summary>
                 <div class="saas-v2-translation-body">
@@ -83,6 +83,26 @@
                     <div class="saas-v2-translation-row" data-translation-row="summary_vi"><strong>Mô tả ngắn (EN)</strong><p data-translation-result="summary_vi">{{ old('summary_en', $service?->summary_en ?? 'Chưa có nội dung') }}</p></div>
                     <div class="saas-v2-translation-row" data-translation-row="description_vi"><strong>Chi tiết dịch vụ (EN)</strong><p data-translation-result="description_vi">{{ old('description_en', $service?->description_en ?? 'Chưa có nội dung') }}</p></div>
                     <p class="saas-v2-translation-note" id="saas-translation-status" role="status" aria-live="polite">Nội dung tiếng Anh sẽ được đồng bộ khi lưu.</p>
+                    <fieldset class="saas-v83-translation-modes">
+                        <legend>Cách cập nhật bản tiếng Anh</legend>
+                        <label><input type="radio" name="translation_mode" value="auto" @checked(old('translation_mode', 'auto') !== 'manual')> Dịch tự động</label>
+                        <label><input type="radio" name="translation_mode" value="manual" @checked(old('translation_mode') === 'manual')> Nhập thủ công</label>
+                    </fieldset>
+                    <div class="saas-v83-manual-fields" data-saas-manual-fields @if(old('translation_mode', 'auto') !== 'manual') hidden @endif>
+                        <label for="saas-name-en">Tên dịch vụ tiếng Anh <span class="saas-v2-required">*</span>
+                            <input id="saas-name-en" type="text" name="name_en" maxlength="150" value="{{ old('name_en', $service?->name_en ?? '') }}" @disabled(old('translation_mode', 'auto') !== 'manual')>
+                            @error('name_en') <small class="saas-v2-input-error">{{ $message }}</small> @enderror
+                        </label>
+                        <label for="saas-summary-en">Mô tả ngắn tiếng Anh (nếu có mô tả tiếng Việt)
+                            <textarea id="saas-summary-en" name="summary_en" maxlength="500" rows="3" @disabled(old('translation_mode', 'auto') !== 'manual')>{{ old('summary_en', $service?->summary_en ?? '') }}</textarea>
+                            @error('summary_en') <small class="saas-v2-input-error">{{ $message }}</small> @enderror
+                        </label>
+                        <label for="saas-description-en">Giới thiệu chi tiết tiếng Anh (nếu có nội dung tiếng Việt)
+                            <textarea id="saas-description-en" name="description_en" maxlength="10000" rows="5" @disabled(old('translation_mode', 'auto') !== 'manual')>{{ old('description_en', $service?->description_en ?? '') }}</textarea>
+                            @error('description_en') <small class="saas-v2-input-error">{{ $message }}</small> @enderror
+                        </label>
+                        <p class="saas-v2-translation-note">Nếu sửa nội dung tiếng Việt, hãy cập nhật phần tiếng Anh tương ứng. Hệ thống không gọi API khi chọn nhập thủ công.</p>
+                    </div>
                 </div>
             </details>
 
@@ -102,6 +122,10 @@
                     <input type="checkbox" name="is_featured" value="1" @checked((bool) old('is_featured', $service?->is_featured ?? false))>
                 </label>
             </div>
+            <label class="saas-v83-draft-option" for="saas-save-hidden-draft">
+                <input id="saas-save-hidden-draft" type="checkbox" name="save_as_draft_on_translation_failure" value="1" @checked((bool) old('save_as_draft_on_translation_failure', false))>
+                <span><strong>Nếu dịch tự động lỗi, lưu bản nháp</strong><small>Dịch vụ sẽ tự chuyển sang trạng thái ẩn, không hiển thị trên website cho đến khi hoàn tất bản dịch.</small></span>
+            </label>
             <div class="saas-form-actions saas-v2-actions">
                 <button type="submit" class="saas-v2-primary">{{ $service ? 'Lưu thay đổi' : 'Thêm dịch vụ' }}</button>
                 <a href="{{ route('admin.saas.index', request()->only(['q', 'status', 'page'])) }}" class="saas-v2-cancel">Hủy</a>

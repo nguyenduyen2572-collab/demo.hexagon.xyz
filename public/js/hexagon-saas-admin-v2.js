@@ -9,6 +9,12 @@
   const status = document.getElementById('saas-translation-status');
   const csrf = form.querySelector('[name="_token"]')?.value || '';
   const url = form.dataset.translateUrl;
+  const modeRadios = [...form.querySelectorAll('[name="translation_mode"]')];
+  const manualFields = form.querySelector('[data-saas-manual-fields]');
+  const manualInputs = [...(manualFields?.querySelectorAll('input,textarea') || [])];
+  const isManual = () => form.querySelector('[name="translation_mode"]:checked')?.value === 'manual';
+  const stopPreviews = [];
+  const retryPreviews = [];
   const slugify = (s) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/gi, 'd')
     .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 180).replace(/-$/g, '');
 
@@ -79,6 +85,7 @@
     if (!input || !output) return;
     let timeout = null, sequence = 0, controller = null, lastText = input.value.trim();
     const translate = async () => {
+      if (isManual()) return;
       const text = input.value.trim();
       if (text === lastText) return;
       lastText = text;
@@ -96,22 +103,43 @@
         });
         const data = await response.json();
         if (!response.ok) throw new Error(data.message || 'Không thể dịch lúc này.');
-        if (thisRequest !== sequence) return;
+        if (thisRequest !== sequence || isManual()) return;
         output.textContent = data.translation || 'Chưa có nội dung';
         if (status) status.textContent = 'Đã cập nhật bản xem trước. Bản dịch sẽ được đồng bộ khi lưu.';
       } catch (error) {
-        if (error.name === 'AbortError' || thisRequest !== sequence) return;
+        if (error.name === 'AbortError' || thisRequest !== sequence || isManual()) return;
         output.textContent = 'Chưa dịch được. Hệ thống sẽ thử lại khi lưu.';
         if (status) status.textContent = error.message || 'Dịch vụ dịch đang tạm thời không phản hồi.';
       }
     };
+    stopPreviews.push(() => { clearTimeout(timeout); sequence++; if (controller) controller.abort(); });
+    retryPreviews.push(() => { lastText = ''; void translate(); });
     input.addEventListener('input', () => {
+      if (isManual()) return;
       clearTimeout(timeout);
       if (input.value.trim() !== lastText) {
         output.textContent = 'Nội dung đã thay đổi, đang chờ dịch...';
         timeout = setTimeout(translate, delay);
       }
     });
-    input.addEventListener('blur', () => { clearTimeout(timeout); void translate(); });
+    input.addEventListener('blur', () => {
+      if (isManual()) return;
+      clearTimeout(timeout); void translate();
+    });
   });
+
+  const syncEnglishMode = (retry = false) => {
+    const manual = isManual();
+    if (manualFields) manualFields.hidden = !manual;
+    manualInputs.forEach((el) => { el.disabled = !manual; });
+    if (manual) {
+      stopPreviews.forEach((stop) => stop());
+      if (status) status.textContent = 'Đang nhập bản dịch thủ công. Không gọi API dịch tự động.';
+    } else if (retry) {
+      if (status) status.textContent = 'Đã bật lại chế độ dịch tự động.';
+      retryPreviews.forEach((retryTranslation) => retryTranslation());
+    }
+  };
+  modeRadios.forEach((radio) => radio.addEventListener('change', () => syncEnglishMode(true)));
+  syncEnglishMode();
 })();
